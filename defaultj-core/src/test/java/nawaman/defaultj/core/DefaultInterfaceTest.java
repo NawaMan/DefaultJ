@@ -1,4 +1,4 @@
-package nawaman.defaultj.impl;
+package nawaman.defaultj.core;
 
 import org.junit.Test;
 

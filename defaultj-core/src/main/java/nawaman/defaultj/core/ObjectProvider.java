@@ -56,9 +56,6 @@ import nawaman.nullablej.NullableJ;
 @ExtensionMethod({ NullableJ.class })
 public class ObjectProvider implements IProvideObject {
     
-    /** Ready to use instance with default settings */
-    public static final ObjectProvider instance = new ObjectProvider();
-    
     // TODO - Add default factory.
     // TODO - Should create interface with all default method.
     
@@ -96,6 +93,9 @@ public class ObjectProvider implements IProvideObject {
     private Map<Class, Supplier> suppliers = new ConcurrentHashMap<Class, Supplier>();
     
     private List<IFindSupplier>  additionalSupplierFinders;
+    
+    /** Ready to use instance with default settings */
+    public static final ObjectProvider instance = new ObjectProvider();
     
     /**
      * Constructs the ObjectProvider without any configuration.

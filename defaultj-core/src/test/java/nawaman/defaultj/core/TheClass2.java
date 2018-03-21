@@ -13,7 +13,7 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.defaultj.impl;
+package nawaman.defaultj.core;
 
 @SuppressWarnings("javadoc")
 public class TheClass2 implements DefaultImplementationTest.TheInterface2 {

@@ -13,7 +13,7 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.defaultj.impl;
+package nawaman.defaultj.core;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -41,7 +41,7 @@ public class DefaultImplementationTest {
     }
     
     
-    @DefaultImplementation("nawaman.defaultj.impl.TheClass2")
+    @DefaultImplementation("nawaman.defaultj.core.TheClass2")
     public static interface TheInterface2 {
         
         public String getText();

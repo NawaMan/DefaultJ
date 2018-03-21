@@ -13,7 +13,7 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.defaultj.impl;
+package nawaman.defaultj.core;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,11 +21,12 @@ import nawaman.defaultj.core.ObjectProvider;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.util.function.Supplier;
 
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")
-public class FactoryMethodTest {
+public class SingletonFieldSupplierTest {
     
     private ObjectProvider provider = new ObjectProvider();
     
@@ -34,34 +35,30 @@ public class FactoryMethodTest {
         
     }
     
-    public static class BasicFactoryMethod {
+    public static class SupplierSingleton {
         
         private static int counter = 0;
         
-        public static final BasicFactoryMethod instance = new BasicFactoryMethod("instance");
-        
-        private String string;
-        
-        private BasicFactoryMethod(String string) {
-            this.string = string;
-        }
+        private static final SupplierSingleton secretInstance = new SupplierSingleton();
         
         @Default
-        public static BasicFactoryMethod newInstance() {
+        public static final Supplier<SupplierSingleton> instance = ()->{
             counter++;
-            return new BasicFactoryMethod("factory");
-        }
+            return secretInstance;
+        };
+        
+        private SupplierSingleton() {}
     }
     
     @Test
-    public void testThat_classWithFactoryMethodDefaultAnnotationHasTheInstanceAsTheValue() {
-        int prevCounter = BasicFactoryMethod.counter;
+    public void testThat_supplierSingletonClassWithDefaultAnnotationHasResultOfThatInstanceAsValue() {
+        int prevCounter = SupplierSingleton.counter;
         
-        assertEquals("factory", provider.get(BasicFactoryMethod.class).string);
-        assertEquals(prevCounter + 1, BasicFactoryMethod.counter);
+        assertEquals(SupplierSingleton.secretInstance, provider.get(SupplierSingleton.class));
+        assertEquals(prevCounter + 1, SupplierSingleton.counter);
         
-        assertEquals("factory", provider.get(BasicFactoryMethod.class).string);
-        assertEquals(prevCounter + 2, BasicFactoryMethod.counter);
+        assertEquals(SupplierSingleton.secretInstance, provider.get(SupplierSingleton.class));
+        assertEquals(prevCounter + 2, SupplierSingleton.counter);
     }
     
 }

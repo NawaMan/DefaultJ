@@ -41,7 +41,7 @@ public interface IProvideObject {
     // == Factory method ==
     
     /** The name of the class of the implementation. */
-    public static final String implementationClassName = "nawaman.defaultj.impl.ObjectProvider";
+    public static final String implementationClassName = "nawaman.defaultj.core.ObjectProvider";
     
     /**
      * Attempt to find the default provider.

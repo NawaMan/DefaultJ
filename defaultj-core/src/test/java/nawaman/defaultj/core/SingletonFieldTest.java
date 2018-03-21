@@ -13,7 +13,7 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.defaultj.impl;
+package nawaman.defaultj.core;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,12 +21,11 @@ import nawaman.defaultj.core.ObjectProvider;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.function.Supplier;
 
 import org.junit.Test;
 
 @SuppressWarnings("javadoc")
-public class SingletonFieldSupplierTest {
+public class SingletonFieldTest {
     
     private ObjectProvider provider = new ObjectProvider();
     
@@ -35,30 +34,26 @@ public class SingletonFieldSupplierTest {
         
     }
     
-    public static class SupplierSingleton {
+    public static class BasicSingleton {
+        @Default
+        public static final BasicSingleton instance = new BasicSingleton("instance");
         
-        private static int counter = 0;
+        private String string;
         
-        private static final SupplierSingleton secretInstance = new SupplierSingleton();
+        private BasicSingleton(String string) {
+            this.string = string;
+        }
         
         @Default
-        public static final Supplier<SupplierSingleton> instance = ()->{
-            counter++;
-            return secretInstance;
-        };
-        
-        private SupplierSingleton() {}
+        public static BasicSingleton newInstance() {
+            return new BasicSingleton("factory");
+        }
     }
     
     @Test
-    public void testThat_supplierSingletonClassWithDefaultAnnotationHasResultOfThatInstanceAsValue() {
-        int prevCounter = SupplierSingleton.counter;
-        
-        assertEquals(SupplierSingleton.secretInstance, provider.get(SupplierSingleton.class));
-        assertEquals(prevCounter + 1, SupplierSingleton.counter);
-        
-        assertEquals(SupplierSingleton.secretInstance, provider.get(SupplierSingleton.class));
-        assertEquals(prevCounter + 2, SupplierSingleton.counter);
+    public void testThat_singletonClassWithDefaultAnnotationHasTheInstanceAsTheValue_withFieldMorePreferThanFactory() {
+        assertEquals(BasicSingleton.instance, provider.get(BasicSingleton.class));
+        assertEquals("instance", provider.get(BasicSingleton.class).string);
     }
     
 }

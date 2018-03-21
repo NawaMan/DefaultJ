@@ -13,7 +13,7 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.defaultj.impl;
+package nawaman.defaultj.core;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
