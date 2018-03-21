@@ -81,7 +81,7 @@ public class DefaultImplementationSupplierFinder implements IFindSupplier {
     }
     
     @SuppressWarnings("unchecked")
-    static <T> Function<String, Class<T>> findClass() {
+    private static <T> Function<String, Class<T>> findClass() {
         return name -> {
             try {
                 return (Class<T>)Class.forName(name);
@@ -91,7 +91,7 @@ public class DefaultImplementationSupplierFinder implements IFindSupplier {
         };
     }
     
-    static <T> Predicate<Class<T>> isAssignableTo(Class<?> theGivenClass) {
+    private static <T> Predicate<Class<T>> isAssignableTo(Class<?> theGivenClass) {
         return theGivenClass::isAssignableFrom;
     }
     
