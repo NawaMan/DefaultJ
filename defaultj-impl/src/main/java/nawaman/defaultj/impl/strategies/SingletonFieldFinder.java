@@ -44,7 +44,7 @@ import nawaman.nullablej.nullable.Nullable;
  *  <li>annotated with @Default</li>
  * </ul>
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({
     NullableJ.class,

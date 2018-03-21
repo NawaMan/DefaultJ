@@ -21,7 +21,7 @@ import nawaman.failable.Failable.Supplier;
 /**
  * Classes implementing this interface know how to find supplier for object of the given class.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @FunctionalInterface
 public interface IFindSupplier {

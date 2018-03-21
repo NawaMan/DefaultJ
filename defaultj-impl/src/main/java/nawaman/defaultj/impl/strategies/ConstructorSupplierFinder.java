@@ -32,7 +32,7 @@ import nawaman.nullablej.NullableJ;
 /**
  * This class get an object by invoking a constructor.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({
     NullableJ.class,

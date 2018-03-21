@@ -25,7 +25,7 @@ import nawaman.defaultj.impl.ICreateObject;
  *
  * @param <TYPE> the type the factory can provide.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 public class FactoryBinding<TYPE> implements IBind<TYPE> {
     

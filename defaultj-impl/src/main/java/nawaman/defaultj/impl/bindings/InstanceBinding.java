@@ -23,7 +23,7 @@ import nawaman.defaultj.impl.IBind;
  * 
  * @param <TYPE> the type the factory can provide.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 public class InstanceBinding<TYPE> implements IBind<TYPE> {
     

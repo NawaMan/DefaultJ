@@ -32,7 +32,7 @@ import nawaman.nullablej.nullable.Nullable;
 /**
  * Abstract class for supplier finders that get value from constructor or method.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({
     NullableJ.class,

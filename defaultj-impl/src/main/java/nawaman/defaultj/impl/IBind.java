@@ -22,7 +22,7 @@ import nawaman.defaultj.api.IProvideObject;
  * 
  * @param <TYPE> the type the factory can provide.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @FunctionalInterface
 public interface IBind<TYPE> {

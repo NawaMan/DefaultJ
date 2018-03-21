@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 /**
  * A ready to use annotation to mask that the class has null as default.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @Target(value=ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

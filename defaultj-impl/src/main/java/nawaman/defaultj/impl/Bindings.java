@@ -27,7 +27,7 @@ import nawaman.nullablej.NullableJ;
 /**
  * Collections of bindings.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({ NullableJ.class })
 public class Bindings {

@@ -18,7 +18,7 @@ package nawaman.defaultj.impl;
 /**
  * Classes implementing this interface handle proving failure.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @FunctionalInterface
 public interface IHandleProvideFailure {

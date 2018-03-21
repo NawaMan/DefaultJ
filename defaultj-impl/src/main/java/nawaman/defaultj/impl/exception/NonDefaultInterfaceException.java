@@ -24,7 +24,7 @@ import static java.util.Collections.unmodifiableMap;
  * This exception is thrown when a method is called when a default interface
  *   as asked but there is at least one method that is not .
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 public class NonDefaultInterfaceException extends AbstractClassCreationException {
     

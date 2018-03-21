@@ -20,7 +20,7 @@ import java.util.Optional;
 /**
  * Classes implementing this interface can provide an object given a class..
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @FunctionalInterface
 public interface IProvideObject {

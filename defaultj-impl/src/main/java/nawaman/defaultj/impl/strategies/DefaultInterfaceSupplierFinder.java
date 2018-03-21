@@ -38,7 +38,7 @@ import nawaman.nullablej._internal.UReflection;
 /**
  * This class find object of interface will all default methods.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
 public class DefaultInterfaceSupplierFinder implements IFindSupplier {

@@ -28,7 +28,7 @@ import nawaman.nullablej.NullableJ;
 /**
  * This class return default enum value.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({
     NullableJ.class,

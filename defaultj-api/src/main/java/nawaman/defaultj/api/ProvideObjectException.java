@@ -18,7 +18,7 @@ package nawaman.defaultj.api;
 /**
  * Exception thrown if there is a problem while trying to provide an object.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 public class ProvideObjectException extends RuntimeException {
     

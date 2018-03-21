@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
  * This exception is thrown when a method is called from a default interface
  *   but found to have no default.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 public class NonDefaultMethodException extends RuntimeException {
     

@@ -26,7 +26,7 @@ import java.lang.annotation.Target;
  * If the class is not found in the classpath or it was found to be uncompatible,
  *   this annotation will be ignore.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @Target(value=ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

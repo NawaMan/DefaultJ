@@ -26,7 +26,7 @@ import nawaman.nullablej.NullableJ;
 /**
  * Utility involving constructors
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({
     NullableJ.class,

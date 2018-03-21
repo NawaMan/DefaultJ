@@ -26,7 +26,7 @@ import nawaman.failable.Failable.Supplier;
 /**
  * This class will provider null if the given class is annotated with @DefaultToNull.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({ AnnotationUtils.class })
 public class NullSupplierFinder implements IFindSupplier {

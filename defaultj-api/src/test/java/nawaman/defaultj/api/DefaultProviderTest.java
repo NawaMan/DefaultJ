@@ -24,7 +24,7 @@ import org.junit.Test;
 /**
  * The tests to get the default provider.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 public class DefaultProviderTest {
     

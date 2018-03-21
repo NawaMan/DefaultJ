@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
  * A ready to use annotation to the class is in interface will all its method have a default implementation
  *   and that the author intent to have the interface itself as an implementation to be created.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @Target(value=ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)

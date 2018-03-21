@@ -17,6 +17,6 @@
 /**
  * This package contains utility classes.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 package nawaman.defaultj.impl.utils;

@@ -32,7 +32,7 @@ import nawaman.nullablej.NullableJ;
 /**
  * This class get an object that is a default implementation of the target class.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
 public class DefaultImplementationSupplierFinder implements IFindSupplier {

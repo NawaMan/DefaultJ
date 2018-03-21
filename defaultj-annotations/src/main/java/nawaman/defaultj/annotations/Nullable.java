@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 /**
  * A ready to use annotation to mask that a parameter in the default parameter can be null.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @Target(value=ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)

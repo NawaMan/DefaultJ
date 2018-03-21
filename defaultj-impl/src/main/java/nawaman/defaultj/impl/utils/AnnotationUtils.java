@@ -25,7 +25,7 @@ import nawaman.nullablej.NullableJ;
 /**
  * Utility class for Annotations.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({
     NullableJ.class

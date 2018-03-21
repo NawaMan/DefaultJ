@@ -38,7 +38,7 @@ import nawaman.nullablej.nullable.Nullable;
 /**
  * This class returns object resulting from a factory method.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({
     NullableJ.class,

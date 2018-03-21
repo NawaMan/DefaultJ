@@ -20,7 +20,7 @@ import nawaman.defaultj.api.ProvideObjectException;
 /**
  * This exception is thrown when creating an object fail.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 public class ObjectCreationException extends ProvideObjectException {
     

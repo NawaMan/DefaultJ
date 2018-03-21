@@ -43,7 +43,7 @@ import nawaman.defaultj.annotations.DefaultInterface;
 /**
  * This annotation process ensures that {@link Default} is only annotated to public, static, final fields or methods.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 public class DefaultInterfaceAnnotationValidator extends AbstractProcessor {
     

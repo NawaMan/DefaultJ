@@ -51,13 +51,13 @@ import nawaman.nullablej.NullableJ;
 /**
  * ObjectProvider can provide objects.
  * 
- * @author NawaMan -- nawaman@dssb.io
+ * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({ NullableJ.class })
 public class ObjectProvider implements IProvideObject {
     
-    // Stepping stone
-//    public static final ObjectProvider instance = new ObjectProvider();
+    /** Ready to use instance with default settings */
+    public static final ObjectProvider instance = new ObjectProvider();
     
     // TODO - Add default factory.
     // TODO - Should create interface with all default method.
