@@ -24,14 +24,14 @@ import static org.junit.Assert.assertNull;
 
 import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.annotations.Nullable;
-import nawaman.defaultj.core.ObjectProvider;
+import nawaman.defaultj.core.DefaultProvider;
 import nawaman.nullablej.NullableJ;
 
 @SuppressWarnings("javadoc")
 @ExtensionMethod({ NullableJ.class })
 public class ConstructorWithOptionalTest {
     
-    private ObjectProvider provider = new ObjectProvider();
+    private DefaultProvider provider = new DefaultProvider();
     
     //== Interface has no defaults so not filled when optional.
     

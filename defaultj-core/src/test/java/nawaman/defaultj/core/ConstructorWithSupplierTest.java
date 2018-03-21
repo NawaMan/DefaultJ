@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 
 import lombok.val;
 import nawaman.defaultj.core.Bindings;
-import nawaman.defaultj.core.ObjectProvider;
+import nawaman.defaultj.core.DefaultProvider;
 import nawaman.defaultj.core.bindings.FactoryBinding;
 
 @SuppressWarnings("javadoc")
@@ -43,10 +43,10 @@ public class ConstructorWithSupplierTest {
     @Test
     public void testThat_withSupplierAsParameter_aSupplierToGetIsGiven() {
         val counter        = new AtomicInteger(1000);
-        val factoryBinding = new FactoryBinding<Integer>(objectProvider->counter.getAndIncrement());
+        val factoryBinding = new FactoryBinding<Integer>(defaultProvider->counter.getAndIncrement());
         
         val bindings = new Bindings.Builder().bind(Integer.class, factoryBinding).build();
-        val provider = new ObjectProvider().wihtBindings(bindings);
+        val provider = new DefaultProvider().wihtBindings(bindings);
         
         val company = provider.get(Company.class);
         

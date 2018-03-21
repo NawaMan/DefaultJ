@@ -19,7 +19,7 @@ import static nawaman.defaultj.core.strategies.common.NullSupplier;
 
 import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.annotations.DefaultToNull;
-import nawaman.defaultj.api.IProvideObject;
+import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.failable.Failable.Supplier;
 
@@ -37,8 +37,8 @@ public class NullSupplierFinder implements IFindSupplier {
     @SuppressWarnings("unchecked")
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
-            Class<TYPE>    theGivenClass,
-            IProvideObject objectProvider) {
+            Class<TYPE>     theGivenClass,
+            IProvideDefault defaultProvider) {
         return theGivenClass.getAnnotations().has(ANNOTATION_NAME)
                 ? (Supplier<TYPE, THROWABLE>)NullSupplier
                 : null;

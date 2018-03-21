@@ -18,7 +18,7 @@ package nawaman.defaultj.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import nawaman.defaultj.core.ObjectProvider;
+import nawaman.defaultj.core.DefaultProvider;
 import nawaman.nullablej.nullable.Nullable;
 
 import java.lang.annotation.Retention;
@@ -30,7 +30,7 @@ import org.junit.Test;
 @SuppressWarnings("javadoc")
 public class SingletonFieldOfOptionalTest {
     
-    private ObjectProvider provider = new ObjectProvider();
+    private DefaultProvider provider = new DefaultProvider();
     
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Default {

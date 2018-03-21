@@ -15,11 +15,11 @@
 //  ========================================================================
 package nawaman.defaultj.core.strategies;
 
-import nawaman.defaultj.api.IProvideObject;
+import nawaman.defaultj.api.IProvideDefault;
 import nawaman.failable.Failable.Supplier;
 
 /**
- * Classes implementing this interface know how to find supplier for object of the given class.
+ * Classes implementing this interface know how to find supplier for the default of the given class.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
@@ -29,14 +29,14 @@ public interface IFindSupplier {
     /**
      * Find a supplier to supplier value
      * 
-     * @param <TYPE>          the data type.
-     * @param <THROWABLE>     the exception.
-     * @param theGivenClass   the data class.
-     * @param objectProvider  the object provider.
+     * @param <TYPE>           the data type.
+     * @param <THROWABLE>      the exception.
+     * @param theGivenClass    the data class.
+     * @param defaultProvider  the default provider.
      * @return  the supplier for the value.
      */
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
-            Class<TYPE>    theGivenClass,
-            IProvideObject objectProvider);
+            Class<TYPE>     theGivenClass,
+            IProvideDefault defaultProvider);
     
 }

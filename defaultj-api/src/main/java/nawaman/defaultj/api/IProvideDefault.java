@@ -18,52 +18,52 @@ package nawaman.defaultj.api;
 import java.util.Optional;
 
 /**
- * Classes implementing this interface can provide an object given a class..
+ * Classes implementing this interface can provide a default given a class..
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
 @FunctionalInterface
-public interface IProvideObject {
+public interface IProvideDefault {
     
     /**
-     * Returns the object for the given class.
+     * Returns the default for the given class.
      * 
      * @param <TYPE>  the data type represented by the given class.
      * @param theGivenClass
      *          the given class.
-     * @return  the object associated with the given class.
-     * @throws ProvideObjectException  if there is a problem getting the object.
+     * @return  the default associated with the given class.
+     * @throws ProvideDefaultException  if there is a problem getting the default.
      */
     public <TYPE> TYPE get(Class<TYPE> theGivenClass)
-            throws ProvideObjectException;
+            throws ProvideDefaultException;
     
     
     // == Factory method ==
     
     /** The name of the class of the implementation. */
-    public static final String implementationClassName = "nawaman.defaultj.core.ObjectProvider";
+    public static final String implementationClassName = "nawaman.defaultj.core.DefaultProvider";
     
     /**
      * Attempt to find the default provider.
      * 
-     * This is done by looking for the class ObjectProvider from the impl package by name.
+     * This is done by looking for the class DefaultProvider from the core package by name.
      * If the class is not in the classpath. This method will return null.
      * 
-     * @return the Optional value of the ObjectProvider if the class was in the classpath.
+     * @return the Optional value of the DefaultProvider if the class was in the classpath.
      */
-    public static Optional<IProvideObject> defaultProvider() {
+    public static Optional<IProvideDefault> defaultProvider() {
         Class<?> providerClass      = utils.findClass(implementationClassName);
         boolean  isClassInClasspath = providerClass != null;
         if (!isClassInClasspath)
             return Optional.empty();
         
-        boolean isCompatibleType = IProvideObject.class.isAssignableFrom(providerClass);
+        boolean isCompatibleType = IProvideDefault.class.isAssignableFrom(providerClass);
         if (!isCompatibleType) 
             return Optional.empty();
         
         try {
-            Object         newInstance = providerClass.newInstance();
-            IProvideObject provider    = IProvideObject.class.cast(newInstance);
+            Object          newInstance = providerClass.newInstance();
+            IProvideDefault provider    = IProvideDefault.class.cast(newInstance);
             return Optional.ofNullable(provider);
             
         } catch (InstantiationException | IllegalAccessException e) {

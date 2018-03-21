@@ -15,7 +15,7 @@
 //  ========================================================================
 package nawaman.defaultj.core.bindings;
 
-import nawaman.defaultj.api.IProvideObject;
+import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.core.IBind;
 
 /**
@@ -39,7 +39,7 @@ public class InstanceBinding<TYPE> implements IBind<TYPE> {
     }
     
     @Override
-    public TYPE get(IProvideObject objectProvider) {
+    public TYPE get(IProvideDefault defaultProvider) {
         return this.instance;
     }
     

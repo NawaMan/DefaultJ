@@ -16,9 +16,9 @@
 package nawaman.defaultj.core.bindings;
 
 import lombok.val;
-import nawaman.defaultj.api.IProvideObject;
+import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.core.IBind;
-import nawaman.defaultj.core.ICreateObject;
+import nawaman.defaultj.core.ICreateDefault;
 
 /**
  * Binding to a factory.
@@ -29,20 +29,20 @@ import nawaman.defaultj.core.ICreateObject;
  */
 public class FactoryBinding<TYPE> implements IBind<TYPE> {
     
-    private final ICreateObject<TYPE> factory;
+    private final ICreateDefault<TYPE> factory;
     
     /**
      * Constructs a factory binding using the the factory.
      * 
-     * @param factory  the factory to create the object.
+     * @param factory  the factory to create the default.
      */
-    public FactoryBinding(ICreateObject<TYPE> factory) {
+    public FactoryBinding(ICreateDefault<TYPE> factory) {
         this.factory = factory;
     }
     
     @Override
-    public TYPE get(IProvideObject objectProvider) {
-        val value = this.factory.create(objectProvider);
+    public TYPE get(IProvideDefault defaultProvider) {
+        val value = this.factory.create(defaultProvider);
         return value;
     }
     

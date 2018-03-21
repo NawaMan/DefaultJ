@@ -24,14 +24,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import lombok.experimental.ExtensionMethod;
-import nawaman.defaultj.core.ObjectProvider;
+import nawaman.defaultj.core.DefaultProvider;
 import nawaman.nullablej.NullableJ;
 
 @SuppressWarnings("javadoc")
 @ExtensionMethod({ NullableJ.class })
 public class DefaultImplementationTest {
     
-    private ObjectProvider provider = new ObjectProvider();
+    private DefaultProvider provider = new DefaultProvider();
     
     @Retention(RetentionPolicy.RUNTIME)
     public @interface DefaultImplementation {

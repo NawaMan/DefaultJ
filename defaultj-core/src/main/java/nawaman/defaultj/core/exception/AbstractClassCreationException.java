@@ -15,14 +15,14 @@
 //  ========================================================================
 package nawaman.defaultj.core.exception;
 
-import nawaman.defaultj.api.ProvideObjectException;
+import nawaman.defaultj.api.ProvideDefaultException;
 
 /**
  * This exception is thrown when there is an to create an instance of an abstract class .
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-public class AbstractClassCreationException extends ProvideObjectException {
+public class AbstractClassCreationException extends ProvideDefaultException {
 
     private static final long serialVersionUID = 5751024581572983499L;
 

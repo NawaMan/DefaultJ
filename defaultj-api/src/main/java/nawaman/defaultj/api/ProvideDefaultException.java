@@ -16,11 +16,11 @@
 package nawaman.defaultj.api;
 
 /**
- * Exception thrown if there is a problem while trying to provide an object.
+ * Exception thrown if there is a problem while trying to provide a default.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-public class ProvideObjectException extends RuntimeException {
+public class ProvideDefaultException extends RuntimeException {
     
     private static final long serialVersionUID = -1503175854525324555L;
     
@@ -32,7 +32,7 @@ public class ProvideObjectException extends RuntimeException {
      * @param clazz
      *          the class that this fail provision is attempted too.
      **/
-    public ProvideObjectException(Class<?> clazz) {
+    public ProvideDefaultException(Class<?> clazz) {
         this(clazz, null);
     }
     
@@ -44,7 +44,7 @@ public class ProvideObjectException extends RuntimeException {
      * @param cause
      *          the cause of the problem.
      **/
-    public ProvideObjectException(Class<?> clazz, Throwable cause) {
+    public ProvideDefaultException(Class<?> clazz, Throwable cause) {
         super(clazz.getCanonicalName(), cause);
         this.clazz = clazz;
     }
@@ -55,7 +55,7 @@ public class ProvideObjectException extends RuntimeException {
      * @param msg    the error message.
      * @param clazz  the class that this fail creation is attempted too.
      **/
-    protected ProvideObjectException(String msg, Class<?> clazz) {
+    protected ProvideDefaultException(String msg, Class<?> clazz) {
         super(msg);
         this.clazz = clazz;
     }

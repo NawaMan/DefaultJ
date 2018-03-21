@@ -5,12 +5,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import nawaman.defaultj.annotations.DefaultInterface;
-import nawaman.defaultj.core.ObjectProvider;
+import nawaman.defaultj.core.DefaultProvider;
 
 @SuppressWarnings("javadoc")
 public class DefaultInterfaceTest {
     
-    private ObjectProvider provider = new ObjectProvider();
+    private DefaultProvider provider = new DefaultProvider();
     
     @DefaultInterface
     public static interface IGreet {

@@ -17,7 +17,7 @@ package nawaman.defaultj.api;
 
 import static org.junit.Assert.assertNull;
 
-import nawaman.defaultj.api.IProvideObject;
+import nawaman.defaultj.api.IProvideDefault;
 
 import org.junit.Test;
 
@@ -34,7 +34,7 @@ public class DefaultProviderTest {
      */
     @Test
     public void testThatWhenNoImplementationInTheClassPath_defaultProviderIsNull() {
-        assertNull(IProvideObject.defaultProvider().orElse(null));
+        assertNull(IProvideDefault.defaultProvider().orElse(null));
     }
     
 }

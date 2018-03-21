@@ -29,7 +29,8 @@ import java.util.function.Predicate;
 import lombok.Value;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
-import nawaman.defaultj.api.IProvideObject;
+import nawaman.defaultj.annotations.Default;
+import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.failable.Failable.Supplier;
 import nawaman.nullablej.NullableJ;
@@ -46,20 +47,21 @@ import nawaman.nullablej.nullable.Nullable;
 })
 public class FactoryMethodSupplierFinder implements IFindSupplier {
     
-    private static final Predicate<Method> annotatedWithDefault = annotatedWith("Default");
+    private static final String            DEFAULT              = Default.class.getSimpleName();
+    private static final Predicate<Method> annotatedWithDefault = annotatedWith(DEFAULT);
     
     @SuppressWarnings({ "unchecked" })
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
-            Class<TYPE>    theGivenClass,
-            IProvideObject objectProvider) {
-        val methodValue = findValueFromFactoryMethod(theGivenClass, objectProvider);
+            Class<TYPE>     theGivenClass,
+            IProvideDefault defaultProvider) {
+        val methodValue = findValueFromFactoryMethod(theGivenClass, defaultProvider);
         return (Supplier<TYPE, THROWABLE>)methodValue;
     }
     
     @SuppressWarnings("unchecked")
-    private <T> Supplier<T, ? extends Throwable> findValueFromFactoryMethod(Class<T> theGivenClass, IProvideObject objectProvider) {
-        val helper   = new Helper<T>(theGivenClass, objectProvider);
+    private <T> Supplier<T, ? extends Throwable> findValueFromFactoryMethod(Class<T> theGivenClass, IProvideDefault defaultProvider) {
+        val helper   = new Helper<T>(theGivenClass, defaultProvider);
         val supplier = (Supplier<T, ? extends Throwable>)
                 theGivenClass.getDeclaredMethods()._stream$()
                 .filter(ifStaticMethod)
@@ -74,7 +76,7 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
     @Value
     static class Helper<T> {
         private Class<T> theGivenClass;
-        private IProvideObject objectProvider;
+        private IProvideDefault defaultProvider;
         
         @SuppressWarnings({ "rawtypes", "unchecked" })
         private Supplier findValue(Method method) {
@@ -126,7 +128,7 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
         @SuppressWarnings({ "rawtypes", "unchecked" })
         private Object getNullableOrOptionalValue(Method method, final boolean isNullable)
                 throws IllegalAccessException, InvocationTargetException {
-            val params   = prepareParameters(method, objectProvider);
+            val params   = prepareParameters(method, defaultProvider);
             val nullable = method.invoke(theGivenClass, params);
             val value = isNullable
                     ? ((Nullable)nullable).orElse(null)
@@ -148,7 +150,7 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
                 Method method,
                 Method getMethod) 
                         throws IllegalAccessException, InvocationTargetException {
-            val params = prepareParameters(method, objectProvider);
+            val params = prepareParameters(method, defaultProvider);
             val result = method.invoke(theGivenClass, params);
             val value  = getMethod.invoke(result);
             return value;
@@ -156,7 +158,7 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
         
         private Object basicFactoryMethodCall(Method method)
                 throws IllegalAccessException, InvocationTargetException {
-            val params = prepareParameters(method, objectProvider);
+            val params = prepareParameters(method, defaultProvider);
             val value  = method.invoke(theGivenClass, params);
             return value;
         }

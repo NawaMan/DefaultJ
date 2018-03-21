@@ -24,7 +24,7 @@ import java.util.Optional;
 
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
-import nawaman.defaultj.api.IProvideObject;
+import nawaman.defaultj.api.IProvideDefault;
 import nawaman.failable.Failable.Supplier;
 import nawaman.nullablej.NullableJ;
 import nawaman.nullablej.nullable.Nullable;
@@ -43,13 +43,13 @@ public class MethodSupplierFinderUtils {
     /**
      * Returns the parameters for the given method.
      * 
-     * @param method          the method.
-     * @param objectProvider  the object provider to use.
+     * @param method           the method.
+     * @param defaultProvider  the default provider to use.
      * @return  the array of parameters.
      */
-    public static Object[] prepareParameters(Method method, IProvideObject objectProvider) {
+    public static Object[] prepareParameters(Method method, IProvideDefault defaultProvider) {
         val paramsArray = method.getParameters();
-        val paramValues = getParameters(paramsArray , objectProvider);
+        val paramValues = getParameters(paramsArray , defaultProvider);
         return paramValues;
     }
     
@@ -57,16 +57,16 @@ public class MethodSupplierFinderUtils {
      * Returns the parameters for the given constructor.
      * 
      * @param constructor     the constructor.
-     * @param objectProvider  the object provider to use.
+     * @param defaultProvider  the object provider to use.
      * @return  the array of parameters.
      */
-    public static Object[] prepareParameters(Constructor<?> constructor, IProvideObject objectProvider) {
+    public static Object[] prepareParameters(Constructor<?> constructor, IProvideDefault defaultProvider) {
         val paramsArray = constructor.getParameters();
-        val paramValues = getParameters(paramsArray , objectProvider);
+        val paramValues = getParameters(paramsArray , defaultProvider);
         return paramValues;
     }
     
-    private static Object[] getParameters(Parameter[] paramsArray, IProvideObject objectProvider) {
+    private static Object[] getParameters(Parameter[] paramsArray, IProvideDefault defaultProvider) {
         val params = new Object[paramsArray.length];
         for (int i = 0; i < paramsArray.length; i++) {
             val param             = paramsArray[i];
@@ -74,51 +74,51 @@ public class MethodSupplierFinderUtils {
             val parameterizedType = param.getParameterizedType();
             boolean isNullable    = param.getAnnotations().has("Nullable")
                                  || param.getAnnotations().has("Optional");
-            Object  paramValue    = determineParameterValue(paramType, parameterizedType, isNullable, objectProvider);
+            Object  paramValue    = determineParameterValue(paramType, parameterizedType, isNullable, defaultProvider);
             params[i] = paramValue;
         }
         return params;
     }
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private static Object determineParameterValue(Class paramType, Type type, boolean canBeNull, IProvideObject objectProvider) {
+    private static Object determineParameterValue(Class paramType, Type type, boolean canBeNull, IProvideDefault defaultProvider) {
         if (type instanceof ParameterizedType) {
             val parameterizedType = (ParameterizedType)type;
             val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
             
             if (Supplier.class.isAssignableFrom(paramType))
                 return  (Supplier)(()-> {
-                    val value = objectProvider.get(actualType);
+                    val value = defaultProvider.get(actualType);
                     return value;
                 });
             
             if (java.util.function.Supplier.class.isAssignableFrom(paramType))
                 return (java.util.function.Supplier)(()->{
-                    val value = objectProvider.get(actualType);
+                    val value = defaultProvider.get(actualType);
                     return value;
                 });
             
             val isOptional = Optional.class.isAssignableFrom(paramType);
             val isNullable = !isOptional && Nullable.class.isAssignableFrom(paramType);
             if (isOptional || isNullable) {
-                return getNullableOrOptionalValue(canBeNull, objectProvider, actualType, isOptional);
+                return getNullableOrOptionalValue(canBeNull, defaultProvider, actualType, isOptional);
             }
         }
         
         if (canBeNull)
-            return getValueOrNullWhenFail(paramType, objectProvider);
+            return getValueOrNullWhenFail(paramType, defaultProvider);
         
-        val value = objectProvider.get(paramType);
+        val value = defaultProvider.get(paramType);
         return value;
     }
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    private static Object getNullableOrOptionalValue(boolean canBeNull, IProvideObject objectProvider,
+    private static Object getNullableOrOptionalValue(boolean canBeNull, IProvideDefault defaultProvider,
             final java.lang.Class actualType, final boolean isOptional) {
         java.util.function.Function noException   = isOptional ? Optional::ofNullable : Nullable::of;
         java.util.function.Supplier withException = isOptional ? Optional::empty      : Nullable::empty;
         try {
-            val paramValue = objectProvider.get(actualType);
+            val paramValue = defaultProvider.get(actualType);
             return noException.apply(paramValue);
         } catch (Exception e) {
             return canBeNull ? null : withException.get();
@@ -126,9 +126,9 @@ public class MethodSupplierFinderUtils {
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    private static Object getValueOrNullWhenFail(Class paramType, IProvideObject objectProvider) {
+    private static Object getValueOrNullWhenFail(Class paramType, IProvideDefault defaultProvider) {
         try {
-            return objectProvider.get(paramType);
+            return defaultProvider.get(paramType);
         } catch (Exception e) {
             return null;
         }

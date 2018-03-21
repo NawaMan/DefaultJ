@@ -17,8 +17,8 @@ package nawaman.defaultj.core;
 
 import static org.junit.Assert.assertTrue;
 
-import nawaman.defaultj.api.IProvideObject;
-import nawaman.defaultj.core.ObjectProvider;
+import nawaman.defaultj.api.IProvideDefault;
+import nawaman.defaultj.core.DefaultProvider;
 
 import org.junit.Test;
 
@@ -27,7 +27,7 @@ public class DefaultProviderTest {
     
     @Test
     public void testDefaultProvider() {
-        assertTrue(ObjectProvider.class.isInstance(IProvideObject.defaultProvider().get()));
+        assertTrue(DefaultProvider.class.isInstance(IProvideDefault.defaultProvider().get()));
     }
     
 }

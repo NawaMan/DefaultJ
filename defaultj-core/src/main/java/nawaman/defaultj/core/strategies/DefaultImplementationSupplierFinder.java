@@ -24,19 +24,25 @@ import java.util.function.Predicate;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
-import nawaman.defaultj.api.IProvideObject;
+import nawaman.defaultj.annotations.DefaultImplementation;
+import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.failable.Failables;
 import nawaman.nullablej.NullableJ;
 
 /**
- * This class get an object that is a default implementation of the target class.
+ * This class get a default that is a default implementation of the target class.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
+@ExtensionMethod({
+    NullableJ.class,
+    AnnotationUtils.class
+})
 public class DefaultImplementationSupplierFinder implements IFindSupplier {
     
+    private static final String ANNOTATION_NAME = DefaultImplementation.class.getSimpleName();
+
     private static final Function<String, String> extractValue
             = toString->toString.replaceAll("^(.*\\(value=)(.*)(\\))$", "$2");
     
@@ -46,9 +52,9 @@ public class DefaultImplementationSupplierFinder implements IFindSupplier {
     @SuppressWarnings("unchecked")
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
-            Class<TYPE>    theGivenClass,
-            IProvideObject objectProvider) {
-        if (!theGivenClass.getAnnotations().has("DefaultImplementation"))
+            Class<TYPE>     theGivenClass,
+            IProvideDefault defaultProvider) {
+        if (!theGivenClass.getAnnotations().has(ANNOTATION_NAME))
             return null;
         
         val defaultImplementationClass = findDefaultImplementation(theGivenClass);
@@ -56,7 +62,7 @@ public class DefaultImplementationSupplierFinder implements IFindSupplier {
             return NullSupplier;
         
         return Failables.of(()->{ 
-            return (TYPE)objectProvider.get(defaultImplementationClass);
+            return (TYPE)defaultProvider.get(defaultImplementationClass);
         });
     }
     

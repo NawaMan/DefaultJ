@@ -29,7 +29,8 @@ import java.util.function.Predicate;
 import lombok.Value;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
-import nawaman.defaultj.api.IProvideObject;
+import nawaman.defaultj.annotations.Default;
+import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.failable.Failable.Supplier;
 import nawaman.nullablej.NullableJ;
@@ -52,14 +53,15 @@ import nawaman.nullablej.nullable.Nullable;
 })
 public class SingletonFieldFinder implements IFindSupplier {
     
-    private static final Predicate<Field>  annotatedWithDefault = annotatedWith("Default");
+    private static final String            DEFAULT              = Default.class.getSimpleName();
+    private static final Predicate<Field>  annotatedWithDefault = annotatedWith(DEFAULT);
     private static final Predicate<Object> notNull              = Objects::nonNull;
 
     @SuppressWarnings({ "unchecked" })
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
-            Class<TYPE>    theGivenClass,
-            IProvideObject objectProvider) {
+            Class<TYPE>     theGivenClass,
+            IProvideDefault defaultProvider) {
         Supplier<TYPE, THROWABLE> fieldValue = findValueFromSingletonField(theGivenClass);
         return fieldValue;
     }

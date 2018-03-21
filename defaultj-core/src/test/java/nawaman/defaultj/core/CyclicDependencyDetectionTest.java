@@ -26,14 +26,14 @@ import static org.junit.Assert.fail;
 
 import lombok.val;
 import nawaman.defaultj.annotations.Nullable;
-import nawaman.defaultj.core.ObjectProvider;
+import nawaman.defaultj.core.DefaultProvider;
 import nawaman.defaultj.core.exception.CyclicDependencyDetectedException;
-import nawaman.defaultj.core.exception.ObjectCreationException;
+import nawaman.defaultj.core.exception.DefaultCreationException;
 
 @SuppressWarnings("javadoc")
 public class CyclicDependencyDetectionTest {
     
-    private ObjectProvider provider = new ObjectProvider();
+    private DefaultProvider provider = new DefaultProvider();
     
     public static class Cyclic1 {
         
@@ -46,7 +46,7 @@ public class CyclicDependencyDetectionTest {
         try {
             provider.get(Cyclic1.class);
             fail("Expect an exception");
-        } catch (ObjectCreationException e) {
+        } catch (DefaultCreationException e) {
             assertTrue(e.getCause() instanceof CyclicDependencyDetectedException);
         }
     }
@@ -61,7 +61,7 @@ public class CyclicDependencyDetectionTest {
     public void testThat_whenDefaultConstructorAskForItself_expectCyclicDependencyDetectedException_evenWithOptional() {
         try {
             provider.get(Cyclic2.class);
-        } catch (ObjectCreationException e) {
+        } catch (DefaultCreationException e) {
             assertTrue(e.getCause() instanceof CyclicDependencyDetectedException);
         }
     }
@@ -76,7 +76,7 @@ public class CyclicDependencyDetectionTest {
     public void testThat_whenDefaultConstructorAskForItself_expectCyclicDependencyDetectedException_evenWithNullable() {
         try {
             provider.get(Cyclic3.class);
-        } catch (ObjectCreationException e) {
+        } catch (DefaultCreationException e) {
             assertTrue(e.getCause() instanceof CyclicDependencyDetectedException);
         }
     }

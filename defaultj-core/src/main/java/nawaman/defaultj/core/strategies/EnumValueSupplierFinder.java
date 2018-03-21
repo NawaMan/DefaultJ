@@ -19,8 +19,9 @@ import java.util.function.Predicate;
 
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
-import nawaman.defaultj.api.IProvideObject;
-import nawaman.defaultj.core.exception.ObjectCreationException;
+import nawaman.defaultj.annotations.Default;
+import nawaman.defaultj.api.IProvideDefault;
+import nawaman.defaultj.core.exception.DefaultCreationException;
 import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.failable.Failable.Supplier;
 import nawaman.nullablej.NullableJ;
@@ -36,10 +37,12 @@ import nawaman.nullablej.NullableJ;
 })
 public class EnumValueSupplierFinder implements IFindSupplier {
     
+    private static final String DEFAULT = Default.class.getSimpleName();
+    
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
-            Class<TYPE>    theGivenClass,
-            IProvideObject objectProvider) {
+            Class<TYPE>     theGivenClass,
+            IProvideDefault defaultProvider) {
         if (!theGivenClass.isEnum()) 
             return null;
         
@@ -64,9 +67,9 @@ public class EnumValueSupplierFinder implements IFindSupplier {
         return value->{
             val name = ((Enum)value).name();
             try {
-                return theGivenClass.getField(name).getAnnotations().has("Default");
+                return theGivenClass.getField(name).getAnnotations().has(DEFAULT);
             } catch (NoSuchFieldException | SecurityException e) {
-                throw new ObjectCreationException(theGivenClass, e);
+                throw new DefaultCreationException(theGivenClass, e);
             }
         };
     }

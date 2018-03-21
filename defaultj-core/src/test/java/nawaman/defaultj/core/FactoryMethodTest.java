@@ -17,7 +17,7 @@ package nawaman.defaultj.core;
 
 import static org.junit.Assert.assertEquals;
 
-import nawaman.defaultj.core.ObjectProvider;
+import nawaman.defaultj.core.DefaultProvider;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -27,7 +27,7 @@ import org.junit.Test;
 @SuppressWarnings("javadoc")
 public class FactoryMethodTest {
     
-    private ObjectProvider provider = new ObjectProvider();
+    private DefaultProvider provider = new DefaultProvider();
     
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Default {

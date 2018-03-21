@@ -20,7 +20,7 @@ import java.lang.reflect.Modifier;
 import java.util.function.Supplier;
 
 import lombok.experimental.ExtensionMethod;
-import nawaman.defaultj.core.exception.ObjectCreationException;
+import nawaman.defaultj.core.exception.DefaultCreationException;
 import nawaman.nullablej.NullableJ;
 
 /**
@@ -109,7 +109,7 @@ public class ConstructorUtils {
         } catch (NoSuchMethodException e) {
             return null;
         } catch (SecurityException e) {
-            throw new ObjectCreationException(clzz);
+            throw new DefaultCreationException(clzz);
         }
     }
     

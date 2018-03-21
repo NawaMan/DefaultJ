@@ -15,14 +15,14 @@
 //  ========================================================================
 package nawaman.defaultj.core.exception;
 
-import nawaman.defaultj.api.ProvideObjectException;
+import nawaman.defaultj.api.ProvideDefaultException;
 
 /**
- * This exception is thrown when creating an object fail.
+ * This exception is thrown when creating a default fail because of cyclic dependency.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-public class CyclicDependencyDetectedException extends ProvideObjectException {
+public class CyclicDependencyDetectedException extends ProvideDefaultException {
     
     private static final long serialVersionUID = -7821227248195126756L;
     

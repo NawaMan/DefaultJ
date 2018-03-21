@@ -32,11 +32,11 @@ import lombok.Setter;
 import lombok.val;
 import lombok.experimental.Accessors;
 import lombok.experimental.ExtensionMethod;
-import nawaman.defaultj.api.IProvideObject;
-import nawaman.defaultj.api.ProvideObjectException;
+import nawaman.defaultj.api.IProvideDefault;
+import nawaman.defaultj.api.ProvideDefaultException;
 import nawaman.defaultj.core.exception.AbstractClassCreationException;
 import nawaman.defaultj.core.exception.CyclicDependencyDetectedException;
-import nawaman.defaultj.core.exception.ObjectCreationException;
+import nawaman.defaultj.core.exception.DefaultCreationException;
 import nawaman.defaultj.core.strategies.ConstructorSupplierFinder;
 import nawaman.defaultj.core.strategies.DefaultImplementationSupplierFinder;
 import nawaman.defaultj.core.strategies.DefaultInterfaceSupplierFinder;
@@ -49,15 +49,12 @@ import nawaman.failable.Failable.Supplier;
 import nawaman.nullablej.NullableJ;
 
 /**
- * ObjectProvider can provide objects.
+ * DefaultProvider can provide defaults.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({ NullableJ.class })
-public class ObjectProvider implements IProvideObject {
-    
-    // TODO - Add default factory.
-    // TODO - Should create interface with all default method.
+public class DefaultProvider implements IProvideDefault {
     
     @SuppressWarnings("rawtypes")
     private static final Supplier NoSupplier = ()->null;
@@ -83,7 +80,7 @@ public class ObjectProvider implements IProvideObject {
     
     private static final Bindings noBinding = new Bindings.Builder().build();
     
-    private IProvideObject        parent;
+    private IProvideDefault       parent;
     private List<IFindSupplier>   finders;
     private IHandleProvideFailure provideFailureHandler;
     
@@ -92,27 +89,27 @@ public class ObjectProvider implements IProvideObject {
     @SuppressWarnings("rawtypes")
     private Map<Class, Supplier> suppliers = new ConcurrentHashMap<Class, Supplier>();
     
-    private List<IFindSupplier>  additionalSupplierFinders;
+    private List<IFindSupplier> additionalSupplierFinders;
     
     /** Ready to use instance with default settings */
-    public static final ObjectProvider instance = new ObjectProvider();
+    public static final DefaultProvider instance = new DefaultProvider();
     
     /**
-     * Constructs the ObjectProvider without any configuration.
+     * Constructs the DefaultProvider without any configuration.
      **/
-    public ObjectProvider() {
+    public DefaultProvider() {
         this(null, null, null, null);
     }
 
     /**
-     * Constructs the ObjectProvider with configurations.
-     * @param parent                     the parent Object provider.
+     * Constructs the DefaultProvider with configurations.
+     * @param parent                     the parent default provider.
      * @param additionalSupplierFinders  additional supplier finders.
      * @param bingings                   the bindings.
      * @param provideFailureHandler      the handler for provide failure.
      **/
-    public ObjectProvider(
-            IProvideObject        parent,
+    public DefaultProvider(
+            IProvideDefault       parent,
             List<IFindSupplier>   additionalSupplierFinders,
             Bindings              bingings,
             IHandleProvideFailure provideFailureHandler) {
@@ -126,13 +123,13 @@ public class ObjectProvider implements IProvideObject {
     }
     
     /**
-     * Create a builder for the ObjectProvider.
+     * Create a builder for the DefaultProvider.
      */
     @Setter
     @AllArgsConstructor
     @Accessors(fluent=true,chain=true)
     public static class Builder {
-        private IProvideObject        parent;
+        private IProvideDefault       parent;
         private List<IFindSupplier>   additionalSupplierFinders;
         private Bindings              bingings;
         private IHandleProvideFailure provideFailureHandler;
@@ -145,12 +142,12 @@ public class ObjectProvider implements IProvideObject {
         }
         
         /**
-         * Build the ObjectProider.
+         * Build the DefaultProvider.
          * 
-         * @return  the newly built ObjectProvider.
+         * @return  the newly built DefaultProvider.
          */
-        public ObjectProvider build() {
-            return new ObjectProvider(parent, additionalSupplierFinders, bingings, provideFailureHandler);
+        public DefaultProvider build() {
+            return new DefaultProvider(parent, additionalSupplierFinders, bingings, provideFailureHandler);
         }
     }
     
@@ -166,20 +163,20 @@ public class ObjectProvider implements IProvideObject {
      * Create a new provider with the given provide failure provider.
      * 
      * @param provideFailureHandler  the handler.
-     * @return  a new object provider with all configuration of this provider except for the handler.
+     * @return  a new default provider with all configuration of this provider except for the handler.
      */
-    public ObjectProvider wihtProvideFailureHandler(IHandleProvideFailure provideFailureHandler) {
-        return new ObjectProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
+    public DefaultProvider wihtProvideFailureHandler(IHandleProvideFailure provideFailureHandler) {
+        return new DefaultProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
     }
     
     /**
      * Create a new provider with the given provide failure provider.
      * 
      * @param bindings  the provision bindings.
-     * @return  a new object provider with all configuration of this provider except for the bindings.
+     * @return  a new default provider with all configuration of this provider except for the bindings.
      */
-    public ObjectProvider wihtBindings(Bindings bindings) {
-        return new ObjectProvider(parent, additionalSupplierFinders, bindings, provideFailureHandler);
+    public DefaultProvider wihtBindings(Bindings bindings) {
+        return new DefaultProvider(parent, additionalSupplierFinders, bindings, provideFailureHandler);
     }
     
     /**
@@ -187,11 +184,11 @@ public class ObjectProvider implements IProvideObject {
      * 
      * @param theGivenClass  the data class.
      * @return the created value.
-     * @throws ProvideObjectException when there is a problem providing the object.
+     * @throws ProvideDefaultException when there is a problem providing the default.
      */
     @SuppressWarnings("rawtypes")
     @Override
-    public <TYPE> TYPE get(Class<TYPE> theGivenClass) throws ProvideObjectException {
+    public <TYPE> TYPE get(Class<TYPE> theGivenClass) throws ProvideDefaultException {
         val set = beingCreateds.get();
         if (set.contains(theGivenClass))
             throw new CyclicDependencyDetectedException(theGivenClass);
@@ -203,10 +200,10 @@ public class ObjectProvider implements IProvideObject {
                 val supplier = getSupplierFor(theGivenClass);
                 val instance = supplier.get();
                 return theGivenClass.cast(instance);
-            } catch (ObjectCreationException e) {
+            } catch (DefaultCreationException e) {
                 throw e;
             } catch (Throwable e) {
-                throw new ObjectCreationException(theGivenClass, e);
+                throw new DefaultCreationException(theGivenClass, e);
             }
         } finally {
             set.remove(theGivenClass);
@@ -232,17 +229,17 @@ public class ObjectProvider implements IProvideObject {
         if (binding._isNotNull())
             return ()->binding.get(this);
         
-        if (ObjectProvider.class.isAssignableFrom(theGivenClass))
+        if (DefaultProvider.class.isAssignableFrom(theGivenClass))
             return ()->this;
         
-        val parentProvider = (IProvideObject)this.parent._or(this);
+        val parentProvider = (IProvideDefault)this.parent._or(this);
         for (val finder : finders) {
             val supplier = finder.find(theGivenClass, parentProvider);
             if (supplier._isNotNull())
                 return supplier;
         }
         
-        if (IProvideObject.class.isAssignableFrom(theGivenClass))
+        if (IProvideDefault.class.isAssignableFrom(theGivenClass))
             return ()->this;
         
         return ()->handleLoadingFailure(theGivenClass);

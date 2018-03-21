@@ -23,13 +23,13 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import nawaman.defaultj.core.ObjectProvider;
+import nawaman.defaultj.core.DefaultProvider;
 import nawaman.failable.Failable;
 
 @SuppressWarnings("javadoc")
 public class FactoryMethodReturningSupplierTest {
     
-    private ObjectProvider provider = new ObjectProvider();
+    private DefaultProvider provider = new DefaultProvider();
     
     @Retention(RetentionPolicy.RUNTIME)
     public @interface Default {

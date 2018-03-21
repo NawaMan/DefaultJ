@@ -16,7 +16,7 @@
 package nawaman.defaultj.core.bindings;
 
 import lombok.val;
-import nawaman.defaultj.api.IProvideObject;
+import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.core.IBind;
 
 /**
@@ -40,8 +40,8 @@ public class TypeBinding<TYPE> implements IBind<TYPE> {
     }
     
     @Override
-    public TYPE get(IProvideObject objectProvider) {
-        val value = (TYPE)objectProvider.get(referedType);
+    public TYPE get(IProvideDefault defaultProvider) {
+        val value = (TYPE)defaultProvider.get(referedType);
         return value;
     }
     

@@ -27,7 +27,8 @@ import java.util.TreeSet;
 import lombok.AllArgsConstructor;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
-import nawaman.defaultj.api.IProvideObject;
+import nawaman.defaultj.annotations.DefaultInterface;
+import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.core.exception.NonDefaultInterfaceException;
 import nawaman.defaultj.core.exception.NonDefaultMethodException;
 import nawaman.defaultj.core.utils.AnnotationUtils;
@@ -36,23 +37,27 @@ import nawaman.nullablej.NullableJ;
 import nawaman.nullablej._internal.UReflection;
 
 /**
- * This class find object of interface will all default methods.
+ * This class find default of an interface with all default methods.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({ NullableJ.class, AnnotationUtils.class })
+@ExtensionMethod({
+    NullableJ.class,
+    AnnotationUtils.class
+})
 public class DefaultInterfaceSupplierFinder implements IFindSupplier {
 
+    private static final String DEFAULT_INTERFACE = DefaultInterface.class.getSimpleName();
     private static final Random random = new Random();
     
     @SuppressWarnings("unchecked")
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
-            Class<TYPE>    theGivenClass,
-            IProvideObject objectProvider) {
+            Class<TYPE>     theGivenClass,
+            IProvideDefault defaultProvider) {
         boolean isDefaultInterface
                 =  theGivenClass.isInterface()
-                && theGivenClass.getAnnotations().has("DefaultInterface");
+                && theGivenClass.getAnnotations().has(DEFAULT_INTERFACE);
         
         if (!isDefaultInterface)
             return null;

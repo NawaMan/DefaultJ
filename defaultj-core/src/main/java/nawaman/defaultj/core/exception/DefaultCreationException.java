@@ -13,26 +13,36 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.defaultj.core;
+package nawaman.defaultj.core.exception;
 
-import nawaman.defaultj.api.IProvideObject;
+import nawaman.defaultj.api.ProvideDefaultException;
 
 /**
- * Classes implementing this interface can create an object.
- * 
- * @param <TYPE> the type the factory can provide.
+ * This exception is thrown when creating a default fail.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@FunctionalInterface
-public interface ICreateObject<TYPE> {
+public class DefaultCreationException extends ProvideDefaultException {
+    
+    private static final long serialVersionUID = 5414890542605369904L;
     
     /**
-     * Create the object.
+     * Constructor 
      * 
-     * @param objectProvider  the object provider.
-     * @return  the newly created object.
-     */
-    public TYPE create(IProvideObject objectProvider);
+     * @param clazz  the class that this fail creation is attempted too.
+     **/
+    public DefaultCreationException(Class<?> clazz) {
+        this(clazz, null);
+    }
+    
+    /**
+     * Constructor 
+     * 
+     * @param clazz  the class that cause this exception.
+     * @param cause  the cause exception of this exception.
+     **/
+    public DefaultCreationException(Class<?> clazz, Throwable cause) {
+        super(clazz, cause);
+    }
     
 }

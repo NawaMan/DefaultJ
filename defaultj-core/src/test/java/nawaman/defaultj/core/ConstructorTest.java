@@ -23,14 +23,14 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import lombok.experimental.ExtensionMethod;
-import nawaman.defaultj.core.ObjectProvider;
+import nawaman.defaultj.core.DefaultProvider;
 import nawaman.nullablej.NullableJ;
 
 @SuppressWarnings("javadoc")
 @ExtensionMethod({ NullableJ.class })
 public class ConstructorTest {
     
-    private ObjectProvider provider = new ObjectProvider();
+    private DefaultProvider provider = new DefaultProvider();
     
     //== Regular class ==
     

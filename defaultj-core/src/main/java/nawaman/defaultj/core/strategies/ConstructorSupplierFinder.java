@@ -23,14 +23,15 @@ import java.lang.reflect.Constructor;
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
 import nawaman.failable.Failable.Supplier;
-import nawaman.defaultj.api.IProvideObject;
+import nawaman.defaultj.annotations.Default;
+import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.defaultj.core.utils.ConstructorUtils;
 import nawaman.failable.Failables;
 import nawaman.nullablej.NullableJ;
 
 /**
- * This class get an object by invoking a constructor.
+ * This class get a default by invoking a constructor.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
@@ -42,13 +43,13 @@ import nawaman.nullablej.NullableJ;
 public class ConstructorSupplierFinder implements IFindSupplier {
     
     /** The name of the Inject annotation */
-    public static final String DEFAULT = "Default";
+    public static final String ANNOTATION_NAME = Default.class.getSimpleName();
     
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE>
-            find(Class<TYPE> theGivenClass, IProvideObject objectProvider) {
+            find(Class<TYPE> theGivenClass, IProvideDefault defaultProvider) {
         Constructor<TYPE> constructor
-                = theGivenClass.findConstructorWithAnnotation(DEFAULT)
+                = theGivenClass.findConstructorWithAnnotation(ANNOTATION_NAME)
                 ._orGet(sensibleDefaultConstructorOf(theGivenClass));
         
         if (!constructor._isPublic())
@@ -56,14 +57,14 @@ public class ConstructorSupplierFinder implements IFindSupplier {
         
         @SuppressWarnings("unchecked")
         val supplier = (Supplier<TYPE, THROWABLE>)Failables.of(()->
-                callConstructor(constructor, objectProvider));
+                callConstructor(constructor, defaultProvider));
         return supplier;
     }
     
-    static <TYPE> TYPE callConstructor(Constructor<TYPE> constructor, IProvideObject objectProvider)
+    static <TYPE> TYPE callConstructor(Constructor<TYPE> constructor, IProvideDefault defaultProvider)
             throws ReflectiveOperationException {
         // TODO - Change to use method handle.
-        val paramValues = prepareParameters(constructor, objectProvider);
+        val paramValues = prepareParameters(constructor, defaultProvider);
         val instance    = constructor.newInstance(paramValues);
         return (TYPE)instance;
     }

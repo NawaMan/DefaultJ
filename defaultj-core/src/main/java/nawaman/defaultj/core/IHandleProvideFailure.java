@@ -24,11 +24,11 @@ package nawaman.defaultj.core;
 public interface IHandleProvideFailure {
     
     /**
-     * Handler the failure to provide object for the give class.
+     * Handler the failure to provide default for the give class.
      * 
      * @param <T>            the type of the object represent by the class.
      * @param theGivenClass  the given class.
-     * @return  the Object that might be found.
+     * @return  the default that might be found.
      */
     public <T> T handle(Class<T> theGivenClass);
     

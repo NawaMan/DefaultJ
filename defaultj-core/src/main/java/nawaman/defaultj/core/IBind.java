@@ -15,7 +15,7 @@
 //  ========================================================================
 package nawaman.defaultj.core;
 
-import nawaman.defaultj.api.IProvideObject;
+import nawaman.defaultj.api.IProvideDefault;
 
 /**
  * Binding of the type to the value its return.
@@ -28,11 +28,11 @@ import nawaman.defaultj.api.IProvideObject;
 public interface IBind<TYPE> {
     
     /**
-     * Get the bounded object.
+     * Get the bounded default object.
      * 
-     * @param objectProvider  the object provider.
-     * @return  the bound object.
+     * @param defaultProvider  the default provider.
+     * @return  the bound default object.
      */
-    public TYPE get(IProvideObject objectProvider);
+    public TYPE get(IProvideDefault defaultProvider);
     
 }
