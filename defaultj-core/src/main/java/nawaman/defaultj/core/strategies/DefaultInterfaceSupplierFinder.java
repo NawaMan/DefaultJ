@@ -15,6 +15,8 @@
 //  ========================================================================
 package nawaman.defaultj.core.strategies;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
@@ -34,7 +36,6 @@ import nawaman.defaultj.core.exception.NonDefaultMethodException;
 import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.failable.Failable.Supplier;
 import nawaman.nullablej.NullableJ;
-import nawaman.nullablej._internal.UReflection;
 
 /**
  * This class find default of an interface with all default methods.
@@ -71,7 +72,7 @@ public class DefaultInterfaceSupplierFinder implements IFindSupplier {
         val interfaces  = new Class<?>[] { theGivenClass };
         val hashCode    = Math.abs(random.nextInt() / 2);
         val theProxy    = (TYPE)Proxy.newProxyInstance(classLoader, interfaces, (proxy, method, args)->{
-            return handleDefaultInterface(theGivenClass, hashCode, proxy, method, args);
+            return handleDefaultInterface(theGivenClass, hashCode, proxy, getDefaultMethod(method), args);
         });
         return () -> theProxy;
     }
@@ -84,22 +85,66 @@ public class DefaultInterfaceSupplierFinder implements IFindSupplier {
             Object[] args)
                     throws Throwable {
         // TODO Redirect this somewhere.
-        if ("toString".equals(method.getName()) && (method.getParameterCount() == 0))
+        if ("toString".equals(getDefaultMethod(method).getName()) && (getDefaultMethod(method).getParameterCount() == 0))
             return theGivenClass.getSimpleName() + "@" + hashCode;
-        if ("hashCode".equals(method.getName()) && (method.getParameterCount() == 0))
+        if ("hashCode".equals(getDefaultMethod(method).getName()) && (getDefaultMethod(method).getParameterCount() == 0))
             return hashCode;
-        if ("equals".equals(method.getName()) && (method.getParameterCount() == 1)) {
+        if ("equals".equals(getDefaultMethod(method).getName()) && (getDefaultMethod(method).getParameterCount() == 1)) {
             return this == args[0];
         }
         
-        if (!method.isDefault())
-            throw new NonDefaultMethodException(method);
+        return invokeDefaultMethod(proxy, getDefaultMethod(method), args);
+    }
+
+    private Object invokeDefaultMethod(Object proxy, Method method, Object[] args) throws NoSuchMethodException,
+            Throwable, IllegalAccessException, InstantiationException, InvocationTargetException {
+        val defaultMethod = getDefaultMethod(method);
         
-        return UReflection.invokeDefaultMethod(proxy, method, args);
+        // TODO - See if we can avoid this in case it is already done.
+        val declaringClass = defaultMethod.getDeclaringClass();
+        val constructor    = MethodHandles.Lookup.class.getDeclaredConstructor(Class.class, int.class);
+        constructor.setAccessible(true);
+        
+        val result = constructor
+                .newInstance(declaringClass, MethodHandles.Lookup.PRIVATE)
+                .unreflectSpecial(defaultMethod, declaringClass)
+                .bindTo(proxy)
+                .invokeWithArguments(args);
+        return result;
+    }
+
+    private Method getDefaultMethod(Method method) {
+        if (method.isDefault())
+            return method;
+        
+        for (Class<?> superInterface : method.getDeclaringClass().getInterfaces()) {
+            Method defaultMethod = getDefaultMethodFrom(method, superInterface);
+            if (defaultMethod != null)
+                return defaultMethod;
+        }
+        throw new NonDefaultMethodException(method);
     }
     
+    private Method getDefaultMethodFrom(Method method, Class<?> thisInterface) {
+        try {
+            Method foundMethod = thisInterface.getDeclaredMethod(method.getName(), method.getParameterTypes());
+            if (foundMethod.isDefault())
+                return foundMethod;
+        } catch (NoSuchMethodException | SecurityException e) {
+            
+        }
+        
+        for (Class<?> superInterface : thisInterface.getInterfaces()) {
+            Method defaultMethod = getDefaultMethodFrom(method, superInterface);
+            if (defaultMethod != null)
+                return defaultMethod;
+        }
+        
+        return null;
+    }
+
     @AllArgsConstructor
-    static class InterfaceChecker<T> {
+    private static class InterfaceChecker<T> {
         
         private Class<T> orgInterface;
         
@@ -107,13 +152,13 @@ public class DefaultInterfaceSupplierFinder implements IFindSupplier {
         
         private final Set<String> defaults = new TreeSet<String>();
         
-        Map<String, String> ensureDefaultInterface() {
+        private Map<String, String> ensureDefaultInterface() {
             ensureDefaultInterface(orgInterface);
             defaults.forEach(m -> abstracts.remove(m));
             return abstracts;
         }
         
-        void ensureDefaultInterface(Class<?> element) {
+        private void ensureDefaultInterface(Class<?> element) {
             for (Method method : element.getDeclaredMethods()) {
                 if (method.isDefault() || !java.lang.reflect.Modifier.isAbstract(method.getModifiers()))
                      defaults.add(methodSignature(method));
@@ -125,7 +170,7 @@ public class DefaultInterfaceSupplierFinder implements IFindSupplier {
             }
         }
         
-        static String methodSignature(Method method) {
+        private static String methodSignature(Method method) {
             return method.getName() + "(" + Arrays.toString(method.getParameterTypes()) + "): " + method.getReturnType();
         }
     }

@@ -37,7 +37,7 @@ public class DefaultInterfaceTest {
     
     @Test
     public void testSuccess_implementInChild() {
-        provider.get(IGreet2Child.class);
+        assertEquals("Hello: world", provider.get(IGreet2Child.class).greet("world"));
     }
     
     public static interface IGreet3Super {
@@ -53,7 +53,7 @@ public class DefaultInterfaceTest {
     
     @Test
     public void testSuccess_implementInSuper() {
-        provider.get(IGreet3Child.class);
+        assertEquals("Hello: world", provider.get(IGreet3Child.class).greet("world"));
     }
     
     // This class fails to compile on CIServer.
