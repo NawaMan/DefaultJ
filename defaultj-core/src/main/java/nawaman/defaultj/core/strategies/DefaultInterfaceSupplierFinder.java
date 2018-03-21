@@ -69,24 +69,33 @@ public class DefaultInterfaceSupplierFinder implements IFindSupplier {
         
         val classLoader = theGivenClass.getClassLoader();
         val interfaces  = new Class<?>[] { theGivenClass };
-        val hashCode    = Math.abs(random.nextInt());
-        return() -> {
-            return (TYPE)Proxy.newProxyInstance(classLoader, interfaces, (proxy, method, args)->{
-                // TODO Redirect this somewhere.
-                if ("toString".equals(method.getName()) && (method.getParameterCount() == 0))
-                    return theGivenClass.getSimpleName() + "@" + hashCode;
-                if ("hashCode".equals(method.getName()) && (method.getParameterCount() == 0))
-                    return hashCode;
-                if ("equals".equals(method.getName()) && (method.getParameterCount() == 1)) {
-                    return false;
-                }
-                
-                if (!method.isDefault())
-                    throw new NonDefaultMethodException(method);
-                
-                return UReflection.invokeDefaultMethod(proxy, method, args);
-            });
-        };
+        val hashCode    = Math.abs(random.nextInt() / 2);
+        val theProxy    = (TYPE)Proxy.newProxyInstance(classLoader, interfaces, (proxy, method, args)->{
+            return handleDefaultInterface(theGivenClass, hashCode, proxy, method, args);
+        });
+        return () -> theProxy;
+    }
+    
+    private <TYPE> Object handleDefaultInterface(
+            Class<TYPE> theGivenClass,
+            int hashCode,
+            Object proxy,
+            Method method,
+            Object[] args)
+                    throws Throwable {
+        // TODO Redirect this somewhere.
+        if ("toString".equals(method.getName()) && (method.getParameterCount() == 0))
+            return theGivenClass.getSimpleName() + "@" + hashCode;
+        if ("hashCode".equals(method.getName()) && (method.getParameterCount() == 0))
+            return hashCode;
+        if ("equals".equals(method.getName()) && (method.getParameterCount() == 1)) {
+            return this == args[0];
+        }
+        
+        if (!method.isDefault())
+            throw new NonDefaultMethodException(method);
+        
+        return UReflection.invokeDefaultMethod(proxy, method, args);
     }
     
     @AllArgsConstructor

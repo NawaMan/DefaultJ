@@ -59,7 +59,7 @@ public class ConstructorWithOptionalTest {
     
     public static class Salary {
         public Salary() {
-            throw new RuntimeException("Too much");
+            throw new IllegalStateException("Too much");
         }
     }
     

@@ -88,7 +88,7 @@ public class DefaultInterfaceAnnotationValidator extends AbstractProcessor {
     }
     
     @AllArgsConstructor
-    class InterfaceChecker {
+    private class InterfaceChecker {
         
         private Element orgInterface;
         
@@ -96,7 +96,7 @@ public class DefaultInterfaceAnnotationValidator extends AbstractProcessor {
         
         private final Set<String> defaults = new TreeSet<String>();
         
-        void ensureDefaultInterface() {
+        private void ensureDefaultInterface() {
             ensureDefaultInterface(orgInterface);
             defaults.forEach(m -> abstracts.remove(m));
             abstracts.forEach((mthd, clzz)->{
@@ -105,7 +105,7 @@ public class DefaultInterfaceAnnotationValidator extends AbstractProcessor {
             });
         }
         
-        void ensureDefaultInterface(Element element) {
+        private void ensureDefaultInterface(Element element) {
             for (Element enclosedElement : element.getEnclosedElements()) {
                 if (enclosedElement.getModifiers().contains(Modifier.DEFAULT))
                      defaults.add(enclosedElement.toString().replaceAll(" default ", " "));
