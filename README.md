@@ -1,6 +1,6 @@
 # DefaultJ
 
-[![Build Status](https://travis-ci.org/nawaman/defaultj.svg?branch=master)](https://travis-ci.org/nawaman/defaultj)
+[![Build Status](https://travis-ci.org/NawaMan/DefaultJ.svg?branch=master)](https://travis-ci.org/NawaMan/DefaultJ)
 
 ## NOTE: This README.md is a work in progress.
 
