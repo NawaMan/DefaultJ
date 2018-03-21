@@ -1,5 +1,5 @@
 //  ========================================================================
-//  Copyright (c) 2017 Direct Solution Software Builders (DSSB).
+//  Copyright (c) 2017-2018 Nawapunth Manusitthipol (NawaMan).
 //  ------------------------------------------------------------------------
 //  All rights reserved. This program and the accompanying materials
 //  are made available under the terms of the Eclipse Public License v1.0
