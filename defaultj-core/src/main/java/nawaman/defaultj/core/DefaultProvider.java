@@ -47,6 +47,8 @@ import nawaman.defaultj.core.strategies.NullSupplierFinder;
 import nawaman.defaultj.core.strategies.SingletonFieldFinder;
 import nawaman.failable.Failable.Supplier;
 import nawaman.nullablej.NullableJ;
+import nawaman.nullablej.nullvalue.strategies.KnownNewNullValuesFinder;
+import nawaman.nullablej.nullvalue.strategies.KnownNullValuesFinder;
 
 /**
  * DefaultProvider can provide defaults.
@@ -71,6 +73,9 @@ public class DefaultProvider implements IProvideDefault {
             new FactoryMethodSupplierFinder(),
             new ConstructorSupplierFinder()
     );
+    
+    private static final KnownNullValuesFinder    knownNullValuesFinder = new KnownNullValuesFinder();
+    private static final KnownNewNullValuesFinder knownNewNullValuesFinder = new KnownNewNullValuesFinder();
     
     @SuppressWarnings("rawtypes")
     private static final ThreadLocal<Set<Class>> beingCreateds
@@ -189,6 +194,10 @@ public class DefaultProvider implements IProvideDefault {
     @SuppressWarnings("rawtypes")
     @Override
     public <TYPE> TYPE get(Class<TYPE> theGivenClass) throws ProvideDefaultException {
+        val knownValue = knownNullValuesFinder.findNullValueOf(theGivenClass);
+        if (knownValue != null)
+            return knownValue;
+        
         val set = beingCreateds.get();
         if (set.contains(theGivenClass))
             throw new CyclicDependencyDetectedException(theGivenClass);
@@ -241,6 +250,9 @@ public class DefaultProvider implements IProvideDefault {
         
         if (IProvideDefault.class.isAssignableFrom(theGivenClass))
             return ()->this;
+        
+        if (knownNewNullValuesFinder.canFindFor(theGivenClass))
+            return ()->knownNewNullValuesFinder.findNullValueOf(theGivenClass);
         
         return ()->handleLoadingFailure(theGivenClass);
     }
