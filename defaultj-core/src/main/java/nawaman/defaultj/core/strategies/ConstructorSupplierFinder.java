@@ -42,8 +42,7 @@ import nawaman.nullablej.NullableJ;
 })
 public class ConstructorSupplierFinder implements IFindSupplier {
     
-    /** The name of the Inject annotation */
-    public static final String ANNOTATION_NAME = Default.class.getSimpleName();
+    private static final String ANNOTATION_NAME = Default.class.getSimpleName();
     
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE>
@@ -61,7 +60,7 @@ public class ConstructorSupplierFinder implements IFindSupplier {
         return supplier;
     }
     
-    static <TYPE> TYPE callConstructor(Constructor<TYPE> constructor, IProvideDefault defaultProvider)
+    private <TYPE> TYPE callConstructor(Constructor<TYPE> constructor, IProvideDefault defaultProvider)
             throws ReflectiveOperationException {
         // TODO - Change to use method handle.
         val paramValues = prepareParameters(constructor, defaultProvider);

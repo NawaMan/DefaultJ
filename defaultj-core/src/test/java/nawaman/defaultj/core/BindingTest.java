@@ -51,7 +51,9 @@ public class BindingTest {
     
     public static class MyRunnable implements Runnable {
         @Override
-        public void run() {}
+        public void run() {
+            System.out.println("Do nothing!");
+        }
     }
     
     @Test

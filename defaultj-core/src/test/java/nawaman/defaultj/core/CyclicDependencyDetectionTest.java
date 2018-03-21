@@ -38,6 +38,7 @@ public class CyclicDependencyDetectionTest {
     public static class Cyclic1 {
         
         public Cyclic1(Cyclic1 another) {
+            System.err.println(another);
         }
     }
     
@@ -54,6 +55,7 @@ public class CyclicDependencyDetectionTest {
     public static class Cyclic2 {
         
         public Cyclic2(Optional<Cyclic2> another) {
+            System.err.println(another);
         }
     }
     
@@ -69,6 +71,7 @@ public class CyclicDependencyDetectionTest {
     public static class Cyclic3 {
         
         public Cyclic3(@Nullable Cyclic3 another) {
+            System.err.println(another);
         }
     }
     
@@ -84,6 +87,7 @@ public class CyclicDependencyDetectionTest {
     public static class Cyclic4 {
         
         public Cyclic4(Supplier<Cyclic4> another) {
+            System.err.println(another);
         }
     }
     
