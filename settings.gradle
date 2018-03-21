@@ -1,6 +1,6 @@
 
 include ":defaultj-api"
-include ":defaultj-impl"
+include ":defaultj-core"
 include ":defaultj-annotations"
 
 rootProject.name = theGroup
