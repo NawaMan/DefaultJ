@@ -100,7 +100,7 @@ public class DefaultInterfaceAnnotationValidator extends AbstractProcessor {
             ensureDefaultInterface(orgInterface);
             defaults.forEach(m -> abstracts.remove(m));
             abstracts.forEach((mthd, clzz)->{
-                error(orgInterface, format( "Interface %s with @%s but has a non-default method: %s in interface %s!",
+                error(orgInterface, format( "Interface %s is annotated with @%s but has a non-default method: %s (%s)!",
                         orgInterface, DEFAULT_INTERFACE, mthd, clzz));
             });
         }
