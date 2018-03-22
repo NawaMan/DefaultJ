@@ -36,13 +36,13 @@ import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.api.ProvideDefaultException;
 import nawaman.defaultj.core.exception.AbstractClassCreationException;
 import nawaman.defaultj.core.exception.CyclicDependencyDetectedException;
-import nawaman.defaultj.core.exception.DefaultCreationException;
 import nawaman.defaultj.core.strategies.ConstructorSupplierFinder;
 import nawaman.defaultj.core.strategies.DefaultImplementationSupplierFinder;
 import nawaman.defaultj.core.strategies.DefaultInterfaceSupplierFinder;
 import nawaman.defaultj.core.strategies.EnumValueSupplierFinder;
 import nawaman.defaultj.core.strategies.FactoryMethodSupplierFinder;
 import nawaman.defaultj.core.strategies.IFindSupplier;
+import nawaman.defaultj.core.strategies.ImplementedBySupplierFinder;
 import nawaman.defaultj.core.strategies.NullSupplierFinder;
 import nawaman.defaultj.core.strategies.SingletonFieldFinder;
 import nawaman.failable.Failable.Supplier;
@@ -62,15 +62,16 @@ public class DefaultProvider implements IProvideDefault {
     private static final Supplier NoSupplier = ()->null;
     
     
-    private static final List<IFindSupplier> classLevelfinders = Arrays.asList(
+    private static final List<IFindSupplier> beforeAdditionalFinders = Arrays.asList(
             new DefaultImplementationSupplierFinder(),
-            new NullSupplierFinder(),
+            new ImplementedBySupplierFinder(),
             new EnumValueSupplierFinder(),
             new DefaultInterfaceSupplierFinder()
     );
-    private static final List<IFindSupplier> elementLevelfinders = Arrays.asList(
+    private static final List<IFindSupplier> afterAdditionalFinders = Arrays.asList(
             new SingletonFieldFinder(),
             new FactoryMethodSupplierFinder(),
+            new NullSupplierFinder(),
             new ConstructorSupplierFinder()
     );
     
@@ -158,9 +159,9 @@ public class DefaultProvider implements IProvideDefault {
     
     private static List<IFindSupplier> combineFinders(List<IFindSupplier> additionalSupplierFinders) {
         val finderList = new ArrayList<IFindSupplier>();
-        finderList.addAll(classLevelfinders);
+        finderList.addAll(beforeAdditionalFinders);
         finderList.addAll(additionalSupplierFinders._or(noAdditionalSuppliers));
-        finderList.addAll(elementLevelfinders);
+        finderList.addAll(afterAdditionalFinders);
         return unmodifiableList(finderList);
     }
     
@@ -211,10 +212,10 @@ public class DefaultProvider implements IProvideDefault {
                 val supplier = getSupplierFor(theGivenClass);
                 val instance = supplier.get();
                 return theGivenClass.isPrimitive() ? instance : theGivenClass.cast(instance);
-            } catch (DefaultCreationException e) {
+            } catch (ProvideDefaultException e) {
                 throw e;
             } catch (Throwable e) {
-                throw new DefaultCreationException(theGivenClass, e);
+                throw new ProvideDefaultException(theGivenClass, e);
             }
         } finally {
             set.remove(theGivenClass);
