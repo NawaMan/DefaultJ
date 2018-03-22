@@ -60,6 +60,23 @@ public class Bindings {
         private final Map<Class, IBind> bindings = new HashMap<>();
         
         /**
+         * Constructor with no predefine binders.
+         */
+        public Builder() {
+            
+        }
+        
+        /**
+         * Constructs a builder with bingings.
+         * 
+         * @param bindings  the predefine bindings.
+         */
+        public Builder(Bindings bindings) {
+            if (bindings != null)
+                this.bindings.putAll(bindings.bindings);
+        }
+        
+        /**
          * Bind the binding to the class.
          * 
          * @param <TYPE>   the data type.
@@ -67,9 +84,20 @@ public class Bindings {
          * @param binding  the bind to be match with this class.
          * @return this binding builder.
          */
-        public <TYPE> Builder bind(@NonNull Class<TYPE> clzz, IBind<TYPE> binding) {
+        public <TYPE> Builder bind(@NonNull Class<TYPE> clzz, IBind<? extends TYPE> binding) {
             if (binding._isNotNull())
                 this.bindings.put(clzz, binding);
+            return this;
+        }
+        /**
+         * Include all the bindings.
+         * 
+         * @param bindings  the bindings.
+         * @return this binding builder.
+         */
+        public Builder bind(Bindings bindings) {
+            if (bindings._isNotNull())
+                this.bindings.putAll(bindings.bindings);
             return this;
         }
         
