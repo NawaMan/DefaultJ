@@ -194,11 +194,11 @@ public class DefaultProvider implements IProvideDefault {
     @SuppressWarnings("rawtypes")
     @Override
     public <TYPE> TYPE get(Class<TYPE> theGivenClass) throws ProvideDefaultException {
-        if (theGivenClass.isPrimitive()) {
-            val knownValue = knownNullValuesFinder.findNullValueOf(theGivenClass);
-            if (knownValue != null)
-                return knownValue;
-        }
+//        if (theGivenClass.isPrimitive()) {
+//            val knownValue = knownNullValuesFinder.findNullValueOf(theGivenClass);
+//            if (knownValue != null)
+//                return knownValue;
+//        }
         
         val set = beingCreateds.get();
         if (set.contains(theGivenClass))
@@ -210,7 +210,7 @@ public class DefaultProvider implements IProvideDefault {
             try {
                 val supplier = getSupplierFor(theGivenClass);
                 val instance = supplier.get();
-                return theGivenClass.cast(instance);
+                return theGivenClass.isPrimitive() ? instance : theGivenClass.cast(instance);
             } catch (DefaultCreationException e) {
                 throw e;
             } catch (Throwable e) {
