@@ -42,14 +42,10 @@ public class CyclicDependencyDetectionTest {
         }
     }
     
-    @Test
+    @Test(expected=CyclicDependencyDetectedException.class)
     public void testThat_whenDefaultConstructorAskForItself_expectCyclicDependencyDetectedException() {
-        try {
-            provider.get(Cyclic1.class);
-            fail("Expect an exception");
-        } catch (DefaultCreationException e) {
-            assertTrue(e.getCause() instanceof CyclicDependencyDetectedException);
-        }
+        provider.get(Cyclic1.class);
+        fail("Expect an exception");
     }
     
     public static class Cyclic2 {

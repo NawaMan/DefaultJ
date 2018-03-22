@@ -13,37 +13,30 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.defaultj.core.exception;
+package nawaman.defaultj.annotations;
 
-import nawaman.defaultj.api.ProvideDefaultException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * This exception is thrown when there is an to create an instance of an abstract class .
+ * A ready to use annotation to specify a class for the default implementation.
+ * 
+ * If the class is not found in the classpath or it was found to be uncompatible,
+ *   an ImplementationNotFouncException will be thrown.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-public class AbstractClassCreationException extends ProvideDefaultException {
-
-    private static final long serialVersionUID = 5751024581572983499L;
-
-    /**
-     * Constructor 
-     * 
-     * @param clazz  the class that this fail creation is attempted too.
-     **/
-    public AbstractClassCreationException(Class<?> clazz) {
-        this("Abstract class can't be created: " + clazz, clazz);
-    }
+@Target(value=ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ImplementedBy {
     
-
     /**
-     * Constructor 
+     * The implementation class.
      * 
-     * @param msg    the error message.
-     * @param clazz  the class that this fail creation is attempted too.
+     * @return  the specified class to be used as an implementation.
      **/
-    protected AbstractClassCreationException(String msg, Class<?> clazz) {
-        super(msg, clazz, null);
-    }
+    public Class<?> value();
     
 }
