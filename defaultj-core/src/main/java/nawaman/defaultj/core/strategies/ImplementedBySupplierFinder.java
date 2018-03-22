@@ -15,14 +15,16 @@
 //  ========================================================================
 package nawaman.defaultj.core.strategies;
 
-import java.util.Objects;
+import static nawaman.defaultj.core.strategies.common.NullSupplier;
+
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
-import nawaman.defaultj.annotations.DefaultImplementation;
+import nawaman.defaultj.annotations.ImplementedBy;
 import nawaman.defaultj.api.IProvideDefault;
+import nawaman.defaultj.core.exception.ImplementedClassNotCompatibleExistException;
+import nawaman.defaultj.core.exception.ImplementedClassNotExistException;
 import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.failable.Failable.Supplier;
 import nawaman.failable.Failables;
@@ -37,16 +39,16 @@ import nawaman.nullablej.NullableJ;
     NullableJ.class,
     AnnotationUtils.class
 })
-public class DefaultImplementationSupplierFinder implements IFindSupplier {
+public class ImplementedBySupplierFinder implements IFindSupplier {
     
-    private static final String ANNOTATION_NAME = DefaultImplementation.class.getSimpleName();
+    private static final String ANNOTATION_NAME = ImplementedBy.class.getSimpleName();
 
     private static final Function<String, String> extractValue = toString->
-                toString.replaceAll("^(.*\\(value=)(.*)(\\))$", "$2");
+                toString.replaceAll("^(.*\\(value=class )(.*)(\\))$", "$2");
     
     private static final Function<Object, String> toString = Object::toString;
-    private static final Predicate<Object>        notNull  = Objects::nonNull;
     
+    @SuppressWarnings("unchecked")
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>     theGivenClass,
@@ -56,7 +58,7 @@ public class DefaultImplementationSupplierFinder implements IFindSupplier {
         
         val defaultImplementationClass = findDefaultImplementation(theGivenClass);
         if (defaultImplementationClass._isNull())
-            return null;
+            return NullSupplier;
         
         return Failables.of(()->{ 
             return (TYPE)defaultProvider.get(defaultImplementationClass);
@@ -69,27 +71,24 @@ public class DefaultImplementationSupplierFinder implements IFindSupplier {
                 = theGivenClass.getAnnotations()._stream$()
                 .map(toString)
                 .map(extractValue)
-                .map(findClass())
-                .filter(notNull)
-                .filter(isAssignableTo(theGivenClass))
+                .map(findClass(theGivenClass))
                 .findAny()
-                .orElse(null);
+                .get();
+        if (!theGivenClass.isAssignableFrom(implementedClass))
+            throw new ImplementedClassNotCompatibleExistException(theGivenClass, implementedClass.getName());
+        
         return (Class<T>)implementedClass;
     }
     
     @SuppressWarnings("unchecked")
-    private static <T> Function<String, Class<T>> findClass() {
+    private static <T> Function<String, Class<T>> findClass(Class<?> theGivenClass) {
         return name -> {
             try {
                 return (Class<T>)Class.forName(name);
             } catch (ClassNotFoundException e) {
-                return null;
+                throw new ImplementedClassNotExistException(theGivenClass, name, e);
             }
         };
-    }
-    
-    private static <T> Predicate<Class<T>> isAssignableTo(Class<?> theGivenClass) {
-        return theGivenClass::isAssignableFrom;
     }
     
 }

@@ -48,15 +48,15 @@ public class ProvideDefaultException extends RuntimeException {
         super(clazz.getCanonicalName(), cause);
         this.clazz = clazz;
     }
-    
     /**
      * Constructor 
      * 
      * @param msg    the error message.
      * @param clazz  the class that this fail creation is attempted too.
+     * @param cause  the root cause of the problem.
      **/
-    protected ProvideDefaultException(String msg, Class<?> clazz) {
-        super(msg);
+    protected ProvideDefaultException(String msg, Class<?> clazz, Throwable cause) {
+        super(msg, cause);
         this.clazz = clazz;
     }
     
