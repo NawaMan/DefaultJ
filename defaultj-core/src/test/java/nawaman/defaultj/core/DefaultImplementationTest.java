@@ -25,6 +25,8 @@ import static org.junit.Assert.assertTrue;
 
 import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.core.DefaultProvider;
+import nawaman.defaultj.core.DefaultToNullTest.DefaultToNull;
+import nawaman.defaultj.core.exception.AbstractClassCreationException;
 import nawaman.nullablej.NullableJ;
 
 @SuppressWarnings("javadoc")
@@ -42,6 +44,7 @@ public class DefaultImplementationTest {
     
     
     @DefaultImplementation("nawaman.defaultj.core.TheClass2")
+    @DefaultToNull
     public static interface TheInterface2 {
         
         public String getText();
@@ -67,7 +70,7 @@ public class DefaultImplementationTest {
         assertTrue(provider.get(TheInterface2.class) instanceof TheClass2);
         assertEquals(TheClass2.TEXT, provider.get(TheInterface2User.class).getText());
     }
-
+    
     @DefaultImplementation(value="directget.get.TheClassThatDoesNotExist")
     public static interface TheInterface3 {
         
@@ -91,9 +94,38 @@ public class DefaultImplementationTest {
         
     }
     
-    @Test
-    public void testThat_whenAnnotatedWithDefaultImplementation_findTheClassAndUseItsDefaultAsThis_nullWhenNotExist() {
+    @Test(expected=AbstractClassCreationException.class)
+    public void testThat_whenAnnotatedWithDefaultImplementation_findTheClassAndUseItsDefaultAsThis_throwException() {
         assertEquals(TheInterface3User.TEXT, provider.get(TheInterface3User.class).getText());
+    }
+    
+    @DefaultImplementation(value="directget.get.TheClassThatDoesNotExist")
+    @DefaultToNull
+    public static interface TheInterface4 {
+        
+        public String getText();
+        
+    }
+    
+    public static class TheInterface4User {
+        
+        public static final String TEXT = "I am TheInterface4User.";
+        
+        private TheInterface4 i4;
+        
+        public TheInterface4User(TheInterface4 i4) {
+            this.i4 = i4;
+        }
+        
+        public String getText() {
+            return this.i4._whenNotNull().map(TheInterface4::getText).orElse(TEXT);
+        }
+        
+    }
+    
+    @Test
+    public void testThat_whenAnnotatedWithDefaultImplementation_findTheClassAndUseItsDefaultAsThis_nullWhenNotExistAsDefaultToNull() {
+        assertEquals(TheInterface4User.TEXT, provider.get(TheInterface4User.class).getText());
     }
     
 }

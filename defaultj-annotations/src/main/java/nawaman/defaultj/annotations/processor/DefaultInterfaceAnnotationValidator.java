@@ -37,11 +37,11 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 
 import lombok.AllArgsConstructor;
-import nawaman.defaultj.annotations.Default;
 import nawaman.defaultj.annotations.DefaultInterface;
 
 /**
- * This annotation process ensures that {@link Default} is only annotated to public, static, final fields or methods.
+ * This annotation process ensures that {@link DefaultInterface} is only annotated
+ *   to an interface with all default methods.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
