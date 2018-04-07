@@ -22,11 +22,12 @@ import java.lang.reflect.Constructor;
 
 import lombok.val;
 import lombok.experimental.ExtensionMethod;
-import nawaman.failable.Failable.Supplier;
 import nawaman.defaultj.annotations.Default;
+import nawaman.defaultj.annotations.PostConstruct;
 import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.defaultj.core.utils.ConstructorUtils;
+import nawaman.failable.Failable.Supplier;
 import nawaman.failable.Failables;
 import nawaman.nullablej.NullableJ;
 
@@ -65,6 +66,26 @@ public class ConstructorSupplierFinder implements IFindSupplier {
         // TODO - Change to use method handle.
         val paramValues = prepareParameters(constructor, defaultProvider);
         val instance    = constructor.newInstance(paramValues);
+        
+        // TODO - Do the inherited methods too. - be careful duplicate when done with default methods
+        val methods = instance.getClass().getDeclaredMethods();
+        for(val method : methods) {
+            for(val annotation : method.getAnnotations()) {
+                val annotationName = annotation.annotationType().getSimpleName();
+                val isPostContruct = PostConstruct.class.getSimpleName().equals(annotationName);
+                if (!isPostContruct)
+                    continue;
+                
+                val isAccessible = method.isAccessible();
+                try {
+                    method.setAccessible(true);
+                    method.invoke(instance);
+                } finally {
+                    method.setAccessible(isAccessible);
+                }
+            }
+        }
+        
         return (TYPE)instance;
     }
     

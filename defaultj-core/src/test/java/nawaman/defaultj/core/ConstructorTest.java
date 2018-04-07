@@ -15,8 +15,10 @@
 //  ========================================================================
 package nawaman.defaultj.core;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 import org.junit.Test;
 
@@ -113,4 +115,29 @@ public class ConstructorTest {
         assertEquals("FLASH!", provider.get(AnotherPerson.class).zoom());
     }
     
+    //== Post Constructor ==
+    
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    public @interface PostConstruct {}
+    
+    public static class ActivePerson {
+        
+        private String value = "Uninitialized";
+        
+        @PostConstruct
+        private void init() {
+            value = "Initialized!";
+        }
+        
+        public String getValue() {
+            return value;
+        }
+        
+    }
+    
+    @Test
+    public void testPostConstruct() {
+        assertEquals("Initialized!", provider.get(ActivePerson.class).getValue());
+    }
 }
