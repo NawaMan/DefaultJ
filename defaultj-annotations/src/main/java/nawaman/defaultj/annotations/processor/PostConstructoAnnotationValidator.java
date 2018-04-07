@@ -72,9 +72,10 @@ public class PostConstructoAnnotationValidator extends AbstractProcessor {
         hasError = false;
         for (Element element : roundEnv.getElementsAnnotatedWith(PostConstruct.class)) {
             if (METHOD.equals(element.getKind())) {
-                System.out.println(((ExecutableElement)element).getParameters());
-                if (0 != ((ExecutableElement)element).getParameters().size())
-                    error(element, format("Only methods with no parameter can be annotated with @%s!", POST_CONSTRCT));
+                if (0 == ((ExecutableElement)element).getParameters().size())
+                    continue;
+                
+                error(element, format("Only methods with no parameter can be annotated with @%s!", POST_CONSTRCT));
             } else {
                 error(element, format("Only methods can be annotated with @%s!", POST_CONSTRCT));
             }
