@@ -15,8 +15,10 @@
 //  ========================================================================
 package nawaman.defaultj.core.strategies;
 
+import static nawaman.defaultj.core.utils.ConstructorUtils.findConstructorWithAnnotation;
 import static nawaman.defaultj.core.utils.ConstructorUtils.sensibleDefaultConstructorOf;
 import static nawaman.defaultj.core.utils.MethodSupplierFinderUtils.prepareParameters;
+import static nawaman.nullablej.NullableJ._orGet;
 
 import java.lang.reflect.Constructor;
 
@@ -25,11 +27,9 @@ import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.annotations.Default;
 import nawaman.defaultj.annotations.PostConstruct;
 import nawaman.defaultj.api.IProvideDefault;
-import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.defaultj.core.utils.ConstructorUtils;
 import nawaman.failable.Failable.Supplier;
 import nawaman.failable.Failables;
-import nawaman.nullablej.NullableJ;
 
 /**
  * This class get a default by invoking a constructor.
@@ -37,9 +37,7 @@ import nawaman.nullablej.NullableJ;
  * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({
-    NullableJ.class,
-    ConstructorUtils.class,
-    AnnotationUtils.class
+	ConstructorUtils.class
 })
 public class ConstructorSupplierFinder implements IFindSupplier {
     
@@ -49,8 +47,8 @@ public class ConstructorSupplierFinder implements IFindSupplier {
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE>
             find(Class<TYPE> theGivenClass, IProvideDefault defaultProvider) {
         Constructor<TYPE> constructor
-                = theGivenClass.findConstructorWithAnnotation(ANNOTATION_NAME)
-                ._orGet(sensibleDefaultConstructorOf(theGivenClass));
+                = _orGet(findConstructorWithAnnotation(theGivenClass, ANNOTATION_NAME), 
+                		sensibleDefaultConstructorOf(theGivenClass));
         
         if (!constructor._isPublic())
             return null;

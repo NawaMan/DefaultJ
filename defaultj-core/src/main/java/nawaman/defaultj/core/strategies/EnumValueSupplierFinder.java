@@ -15,14 +15,15 @@
 //  ========================================================================
 package nawaman.defaultj.core.strategies;
 
+import static nawaman.defaultj.core.utils.AnnotationUtils.has;
+import static nawaman.nullablej.NullableJ._isEmpty;
+
 import java.util.function.Predicate;
 
 import lombok.val;
-import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.annotations.Default;
 import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.core.exception.DefaultCreationException;
-import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.failable.Failable.Supplier;
 import nawaman.nullablej.NullableJ;
 
@@ -31,10 +32,10 @@ import nawaman.nullablej.NullableJ;
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({
-    NullableJ.class,
-    AnnotationUtils.class
-})
+//@ExtensionMethod({
+//    NullableJ.class,
+//    AnnotationUtils.class
+//})
 public class EnumValueSupplierFinder implements IFindSupplier {
     
     private static final String DEFAULT = Default.class.getSimpleName();
@@ -52,12 +53,11 @@ public class EnumValueSupplierFinder implements IFindSupplier {
     
     private static <T> T findDefaultEnumValue(Class<T> theGivenClass) {
         T[] enumConstants = theGivenClass.getEnumConstants();
-        if (enumConstants._isEmpty())
+        if (_isEmpty(enumConstants))
             return null;
         
         T enumConstant
-                = enumConstants
-                ._find(defaultEnumValue(theGivenClass))
+                = NullableJ._find(enumConstants, defaultEnumValue(theGivenClass))
                 .orElse(enumConstants[0]);
         return enumConstant;
     }
@@ -67,7 +67,7 @@ public class EnumValueSupplierFinder implements IFindSupplier {
         return value->{
             val name = ((Enum)value).name();
             try {
-                return theGivenClass.getField(name).getAnnotations().has(DEFAULT);
+                return has(theGivenClass.getField(name).getAnnotations(), DEFAULT);
             } catch (NoSuchFieldException | SecurityException e) {
                 throw new DefaultCreationException(theGivenClass, e);
             }

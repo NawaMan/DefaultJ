@@ -15,6 +15,8 @@
 //  ========================================================================
 package nawaman.defaultj.core.utils;
 
+import static nawaman.defaultj.core.utils.AnnotationUtils.has;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.function.Supplier;
@@ -29,8 +31,7 @@ import nawaman.nullablej.NullableJ;
  * @author NawaMan -- nawa@nawaman.net
  */
 @ExtensionMethod({
-    NullableJ.class,
-    AnnotationUtils.class
+    NullableJ.class
 })
 public class ConstructorUtils {
     
@@ -79,7 +80,7 @@ public class ConstructorUtils {
             if (!Modifier.isPublic(constructor.getModifiers()))
                 continue;
             
-            if (constructor.getAnnotations().has(annotationNames))
+            if (has(constructor.getAnnotations(), annotationNames))
                 return (Constructor<T>)constructor;
         }
         return null;

@@ -15,6 +15,9 @@
 //  ========================================================================
 package nawaman.defaultj.core.utils;
 
+import static nawaman.nullablej.NullableJ._hasAll;
+import static nawaman.nullablej.NullableJ._hasSome;
+
 import java.lang.annotation.Annotation;
 import java.util.function.Predicate;
 
@@ -53,7 +56,7 @@ public class AnnotationUtils {
      */
     public static boolean has(Annotation[] annotations, String ... names) {
         return names._stream$().anyMatch(
-                name -> annotations._hasSome(withNamed(name)));
+                name -> _hasSome(annotations, withNamed(name)));
     }
     
     /**
@@ -65,7 +68,7 @@ public class AnnotationUtils {
      */
     public static boolean hasAllOf(Annotation[] annotations, String ... names) {
         return names._stream$().allMatch(
-                name -> annotations._hasAll(withNamed(name)));
+                name -> _hasAll(annotations, withNamed(name)));
     }
     
 }
