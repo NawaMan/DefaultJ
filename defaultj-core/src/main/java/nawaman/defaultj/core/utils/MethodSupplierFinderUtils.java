@@ -34,10 +34,6 @@ import nawaman.nullablej.nullable.Nullable;
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-//@ExtensionMethod({
-//    NullableJ.class,
-//    AnnotationUtils.class
-//})
 public class MethodSupplierFinderUtils {
     
     /**

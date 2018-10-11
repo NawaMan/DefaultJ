@@ -32,10 +32,6 @@ import nawaman.nullablej.NullableJ;
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-//@ExtensionMethod({
-//    NullableJ.class,
-//    AnnotationUtils.class
-//})
 public class EnumValueSupplierFinder implements IFindSupplier {
     
     private static final String DEFAULT = Default.class.getSimpleName();

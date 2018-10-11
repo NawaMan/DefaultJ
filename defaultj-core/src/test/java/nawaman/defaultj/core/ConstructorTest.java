@@ -15,6 +15,8 @@
 //  ========================================================================
 package nawaman.defaultj.core;
 
+import static org.junit.Assert.assertEquals;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -22,14 +24,7 @@ import java.lang.annotation.Target;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-
-import lombok.experimental.ExtensionMethod;
-import nawaman.defaultj.core.DefaultProvider;
-import nawaman.nullablej.NullableJ;
-
 @SuppressWarnings("javadoc")
-@ExtensionMethod({ NullableJ.class })
 public class ConstructorTest {
     
     private DefaultProvider provider = new DefaultProvider();

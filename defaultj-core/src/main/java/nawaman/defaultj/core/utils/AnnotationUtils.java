@@ -17,22 +17,18 @@ package nawaman.defaultj.core.utils;
 
 import static nawaman.nullablej.NullableJ._hasAll;
 import static nawaman.nullablej.NullableJ._hasSome;
+import static nawaman.nullablej.NullableJ._stream$;
 
 import java.lang.annotation.Annotation;
 import java.util.function.Predicate;
 
 import lombok.val;
-import lombok.experimental.ExtensionMethod;
-import nawaman.nullablej.NullableJ;
 
 /**
  * Utility class for Annotations.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({
-    NullableJ.class
-})
 public class AnnotationUtils {
 
     /**
@@ -55,7 +51,7 @@ public class AnnotationUtils {
      * @return  {@code true}  if the annotations has at lease one of the names.
      */
     public static boolean has(Annotation[] annotations, String ... names) {
-        return names._stream$().anyMatch(
+        return _stream$(names).anyMatch(
                 name -> _hasSome(annotations, withNamed(name)));
     }
     
@@ -67,7 +63,7 @@ public class AnnotationUtils {
      * @return  {@code true}  if the annotations has at lease one of the names.
      */
     public static boolean hasAllOf(Annotation[] annotations, String ... names) {
-        return names._stream$().allMatch(
+        return _stream$(names).allMatch(
                 name -> _hasAll(annotations, withNamed(name)));
     }
     

@@ -21,18 +21,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.function.Supplier;
 
-import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.core.exception.DefaultCreationException;
-import nawaman.nullablej.NullableJ;
 
 /**
  * Utility involving constructors
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({
-    NullableJ.class
-})
 public class ConstructorUtils {
     
     /**
@@ -42,7 +37,7 @@ public class ConstructorUtils {
      * @return {@code true} if the constructor is public.
      */
     public static boolean _isPublic(Constructor<?> constructor) {
-        if (constructor._isNull())
+        if (constructor == null)
             return false;
         
         return Modifier.isPublic(constructor.getModifiers());

@@ -35,10 +35,6 @@ import nawaman.failable.Failables;
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-//@ExtensionMethod({
-//    NullableJ.class,
-//    AnnotationUtils.class
-//})
 public class ImplementedBySupplierFinder implements IFindSupplier {
     
     private static final String ANNOTATION_NAME = ImplementedBy.class.getSimpleName();

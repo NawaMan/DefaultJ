@@ -15,6 +15,7 @@
 //  ========================================================================
 package nawaman.defaultj.core.strategies;
 
+import static nawaman.defaultj.core.utils.ConstructorUtils._isPublic;
 import static nawaman.defaultj.core.utils.ConstructorUtils.findConstructorWithAnnotation;
 import static nawaman.defaultj.core.utils.ConstructorUtils.sensibleDefaultConstructorOf;
 import static nawaman.defaultj.core.utils.MethodSupplierFinderUtils.prepareParameters;
@@ -23,11 +24,9 @@ import static nawaman.nullablej.NullableJ._orGet;
 import java.lang.reflect.Constructor;
 
 import lombok.val;
-import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.annotations.Default;
 import nawaman.defaultj.annotations.PostConstruct;
 import nawaman.defaultj.api.IProvideDefault;
-import nawaman.defaultj.core.utils.ConstructorUtils;
 import nawaman.failable.Failable.Supplier;
 import nawaman.failable.Failables;
 
@@ -36,9 +35,6 @@ import nawaman.failable.Failables;
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({
-	ConstructorUtils.class
-})
 public class ConstructorSupplierFinder implements IFindSupplier {
     
     private static final String ANNOTATION_NAME = Default.class.getSimpleName();
@@ -50,7 +46,7 @@ public class ConstructorSupplierFinder implements IFindSupplier {
                 = _orGet(findConstructorWithAnnotation(theGivenClass, ANNOTATION_NAME), 
                 		sensibleDefaultConstructorOf(theGivenClass));
         
-        if (!constructor._isPublic())
+        if (!_isPublic(constructor))
             return null;
         
         @SuppressWarnings("unchecked")
