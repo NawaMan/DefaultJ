@@ -106,7 +106,7 @@ public class DefaultProvider implements IProvideDefault {
     public DefaultProvider() {
         this(null, null, null, null);
     }
-
+    
     /**
      * Constructs the DefaultProvider with configurations.
      * @param parent                     the parent default provider.
