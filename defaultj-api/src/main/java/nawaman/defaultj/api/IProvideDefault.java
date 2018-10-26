@@ -40,6 +40,12 @@ public interface IProvideDefault {
     
     // == Factory method ==
     
+    /** The property that contains the class name of the class of the implementation. */
+    public static final String implementationClassNameProperty = "DefaultProviderClassName";
+    
+    /** The property that contains the suggest class name of the class of the implementation. */
+    public static final String suggestImplementationClassNameProperty = "SuggestDefaultProviderClassName";
+    
     /** The name of the class of the implementation. */
     public static final String implementationClassName = "nawaman.defaultj.core.DefaultProvider";
     
@@ -52,23 +58,7 @@ public interface IProvideDefault {
      * @return the Optional value of the DefaultProvider if the class was in the classpath.
      */
     public static Optional<IProvideDefault> defaultProvider() {
-        Class<?> providerClass      = utils.findClass(implementationClassName);
-        boolean  isClassInClasspath = providerClass != null;
-        if (!isClassInClasspath)
-            return Optional.empty();
-        
-        boolean isCompatibleType = IProvideDefault.class.isAssignableFrom(providerClass);
-        if (!isCompatibleType) 
-            return Optional.empty();
-        
-        try {
-            Object          newInstance = providerClass.newInstance();
-            IProvideDefault provider    = IProvideDefault.class.cast(newInstance);
-            return Optional.ofNullable(provider);
-            
-        } catch (InstantiationException | IllegalAccessException e) {
-            return Optional.empty();
-        }
+        return utils.getDefault();
     }
     
     

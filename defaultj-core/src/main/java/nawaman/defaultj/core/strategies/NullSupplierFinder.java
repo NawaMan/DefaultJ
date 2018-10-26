@@ -16,11 +16,10 @@
 package nawaman.defaultj.core.strategies;
 
 import static nawaman.defaultj.core.strategies.common.NullSupplier;
+import static nawaman.defaultj.core.utils.AnnotationUtils.has;
 
-import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.annotations.DefaultToNull;
 import nawaman.defaultj.api.IProvideDefault;
-import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.failable.Failable.Supplier;
 
 /**
@@ -28,7 +27,6 @@ import nawaman.failable.Failable.Supplier;
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({ AnnotationUtils.class })
 public class NullSupplierFinder implements IFindSupplier {
     
     /** The name of the DefaultToNull annotation */
@@ -39,7 +37,7 @@ public class NullSupplierFinder implements IFindSupplier {
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>     theGivenClass,
             IProvideDefault defaultProvider) {
-        return theGivenClass.getAnnotations().has(ANNOTATION_NAME)
+        return has(theGivenClass.getAnnotations(), ANNOTATION_NAME)
                 ? (Supplier<TYPE, THROWABLE>)NullSupplier
                 : null;
     }

@@ -15,31 +15,26 @@
 //  ========================================================================
 package nawaman.defaultj.core.strategies;
 
+import static nawaman.defaultj.core.utils.ConstructorUtils._isPublic;
+import static nawaman.defaultj.core.utils.ConstructorUtils.findConstructorWithAnnotation;
 import static nawaman.defaultj.core.utils.ConstructorUtils.sensibleDefaultConstructorOf;
 import static nawaman.defaultj.core.utils.MethodSupplierFinderUtils.prepareParameters;
+import static nawaman.nullablej.NullableJ._orGet;
 
 import java.lang.reflect.Constructor;
 
 import lombok.val;
-import lombok.experimental.ExtensionMethod;
-import nawaman.failable.Failable.Supplier;
 import nawaman.defaultj.annotations.Default;
+import nawaman.defaultj.annotations.PostConstruct;
 import nawaman.defaultj.api.IProvideDefault;
-import nawaman.defaultj.core.utils.AnnotationUtils;
-import nawaman.defaultj.core.utils.ConstructorUtils;
+import nawaman.failable.Failable.Supplier;
 import nawaman.failable.Failables;
-import nawaman.nullablej.NullableJ;
 
 /**
  * This class get a default by invoking a constructor.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({
-    NullableJ.class,
-    ConstructorUtils.class,
-    AnnotationUtils.class
-})
 public class ConstructorSupplierFinder implements IFindSupplier {
     
     private static final String ANNOTATION_NAME = Default.class.getSimpleName();
@@ -48,10 +43,10 @@ public class ConstructorSupplierFinder implements IFindSupplier {
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE>
             find(Class<TYPE> theGivenClass, IProvideDefault defaultProvider) {
         Constructor<TYPE> constructor
-                = theGivenClass.findConstructorWithAnnotation(ANNOTATION_NAME)
-                ._orGet(sensibleDefaultConstructorOf(theGivenClass));
+                = _orGet(findConstructorWithAnnotation(theGivenClass, ANNOTATION_NAME), 
+                		sensibleDefaultConstructorOf(theGivenClass));
         
-        if (!constructor._isPublic())
+        if (!_isPublic(constructor))
             return null;
         
         @SuppressWarnings("unchecked")
@@ -65,6 +60,26 @@ public class ConstructorSupplierFinder implements IFindSupplier {
         // TODO - Change to use method handle.
         val paramValues = prepareParameters(constructor, defaultProvider);
         val instance    = constructor.newInstance(paramValues);
+        
+        // TODO - Do the inherited methods too. - be careful duplicate when done with default methods
+        val methods = instance.getClass().getDeclaredMethods();
+        for(val method : methods) {
+            for(val annotation : method.getAnnotations()) {
+                val annotationName = annotation.annotationType().getSimpleName();
+                val isPostContruct = PostConstruct.class.getSimpleName().equals(annotationName);
+                if (!isPostContruct)
+                    continue;
+                
+                val isAccessible = method.isAccessible();
+                try {
+                    method.setAccessible(true);
+                    method.invoke(instance);
+                } finally {
+                    method.setAccessible(isAccessible);
+                }
+            }
+        }
+        
         return (TYPE)instance;
     }
     

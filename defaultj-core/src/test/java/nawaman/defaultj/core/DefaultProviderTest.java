@@ -66,7 +66,7 @@ public class DefaultProviderTest {
         assertTrue(provider.get(List.class).isEmpty());
         assertTrue(provider.get(Set.class).isEmpty());
         assertTrue(provider.get(Map.class).isEmpty());
-
+        
         assertTrue(provider.get(String[].class).length == 0);
     }
     

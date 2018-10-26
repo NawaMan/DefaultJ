@@ -19,6 +19,7 @@ import static nawaman.defaultj.core.utils.MethodSupplierFinderUtils.prepareParam
 import static nawaman.defaultj.core.utils.MethodUtils.annotatedWith;
 import static nawaman.defaultj.core.utils.MethodUtils.ifPublicMethod;
 import static nawaman.defaultj.core.utils.MethodUtils.ifStaticMethod;
+import static nawaman.nullablej.NullableJ._stream$;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -28,12 +29,9 @@ import java.util.function.Predicate;
 
 import lombok.Value;
 import lombok.val;
-import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.annotations.Default;
 import nawaman.defaultj.api.IProvideDefault;
-import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.failable.Failable.Supplier;
-import nawaman.nullablej.NullableJ;
 import nawaman.nullablej.nullable.Nullable;
 
 /**
@@ -41,10 +39,6 @@ import nawaman.nullablej.nullable.Nullable;
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({
-    NullableJ.class,
-    AnnotationUtils.class
-})
 public class FactoryMethodSupplierFinder implements IFindSupplier {
     
     private static final String            DEFAULT              = Default.class.getSimpleName();
@@ -63,7 +57,7 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
     private <T> Supplier<T, ? extends Throwable> findValueFromFactoryMethod(Class<T> theGivenClass, IProvideDefault defaultProvider) {
         val helper   = new Helper<T>(theGivenClass, defaultProvider);
         val supplier = (Supplier<T, ? extends Throwable>)
-                theGivenClass.getDeclaredMethods()._stream$()
+                _stream$(theGivenClass.getDeclaredMethods())
                 .filter(ifStaticMethod)
                 .filter(ifPublicMethod)
                 .filter(annotatedWithDefault)
@@ -85,11 +79,11 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
                 return (Supplier)(()->basicFactoryMethodCall(method));
             
             val fromNullable = findNullableOrOptional(method, type);
-            if (fromNullable._isNotNull())
+            if (fromNullable != null)
                 return fromNullable;
             
             val fromSupplier = findSupplier(method, type);
-            if (fromSupplier._isNotNull())
+            if (fromSupplier != null)
                 return fromSupplier;
             
             return null;

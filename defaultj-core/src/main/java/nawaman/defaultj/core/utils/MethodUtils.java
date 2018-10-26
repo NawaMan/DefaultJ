@@ -21,18 +21,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
 
-import lombok.experimental.ExtensionMethod;
-import nawaman.nullablej.NullableJ;
-
 /**
  * Utility involving methods
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({
-    NullableJ.class,
-    AnnotationUtils.class
-})
 public class MethodUtils {
     
     /** The predicate to check if a method is public. */
@@ -48,7 +41,7 @@ public class MethodUtils {
      * @return {@code true} if the method is public.
      */
     public static boolean _isPublic(Method method) {
-        if (method._isNull())
+        if (method == null)
             return false;
         
         return Modifier.isPublic(method.getModifiers());
@@ -61,7 +54,7 @@ public class MethodUtils {
      * @return {@code true} if the method is static.
      */
     public static boolean _isStatic(Method method) {
-        if (method._isNull())
+        if (method == null)
             return false;
         
         return Modifier.isStatic(method.getModifiers());
