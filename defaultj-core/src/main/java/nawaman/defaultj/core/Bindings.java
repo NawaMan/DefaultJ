@@ -15,21 +15,18 @@
 //  ========================================================================
 package nawaman.defaultj.core;
 
+import static java.util.Collections.unmodifiableMap;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.util.Collections.unmodifiableMap;
-
 import lombok.NonNull;
-import lombok.experimental.ExtensionMethod;
-import nawaman.nullablej.NullableJ;
 
 /**
  * Collections of bindings.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({ NullableJ.class })
 public class Bindings {
     
     @SuppressWarnings("rawtypes")
@@ -85,7 +82,7 @@ public class Bindings {
          * @return this binding builder.
          */
         public <TYPE> Builder bind(@NonNull Class<TYPE> clzz, IBind<? extends TYPE> binding) {
-            if (binding._isNotNull())
+            if (binding != null)
                 this.bindings.put(clzz, binding);
             return this;
         }
@@ -96,7 +93,7 @@ public class Bindings {
          * @return this binding builder.
          */
         public Builder bind(Bindings bindings) {
-            if (bindings._isNotNull())
+            if (bindings != null)
                 this.bindings.putAll(bindings.bindings);
             return this;
         }

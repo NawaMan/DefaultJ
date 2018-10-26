@@ -1,3 +1,4 @@
 nawaman.defaultj.annotations.processor.DefaultAnnotationValidator
 nawaman.defaultj.annotations.processor.DefaultInterfaceAnnotationValidator
 nawaman.defaultj.annotations.processor.ImplementedByAnnotationValidator
+nawaman.defaultj.annotations.processor.PostConstructoAnnotationValidator

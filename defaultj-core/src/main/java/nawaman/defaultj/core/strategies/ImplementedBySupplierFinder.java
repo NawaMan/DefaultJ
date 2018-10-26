@@ -16,29 +16,25 @@
 package nawaman.defaultj.core.strategies;
 
 import static nawaman.defaultj.core.strategies.common.NullSupplier;
+import static nawaman.defaultj.core.utils.AnnotationUtils.has;
+import static nawaman.nullablej.NullableJ._isNull;
+import static nawaman.nullablej.NullableJ._stream$;
 
 import java.util.function.Function;
 
 import lombok.val;
-import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.annotations.ImplementedBy;
 import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.core.exception.ImplementedClassNotCompatibleExistException;
 import nawaman.defaultj.core.exception.ImplementedClassNotExistException;
-import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.failable.Failable.Supplier;
 import nawaman.failable.Failables;
-import nawaman.nullablej.NullableJ;
 
 /**
  * This class get a default that is a default implementation of the target class.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({
-    NullableJ.class,
-    AnnotationUtils.class
-})
 public class ImplementedBySupplierFinder implements IFindSupplier {
     
     private static final String ANNOTATION_NAME = ImplementedBy.class.getSimpleName();
@@ -53,11 +49,11 @@ public class ImplementedBySupplierFinder implements IFindSupplier {
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>     theGivenClass,
             IProvideDefault defaultProvider) {
-        if (!theGivenClass.getAnnotations().has(ANNOTATION_NAME))
+        if (!has(theGivenClass.getAnnotations(), ANNOTATION_NAME))
             return null;
         
         val defaultImplementationClass = findDefaultImplementation(theGivenClass);
-        if (defaultImplementationClass._isNull())
+        if (_isNull(defaultImplementationClass))
             return NullSupplier;
         
         return Failables.of(()->{ 
@@ -68,7 +64,7 @@ public class ImplementedBySupplierFinder implements IFindSupplier {
     @SuppressWarnings("unchecked")
     private static <T> Class<T> findDefaultImplementation(Class<T> theGivenClass) {
         Class<?> implementedClass
-                = theGivenClass.getAnnotations()._stream$()
+                = _stream$(theGivenClass.getAnnotations())
                 .map(toString)
                 .map(extractValue)
                 .map(findClass(theGivenClass))

@@ -15,6 +15,12 @@
 //  ========================================================================
 package nawaman.defaultj.core;
 
+import static java.util.Collections.emptyList;
+import static java.util.Collections.unmodifiableList;
+import static nawaman.nullablej.NullableJ._isNotNull;
+import static nawaman.nullablej.NullableJ._isNull;
+import static nawaman.nullablej.NullableJ._or;
+
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,14 +30,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.unmodifiableList;
-
 import lombok.AllArgsConstructor;
 import lombok.Setter;
 import lombok.val;
 import lombok.experimental.Accessors;
-import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.api.ProvideDefaultException;
 import nawaman.defaultj.core.exception.AbstractClassCreationException;
@@ -46,7 +48,6 @@ import nawaman.defaultj.core.strategies.ImplementedBySupplierFinder;
 import nawaman.defaultj.core.strategies.NullSupplierFinder;
 import nawaman.defaultj.core.strategies.SingletonFieldFinder;
 import nawaman.failable.Failable.Supplier;
-import nawaman.nullablej.NullableJ;
 import nawaman.nullablej.nullvalue.strategies.KnownNewNullValuesFinder;
 import nawaman.nullablej.nullvalue.strategies.KnownNullValuesFinder;
 
@@ -55,7 +56,6 @@ import nawaman.nullablej.nullvalue.strategies.KnownNullValuesFinder;
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({ NullableJ.class })
 public class DefaultProvider implements IProvideDefault {
     
     @SuppressWarnings("rawtypes")
@@ -106,7 +106,7 @@ public class DefaultProvider implements IProvideDefault {
     public DefaultProvider() {
         this(null, null, null, null);
     }
-
+    
     /**
      * Constructs the DefaultProvider with configurations.
      * @param parent                     the parent default provider.
@@ -122,7 +122,7 @@ public class DefaultProvider implements IProvideDefault {
         this.parent                = parent;
         this.finders               = combineFinders(additionalSupplierFinders);
         this.provideFailureHandler = provideFailureHandler;
-        this.binidings             = bingings._or(noBinding);
+        this.binidings             = _or(bingings, noBinding);
         
         // Supportive
         this.additionalSupplierFinders = additionalSupplierFinders;
@@ -160,7 +160,7 @@ public class DefaultProvider implements IProvideDefault {
     private static List<IFindSupplier> combineFinders(List<IFindSupplier> additionalSupplierFinders) {
         val finderList = new ArrayList<IFindSupplier>();
         finderList.addAll(beforeAdditionalFinders);
-        finderList.addAll(additionalSupplierFinders._or(noAdditionalSuppliers));
+        finderList.addAll(_or(additionalSupplierFinders, noAdditionalSuppliers));
         finderList.addAll(afterAdditionalFinders);
         return unmodifiableList(finderList);
     }
@@ -227,9 +227,9 @@ public class DefaultProvider implements IProvideDefault {
             Class<TYPE> theGivenClass) {
         
         Supplier supplier = suppliers.get(theGivenClass);
-        if (supplier._isNull()) {
+        if (_isNull(supplier)) {
             supplier = newSupplierFor(theGivenClass);
-            supplier = supplier._or(NoSupplier);
+            supplier = _or(supplier, NoSupplier);
             suppliers.put(theGivenClass, supplier);
         }
         return supplier;
@@ -238,16 +238,16 @@ public class DefaultProvider implements IProvideDefault {
     @SuppressWarnings({ "rawtypes" })
     private <T> Supplier newSupplierFor(Class<T> theGivenClass) {
         val binding = this.binidings.getBinding(theGivenClass);
-        if (binding._isNotNull())
+        if (_isNotNull(binding))
             return ()->binding.get(this);
         
         if (DefaultProvider.class.isAssignableFrom(theGivenClass))
             return ()->this;
         
-        val parentProvider = (IProvideDefault)this.parent._or(this);
+        val parentProvider = (IProvideDefault)_or(this.parent, this);
         for (val finder : finders) {
             val supplier = finder.find(theGivenClass, parentProvider);
-            if (supplier._isNotNull())
+            if (_isNotNull(supplier))
                 return supplier;
         }
         
@@ -265,7 +265,7 @@ public class DefaultProvider implements IProvideDefault {
     }
     
     private <T> Object handleLoadingFailure(Class<T> theGivenClass) {
-        if (this.provideFailureHandler._isNotNull()) {
+        if (_isNotNull(this.provideFailureHandler)) {
             return callHandler(theGivenClass);
         } else {
             return defaultHandling(theGivenClass);

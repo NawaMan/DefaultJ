@@ -16,8 +16,9 @@
 package nawaman.defaultj.api;
 
 import static org.junit.Assert.assertNull;
-
-import nawaman.defaultj.api.IProvideDefault;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -35,6 +36,61 @@ public class DefaultProviderTest {
     @Test
     public void testThatWhenNoImplementationInTheClassPath_defaultProviderIsNull() {
         assertNull(IProvideDefault.defaultProvider().orElse(null));
+    }
+    
+    @Test
+    public void testSuggestImplementation() {
+        try {
+            utils.cachedProvider.set(null);
+            System.setProperty(IProvideDefault.suggestImplementationClassNameProperty, SuggestedDefaultProvider.class.getCanonicalName());
+            assertTrue(IProvideDefault.defaultProvider().get() instanceof SuggestedDefaultProvider);
+        } finally {
+            System.setProperty(IProvideDefault.suggestImplementationClassNameProperty, "");
+            utils.cachedProvider.set(null);
+        }
+    }
+    
+    @Test
+    public void testSuggestImplementation_notExist() {
+        try {
+            utils.cachedProvider.set(null);
+            System.setProperty(IProvideDefault.suggestImplementationClassNameProperty, "non.exist." + SuggestedDefaultProvider.class.getCanonicalName());
+            assertFalse(IProvideDefault.defaultProvider().isPresent());
+        } finally {
+            System.setProperty(IProvideDefault.suggestImplementationClassNameProperty, "");
+            utils.cachedProvider.set(null);
+        }
+    }
+    
+    @Test
+    public void testRequiredImplementation() {
+        try {
+            utils.cachedProvider.set(null);
+            System.setProperty(IProvideDefault.suggestImplementationClassNameProperty, SuggestedDefaultProvider.class.getCanonicalName());
+            System.setProperty(IProvideDefault.implementationClassNameProperty, RequiredDefaultProvider.class.getCanonicalName());
+            assertTrue(IProvideDefault.defaultProvider().get() instanceof RequiredDefaultProvider);
+        } finally {
+            System.setProperty(IProvideDefault.suggestImplementationClassNameProperty, "");
+            System.setProperty(IProvideDefault.implementationClassNameProperty,        "");
+            utils.cachedProvider.set(null);
+        }
+    }
+    
+    @Test
+    public void testRequiredImplementation_notExist() {
+        try {
+            utils.cachedProvider.set(null);
+            System.setProperty(IProvideDefault.suggestImplementationClassNameProperty, SuggestedDefaultProvider.class.getCanonicalName());
+            System.setProperty(IProvideDefault.implementationClassNameProperty, "non.exist." + RequiredDefaultProvider.class.getCanonicalName());
+            IProvideDefault.defaultProvider();
+            fail("Expect a failure");
+        } catch (RequiredDefaultProviderNotAvailableException e) {
+            // Expect!
+        } finally {
+            System.setProperty(IProvideDefault.suggestImplementationClassNameProperty, "");
+            System.setProperty(IProvideDefault.implementationClassNameProperty,        "");
+            utils.cachedProvider.set(null);
+        }
     }
     
 }

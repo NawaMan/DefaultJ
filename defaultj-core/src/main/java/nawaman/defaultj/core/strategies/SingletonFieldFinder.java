@@ -28,12 +28,9 @@ import java.util.function.Predicate;
 
 import lombok.Value;
 import lombok.val;
-import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.annotations.Default;
 import nawaman.defaultj.api.IProvideDefault;
-import nawaman.defaultj.core.utils.AnnotationUtils;
 import nawaman.failable.Failable.Supplier;
-import nawaman.nullablej.NullableJ;
 import nawaman.nullablej.nullable.Nullable;
 
 /**
@@ -47,10 +44,6 @@ import nawaman.nullablej.nullable.Nullable;
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({
-    NullableJ.class,
-    AnnotationUtils.class
-})
 public class SingletonFieldFinder implements IFindSupplier {
     
     private static final String            DEFAULT              = Default.class.getSimpleName();
@@ -90,11 +83,11 @@ public class SingletonFieldFinder implements IFindSupplier {
                 return (Supplier)(()->getFieldValue(field));
             
             val optionalSupplier = findOptionalOrNullableFieldValue(field, type);
-            if (optionalSupplier._isNotNull())
+            if (optionalSupplier != null)
                 return optionalSupplier;
             
             val supplierSupplier = findSupplierFieldValue(field, type);
-            if (supplierSupplier._isNotNull())
+            if (supplierSupplier != null)
                 return supplierSupplier;
             
             return null;

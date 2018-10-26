@@ -21,18 +21,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.function.Predicate;
 
-import lombok.experimental.ExtensionMethod;
-import nawaman.nullablej.NullableJ;
-
 /**
  * Utility involving fields.
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({
-    NullableJ.class,
-    AnnotationUtils.class
-})
 public class FieldUtils {
     
     /** The predicate to check if a field is public. */
@@ -48,7 +41,7 @@ public class FieldUtils {
      * @return {@code true} if the field is public.
      */
     public static boolean _isPublic(Field field) {
-        if (field._isNull())
+        if (field == null)
             return false;
         
         return Modifier.isPublic(field.getModifiers());
@@ -61,7 +54,7 @@ public class FieldUtils {
      * @return {@code true} if the field is static.
      */
     public static boolean _isStatic(Field field) {
-        if (field._isNull())
+        if (field == null)
             return false;
         
         return Modifier.isStatic(field.getModifiers());

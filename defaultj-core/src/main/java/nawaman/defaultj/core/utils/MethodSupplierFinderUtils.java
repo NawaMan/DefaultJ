@@ -15,6 +15,8 @@
 //  ========================================================================
 package nawaman.defaultj.core.utils;
 
+import static nawaman.defaultj.core.utils.AnnotationUtils.has;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -23,10 +25,8 @@ import java.lang.reflect.Type;
 import java.util.Optional;
 
 import lombok.val;
-import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.api.IProvideDefault;
 import nawaman.failable.Failable.Supplier;
-import nawaman.nullablej.NullableJ;
 import nawaman.nullablej.nullable.Nullable;
 
 /**
@@ -34,10 +34,6 @@ import nawaman.nullablej.nullable.Nullable;
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-@ExtensionMethod({
-    NullableJ.class,
-    AnnotationUtils.class
-})
 public class MethodSupplierFinderUtils {
     
     /**
@@ -72,8 +68,8 @@ public class MethodSupplierFinderUtils {
             val param             = paramsArray[i];
             val paramType         = param.getType();
             val parameterizedType = param.getParameterizedType();
-            boolean isNullable    = param.getAnnotations().has("Nullable")
-                                 || param.getAnnotations().has("Optional");
+            boolean isNullable    = has(param.getAnnotations(), "Nullable")
+                                 || has(param.getAnnotations(), "Optional");
             Object  paramValue    = determineParameterValue(paramType, parameterizedType, isNullable, defaultProvider);
             params[i] = paramValue;
         }
