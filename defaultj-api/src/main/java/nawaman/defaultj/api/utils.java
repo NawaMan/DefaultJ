@@ -47,7 +47,6 @@ class utils {
     
     static Optional<IProvideDefault> loadDefault() {
         String requireClassName = System.getProperty(IProvideDefault.implementationClassNameProperty);
-        System.out.println("requireClassName: " + requireClassName);
         if ((requireClassName != null) && !requireClassName.trim().isEmpty()) {
             try {
                 IProvideDefault requireProvider = utils.loadDefaultByName(requireClassName);
@@ -60,7 +59,6 @@ class utils {
         }
         
         String suggestClassName = System.getProperty(IProvideDefault.suggestImplementationClassNameProperty);
-        System.out.println("suggestClassName: " + suggestClassName);
         if ((suggestClassName != null) && !suggestClassName.trim().isEmpty()) {
             try {
                 IProvideDefault suggestProvider = utils.loadDefaultByName(suggestClassName);
