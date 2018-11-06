@@ -54,8 +54,8 @@ If the any strategy is not applicable, DefaultJ will skip it to the next one.
 4. **Enum value** -- default value for enum.
 5. **@DefaultInterface** -- specify that all methods in the interface are default methods.
 6. Additional finder -- additional strategies.
-7. Singleton field -- a public static final field in the class that hold the default value.
-8. Factory method -- a public static final method in the class that return the default value.
+7. **Singleton field** -- a public static final field in the class that hold the default value.
+8. *8Factory method** -- a public static final method in the class that return the default value.
 9. **@DefaultToNull** -- specify that the default for this class is `null`.
 10. **@Default on constructor** -- specify the default constructor to use.
 11. **Only constructor** -- use the only constructor.
