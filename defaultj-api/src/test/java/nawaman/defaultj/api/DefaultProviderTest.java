@@ -15,9 +15,10 @@
 //  ========================================================================
 package nawaman.defaultj.api;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
@@ -34,8 +35,23 @@ public class DefaultProviderTest {
      *   as we know that the implementation class is not in the class path.
      */
     @Test
-    public void testThatWhenNoImplementationInTheClassPath_defaultProviderIsNull() {
-        assertNull(IProvideDefault.defaultProvider().orElse(null));
+    public void testThatWhenNoImplementationInTheClassPath_fallbackToBasic() {
+        assertEquals(
+                "nawaman.defaultj.api.BasicDefaultProvider",
+                IProvideDefault.defaultProvider()
+                .map(Object::getClass)
+                .map(Class ::getCanonicalName)
+                .orElse(null));
+    }
+    
+    @Test
+    public void testThatWhenNoImplementationInTheClassPath_notFallBack_defaultToNull() {
+        try {
+            System.setProperty(IProvideDefault.fallbackToBasicDefaultProvider, "false");
+            assertNull(IProvideDefault.defaultProvider().orElse(null));
+        } finally {
+            System.setProperty(IProvideDefault.fallbackToBasicDefaultProvider, "");
+        }
     }
     
     @Test
@@ -55,8 +71,10 @@ public class DefaultProviderTest {
         try {
             utils.cachedProvider.set(null);
             System.setProperty(IProvideDefault.suggestImplementationClassNameProperty, "non.exist." + SuggestedDefaultProvider.class.getCanonicalName());
+            System.setProperty(IProvideDefault.fallbackToBasicDefaultProvider        , "false");
             assertFalse(IProvideDefault.defaultProvider().isPresent());
         } finally {
+            System.setProperty(IProvideDefault.fallbackToBasicDefaultProvider        , "");
             System.setProperty(IProvideDefault.suggestImplementationClassNameProperty, "");
             utils.cachedProvider.set(null);
         }
