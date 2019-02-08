@@ -11,6 +11,9 @@ In that aspect, it injects value base on the class, very much similar in princip
 
 ```Java
 	public class Car {
+		@Default
+		public static Car newInstance() { return new Car(); }
+		
 		public String go() {
 			return "Zoom!";
 		}
