@@ -45,6 +45,12 @@ Factory method is another strategy.
 DefaultJ has 14 built-in strategies for getting default values.
 More detail about those strategies are discussed below.
 
+It is important to note that DefaultJ does not require the annotation `@Default` to be
+from DefaultJ.
+The annotation can be from any package.
+It just has to have `RUNTIME` retention.
+This allow any code to specify default value providing strategy without depending on DefaultJ.
+
 ## Getting the default
 There are strategies DefaultJ deploys to obtain a default value.
 Calling the default constructor is just one of such strategies.
