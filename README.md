@@ -11,6 +11,9 @@ In that aspect, it injects value base on the class, very much similar in princip
 
 ```Java
 	public class Car {
+		@Default
+		public static Car newInstance() { return new Car(); }
+		
 		public String go() {
 			return "Zoom!";
 		}
@@ -87,13 +90,13 @@ This project binary is published on [my maven repo](https://github.com/NawaMan/n
 Add the maven repository ...
 
 ```Groovy
-    maven { url 'https://raw.githubusercontent.com/nawmaman/nawaman-maven-repository/master/' }
+	maven { url 'https://raw.githubusercontent.com/nawmaman/nawaman-maven-repository/master/' }
 ```
 
 and the dependencies to DefaultJ.
 
 ```Groovy
-    compile 'defaultj:defaultj-core:1.1.0.0' // Please lookup for the latest version.
+	compile 'defaultj:defaultj-core:1.1.0.0' // Please lookup for the latest version.
 ```
 
 [UseNullableJGradle](https://github.com/NawaMan/UseNullableJGradle) is an example project that use NullableJ.
