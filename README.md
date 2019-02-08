@@ -96,7 +96,7 @@ Add the maven repository ...
 and the dependencies to DefaultJ.
 
 ```Groovy
-	compile 'defaultj:defaultj-core:1.1.0.0' // Please lookup for the latest version.
+	compile 'defaultj:defaultj-core:1.3.0.0' // Please lookup for the latest version.
 ```
 
 [UseNullableJGradle](https://github.com/NawaMan/UseNullableJGradle) is an example project that use NullableJ.
