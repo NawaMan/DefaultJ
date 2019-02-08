@@ -49,6 +49,9 @@ public interface IProvideDefault {
     /** The name of the class of the implementation. */
     public static final String implementationClassName = "nawaman.defaultj.core.DefaultProvider";
     
+    /** The flag to fall back to basic default provider (only do default constructor) when none is found - default to true. */
+    public static final String fallbackToBasicDefaultProvider = "FallbackToBasicDefaultProvider";
+    
     /**
      * Attempt to find the default provider.
      * 

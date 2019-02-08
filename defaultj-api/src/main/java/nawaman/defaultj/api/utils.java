@@ -74,7 +74,12 @@ class utils {
             IProvideDefault provider = utils.loadDefaultByName(className);
             return Optional.ofNullable(provider);
         } catch (Exception e) {
-            return Optional.empty();
+            String fallbackToBasicDefaultProvider = System.getProperty(IProvideDefault.fallbackToBasicDefaultProvider);
+            if ("false".equalsIgnoreCase(fallbackToBasicDefaultProvider))
+                return Optional.empty();
+            
+            BasicDefaultProvider basicProvider = new BasicDefaultProvider();
+            return Optional.of(basicProvider);
         }
     }
     
