@@ -38,9 +38,11 @@ In that aspect, it injects value base on the class, very much similar in princip
 ```
 
 As you can see, DefaultJ can get default values of the `Car` and Driver.
-In case of `Car`, since there is one constructor, DefaultJ use that to create an instance of that.
-In case of `Driver`, its constructor requires a `Car` instance so DefaultJ create a `Car` instance  and use that to create a `Driver` instance.
+In case of `Car`, since there is `@Default` on a static method that return `Car`, DefaultJ use that to create an instance.
+In case of `Driver`, its has a constructor requiring a `Car` instance so DefaultJ create a `Car` instance  and use that to create a `Driver` instance.
 Calling default constructor is one of the strategy DefaultJ uses.
+Factory method is another strategy.
+DefaultJ has 14 built-in strategies for getting default values.
 More detail about those strategies are discussed below.
 
 ## Getting the default
