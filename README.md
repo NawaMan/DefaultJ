@@ -95,16 +95,10 @@ As mentioned, DefaultJ check for annotations for more clue on how to provide def
 
 This project binary is published on [my maven repo](https://github.com/NawaMan/nawaman-maven-repository) hosted on GitHub. So to use DefaultJ you will need to ...
 
-Add the maven repository ...
+Add the dependencies to DefaultJ.
 
 ```Groovy
-	maven { url 'https://raw.githubusercontent.com/nawmaman/nawaman-maven-repository/master/' }
-```
-
-and the dependencies to DefaultJ.
-
-```Groovy
-	compile 'defaultj:defaultj-core:1.3.0.0' // Please lookup for the latest version.
+	compile 'io.defaultj:defaultj-core:2.0.0.0' // Please lookup for the latest version.
 ```
 
 [UseNullableJGradle](https://github.com/NawaMan/UseNullableJGradle) is an example project that use NullableJ.
@@ -113,32 +107,19 @@ Just add the dependency to DefaultJ to it.
 
 ### Using DefaultJ in a Maven project
 
-Adding the required maven repository (hosted by github).
-
-```xml
-<repository>
-	<id>Nullable-mvn-repo</id>
-	<url>https://raw.githubusercontent.com/nawaman/nawaman-maven-repository/master/</url>
-	<snapshots>
-		<enabled>true</enabled>
-		<updatePolicy>always</updatePolicy>
-	</snapshots>
-</repository>
-```
-
-and the dependencies to DefaultJ.
+Add the dependencies to DefaultJ.
 
 ```xml
 
 	<dependency>
-		<groupId>defaultj</groupId>
+		<groupId>io.defaultj</groupId>
 		<artifactId>defaultj-annotations</artifactId>
-		<version>1.1.0.0</version>
+		<version>2.0.0.0</version>
 	</dependency>
 	<dependency>
-		<groupId>defaultj</groupId>
+		<groupId>io.defaultj</groupId>
 		<artifactId>defaultj-core</artifactId>
-		<version>1.1.0.0</version>
+		<version>2.0.0.0</version>
 	</dependency>
 	<dependency>
 		<groupId>junit</groupId>
