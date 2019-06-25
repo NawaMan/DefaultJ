@@ -19,7 +19,7 @@ import static nawaman.defaultj.core.utils.MethodSupplierFinderUtils.prepareParam
 import static nawaman.defaultj.core.utils.MethodUtils.annotatedWith;
 import static nawaman.defaultj.core.utils.MethodUtils.ifPublicMethod;
 import static nawaman.defaultj.core.utils.MethodUtils.ifStaticMethod;
-import static nawaman.nullablej.NullableJ._stream$;
+import static nullablej.NullableJ._stream$;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -32,7 +32,7 @@ import lombok.val;
 import nawaman.defaultj.annotations.Default;
 import nawaman.defaultj.api.IProvideDefault;
 import nawaman.failable.Failable.Supplier;
-import nawaman.nullablej.nullable.Nullable;
+import nullablej.nullable.Nullable;
 
 /**
  * This class returns object resulting from a factory method.

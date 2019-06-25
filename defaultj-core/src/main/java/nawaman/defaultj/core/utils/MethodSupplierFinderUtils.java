@@ -27,7 +27,7 @@ import java.util.Optional;
 import lombok.val;
 import nawaman.defaultj.api.IProvideDefault;
 import nawaman.failable.Failable.Supplier;
-import nawaman.nullablej.nullable.Nullable;
+import nullablej.nullable.Nullable;
 
 /**
  * Abstract class for supplier finders that get value from constructor or method.

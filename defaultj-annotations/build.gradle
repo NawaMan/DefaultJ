@@ -3,7 +3,7 @@ version="${theVersion}.0"
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { url 'https://raw.githubusercontent.com/nawaman/nawaman-maven-repository/master/' }
+    //maven { url 'https://raw.githubusercontent.com/nawaman/nawaman-maven-repository/master/' }
 }
 
 dependencies {
@@ -11,8 +11,8 @@ dependencies {
     
     compileOnly 'org.projectlombok:lombok:1.16.16'
     
-    compile 'nawaman:failablej:1.1.1'
-    compile 'nawaman:nullablej:3.1.2.0'
+    //compile 'nawaman:failablej:1.1.1'
+    //compile 'nawaman:nullablej:3.1.2.0'
     
     //== Test ==
     

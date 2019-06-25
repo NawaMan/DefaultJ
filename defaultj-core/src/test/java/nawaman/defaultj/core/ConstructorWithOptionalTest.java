@@ -25,7 +25,7 @@ import static org.junit.Assert.assertNull;
 import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.annotations.Nullable;
 import nawaman.defaultj.core.DefaultProvider;
-import nawaman.nullablej.NullableJ;
+import nullablej.NullableJ;
 
 @SuppressWarnings("javadoc")
 @ExtensionMethod({ NullableJ.class })

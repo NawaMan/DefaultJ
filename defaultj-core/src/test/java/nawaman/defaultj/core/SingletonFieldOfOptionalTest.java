@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import nawaman.defaultj.core.DefaultProvider;
-import nawaman.nullablej.nullable.Nullable;
+import nullablej.nullable.Nullable;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

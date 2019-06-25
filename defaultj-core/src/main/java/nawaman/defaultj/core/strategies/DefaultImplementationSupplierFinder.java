@@ -16,7 +16,7 @@
 package nawaman.defaultj.core.strategies;
 
 import static nawaman.defaultj.core.utils.AnnotationUtils.has;
-import static nawaman.nullablej.NullableJ._stream$;
+import static nullablej.NullableJ._stream$;
 
 import java.util.Objects;
 import java.util.function.Function;

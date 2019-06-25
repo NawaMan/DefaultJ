@@ -27,7 +27,7 @@ import lombok.experimental.ExtensionMethod;
 import nawaman.defaultj.core.DefaultProvider;
 import nawaman.defaultj.core.DefaultToNullTest.DefaultToNull;
 import nawaman.defaultj.core.exception.AbstractClassCreationException;
-import nawaman.nullablej.NullableJ;
+import nullablej.NullableJ;
 
 @SuppressWarnings("javadoc")
 @ExtensionMethod({ NullableJ.class })

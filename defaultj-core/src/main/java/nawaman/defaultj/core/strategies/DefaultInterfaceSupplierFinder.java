@@ -16,8 +16,8 @@
 package nawaman.defaultj.core.strategies;
 
 import static nawaman.defaultj.core.utils.AnnotationUtils.has;
-import static nawaman.utils.reflection.UProxy.createDefaultProxy;
-import static nawaman.utils.reflection.UProxy.getNonDefaultMethods;
+import static nullablej.utils.reflection.UProxy.createDefaultProxy;
+import static nullablej.utils.reflection.UProxy.getNonDefaultMethods;
 
 import lombok.val;
 import nawaman.defaultj.annotations.DefaultInterface;

@@ -16,7 +16,7 @@
 package nawaman.defaultj.core.strategies;
 
 import static nawaman.defaultj.core.utils.AnnotationUtils.has;
-import static nawaman.nullablej.NullableJ._isEmpty;
+import static nullablej.NullableJ._isEmpty;
 
 import java.util.function.Predicate;
 
@@ -25,7 +25,7 @@ import nawaman.defaultj.annotations.Default;
 import nawaman.defaultj.api.IProvideDefault;
 import nawaman.defaultj.core.exception.DefaultCreationException;
 import nawaman.failable.Failable.Supplier;
-import nawaman.nullablej.NullableJ;
+import nullablej.NullableJ;
 
 /**
  * This class return default enum value.

@@ -15,9 +15,9 @@
 //  ========================================================================
 package nawaman.defaultj.core.utils;
 
-import static nawaman.nullablej.NullableJ._hasAll;
-import static nawaman.nullablej.NullableJ._hasSome;
-import static nawaman.nullablej.NullableJ._stream$;
+import static nullablej.NullableJ._hasAll;
+import static nullablej.NullableJ._hasSome;
+import static nullablej.NullableJ._stream$;
 
 import java.lang.annotation.Annotation;
 import java.util.function.Predicate;

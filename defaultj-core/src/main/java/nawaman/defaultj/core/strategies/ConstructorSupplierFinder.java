@@ -19,7 +19,7 @@ import static nawaman.defaultj.core.utils.ConstructorUtils._isPublic;
 import static nawaman.defaultj.core.utils.ConstructorUtils.findConstructorWithAnnotation;
 import static nawaman.defaultj.core.utils.ConstructorUtils.sensibleDefaultConstructorOf;
 import static nawaman.defaultj.core.utils.MethodSupplierFinderUtils.prepareParameters;
-import static nawaman.nullablej.NullableJ._orGet;
+import static nullablej.NullableJ._orGet;
 
 import java.lang.reflect.Constructor;
 

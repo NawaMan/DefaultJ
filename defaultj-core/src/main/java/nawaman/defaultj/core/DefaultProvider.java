@@ -17,9 +17,9 @@ package nawaman.defaultj.core;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
-import static nawaman.nullablej.NullableJ._isNotNull;
-import static nawaman.nullablej.NullableJ._isNull;
-import static nawaman.nullablej.NullableJ._or;
+import static nullablej.NullableJ._isNotNull;
+import static nullablej.NullableJ._isNull;
+import static nullablej.NullableJ._or;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -48,8 +48,8 @@ import nawaman.defaultj.core.strategies.ImplementedBySupplierFinder;
 import nawaman.defaultj.core.strategies.NullSupplierFinder;
 import nawaman.defaultj.core.strategies.SingletonFieldFinder;
 import nawaman.failable.Failable.Supplier;
-import nawaman.nullablej.nullvalue.strategies.KnownNewNullValuesFinder;
-import nawaman.nullablej.nullvalue.strategies.KnownNullValuesFinder;
+import nullablej.nullvalue.strategies.KnownNewNullValuesFinder;
+import nullablej.nullvalue.strategies.KnownNullValuesFinder;
 
 /**
  * DefaultProvider can provide defaults.

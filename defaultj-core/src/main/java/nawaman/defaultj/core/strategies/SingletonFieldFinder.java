@@ -31,7 +31,7 @@ import lombok.val;
 import nawaman.defaultj.annotations.Default;
 import nawaman.defaultj.api.IProvideDefault;
 import nawaman.failable.Failable.Supplier;
-import nawaman.nullablej.nullable.Nullable;
+import nullablej.nullable.Nullable;
 
 /**
  * This class provides value from the singleton field

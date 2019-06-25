@@ -14,9 +14,6 @@ subprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        maven {
-            url 'https://raw.githubusercontent.com/dssb/maven-repository/master/'
-        }
     }
     
     // IDE
