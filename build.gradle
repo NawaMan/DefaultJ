@@ -14,9 +14,6 @@ subprojects {
     repositories {
         mavenLocal()
         mavenCentral()
-        maven {
-            url 'https://raw.githubusercontent.com/dssb/maven-repository/master/'
-        }
     }
     
     // IDE
@@ -32,6 +29,21 @@ subprojects {
             downloadJavadoc = true
             downloadSources = true
         }
+    }
+    
+    // Add Javadoc JAR and sources JAR to artifact
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from javadoc
+    }
+    task sourceJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+    
+    task packageJavadoc(type: Jar) {
+        from javadoc
+        classifier = 'javadoc'
     }
     
     // Building/Publishing
@@ -59,15 +71,6 @@ subprojects {
         }
     }
     
-    task sourceJar(type: Jar) {
-        classifier = 'sources'
-        from sourceSets.main.allJava
-    }
-    
-    task packageJavadoc(type: Jar) {
-        from javadoc
-        classifier = 'javadoc'
-    }
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
             options.compilerArgs << "-parameters"
@@ -75,4 +78,86 @@ subprojects {
             options.incremental = true
         }
     }
+    
+    tasks.withType(Javadoc).all { enabled = false }
+    
+    // Deploying
+    artifacts {
+        archives javadocJar, sourceJar
+    }
+    
+    archivesBaseName = "${project.name}"
+    version = "${project.version}"
+    
+    if (project.gradle.startParameter.taskNames.contains('uploadArchives')) {
+        
+        // Build, sign, and upload
+        uploadArchives {
+            repositories {
+                mavenDeployer {
+                    
+                    // Signing
+                    apply plugin: 'signing'
+                    signing {
+                        sign configurations.archives
+                    }
+                    
+                    // Sign POM
+                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+                    
+                    // Destination
+                    repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                        authentication(userName: ossrhUsername, password: ossrhPassword)
+                    }
+                    snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                        authentication(userName: ossrhUsername, password: ossrhPassword)
+                    }
+                    
+                    // Add required metadata to POM
+                    pom.project {
+                        name project.name
+                        packaging 'jar'
+                        description 'Brining functional goodies to Java: ' + project.name
+                        url 'https://github.com/NawaMan/DefaultJ'
+                        
+                        scm {
+                            connection 'scm:git:git://github.com/NawaMan/DefaultJ.git'
+                                developerConnection 'scm:git:ssh://github.com/NawaMan/DefaultJ.git'
+                                url 'http://github.com/NawaMan/DefaultJ/tree/master'
+                        }
+                        
+                        licenses {
+                            license {
+                                name 'MIT License'
+                                url 'http://www.opensource.org/licenses/MIT'
+                            }
+                        }
+                        
+                        developers {
+                            developer {
+                                id 'NawaMan'
+                                name 'Nawapunth Manusitthipol'
+                                email 'nawa@nawaman.net'
+                                organization 'NawaMan'
+                                organizationUrl 'http://nawaman.net'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // == Annotation processor
+    
+    task compileAnnotationProcessor (type: JavaCompile) {
+        options.compilerArgs << "-proc:none"
+        options.incremental = true
+        
+        source         = file("src/main/annotationprocessor")
+        destinationDir = file('build/classes/java/main')
+        classpath      = sourceSets.main.compileClasspath
+    }
+    
+    compileJava.dependsOn compileAnnotationProcessor
 }
