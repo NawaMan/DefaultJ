@@ -13,11 +13,11 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.defaultj.core.bindings;
+package defaultj.core.bindings;
 
+import defaultj.api.IProvideDefault;
+import defaultj.core.IBind;
 import lombok.val;
-import nawaman.defaultj.api.IProvideDefault;
-import nawaman.defaultj.core.IBind;
 
 /**
  * Bind to a type.

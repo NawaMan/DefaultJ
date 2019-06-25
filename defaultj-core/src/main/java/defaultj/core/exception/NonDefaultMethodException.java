@@ -13,7 +13,7 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.defaultj.core.exception;
+package defaultj.core.exception;
 
 import java.lang.reflect.Method;
 

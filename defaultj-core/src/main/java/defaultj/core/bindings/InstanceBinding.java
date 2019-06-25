@@ -13,10 +13,10 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.defaultj.core.bindings;
+package defaultj.core.bindings;
 
-import nawaman.defaultj.api.IProvideDefault;
-import nawaman.defaultj.core.IBind;
+import defaultj.api.IProvideDefault;
+import defaultj.core.IBind;
 
 /**
  * Bind to a value.

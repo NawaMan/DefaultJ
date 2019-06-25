@@ -12,19 +12,18 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.failable;
-
-import nawaman.failable.Failable.Runnable;
+package defaultj.core.utils.failable;
 
 import java.util.function.Predicate;
 
-import nawaman.failable.Failable.Consumer;
-import nawaman.failable.Failable.Function;
-import nawaman.failable.Failable.Function2;
-import nawaman.failable.Failable.Function3;
-import nawaman.failable.Failable.Function4;
-import nawaman.failable.Failable.Function5;
-import nawaman.failable.Failable.Supplier;
+import defaultj.core.utils.failable.Failable.Consumer;
+import defaultj.core.utils.failable.Failable.Function;
+import defaultj.core.utils.failable.Failable.Function2;
+import defaultj.core.utils.failable.Failable.Function3;
+import defaultj.core.utils.failable.Failable.Function4;
+import defaultj.core.utils.failable.Failable.Function5;
+import defaultj.core.utils.failable.Failable.Runnable;
+import defaultj.core.utils.failable.Failable.Supplier;
 
 /**
  * Utility methods to create Failable from lambda.
@@ -46,7 +45,7 @@ public class Failables {
      * 
      * @param <T>  the type of the thrown exception.
      **/
-    public static <T extends Throwable> Runnable<T> of(nawaman.failable.Failable.Runnable<T> runnable) {
+    public static <T extends Throwable> Runnable<T> of(defaultj.core.utils.failable.Failable.Runnable<T> runnable) {
         return runnable;
     }
     

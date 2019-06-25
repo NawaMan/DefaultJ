@@ -12,7 +12,7 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.failable;
+package defaultj.core.utils.failable;
 
 /**
  * This exception wraps an exception from a failable.

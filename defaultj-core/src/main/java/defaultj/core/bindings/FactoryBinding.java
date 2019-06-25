@@ -13,12 +13,12 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.defaultj.core.bindings;
+package defaultj.core.bindings;
 
+import defaultj.api.IProvideDefault;
+import defaultj.core.IBind;
+import defaultj.core.ICreateDefault;
 import lombok.val;
-import nawaman.defaultj.api.IProvideDefault;
-import nawaman.defaultj.core.IBind;
-import nawaman.defaultj.core.ICreateDefault;
 
 /**
  * Binding to a factory.

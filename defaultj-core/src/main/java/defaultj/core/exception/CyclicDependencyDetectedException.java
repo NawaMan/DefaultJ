@@ -13,9 +13,9 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.defaultj.core.exception;
+package defaultj.core.exception;
 
-import nawaman.defaultj.api.ProvideDefaultException;
+import defaultj.api.ProvideDefaultException;
 
 /**
  * This exception is thrown when creating a default fail because of cyclic dependency.

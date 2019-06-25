@@ -13,9 +13,9 @@
 //
 //  You may elect to redistribute this code under either of these licenses.
 //  ========================================================================
-package nawaman.defaultj.core.strategies;
+package defaultj.core.strategies;
 
-import nawaman.failable.Failable.Supplier;
+import defaultj.core.utils.failable.Failable.Supplier;
 
 class common {
     
