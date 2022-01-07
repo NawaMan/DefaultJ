@@ -28,8 +28,6 @@ import java.lang.annotation.RetentionPolicy;
 
 import org.junit.Test;
 
-import defaultj.core.DefaultProvider;
-
 @SuppressWarnings("javadoc")
 public class DefaultEnumTest {
     

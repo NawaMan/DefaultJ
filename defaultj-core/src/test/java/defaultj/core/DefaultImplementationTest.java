@@ -21,23 +21,19 @@
 //  SOFTWARE.
 package defaultj.core;
 
+import static nullablej.nullable.Nullable.nullable;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import org.junit.Test;
 
-import defaultj.core.DefaultProvider;
 import defaultj.core.DefaultToNullTest.DefaultToNull;
 import defaultj.core.exception.AbstractClassCreationException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import lombok.experimental.ExtensionMethod;
-import nullablej.NullableJ;
-
 @SuppressWarnings("javadoc")
-@ExtensionMethod({ NullableJ.class })
 public class DefaultImplementationTest {
     
     private DefaultProvider provider = new DefaultProvider();
@@ -67,7 +63,7 @@ public class DefaultImplementationTest {
         }
         
         public String getText() {
-            return this.i2._whenNotNull().map(TheInterface2::getText).orElse("I am TheInterface2User.");
+            return nullable(this.i2).map(TheInterface2::getText).orElse("I am TheInterface2User.");
         }
         
     }
@@ -96,7 +92,7 @@ public class DefaultImplementationTest {
         }
         
         public String getText() {
-            return this.i3._whenNotNull().map(TheInterface3::getText).orElse(TEXT);
+            return nullable(this.i3).map(TheInterface3::getText).orElse(TEXT);
         }
         
     }
@@ -125,7 +121,7 @@ public class DefaultImplementationTest {
         }
         
         public String getText() {
-            return this.i4._whenNotNull().map(TheInterface4::getText).orElse(TEXT);
+            return nullable(this.i4).map(TheInterface4::getText).orElse(TEXT);
         }
         
     }

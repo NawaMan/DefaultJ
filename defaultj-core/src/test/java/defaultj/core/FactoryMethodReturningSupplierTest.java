@@ -21,16 +21,15 @@
 //  SOFTWARE.
 package defaultj.core;
 
+import static org.junit.Assert.assertEquals;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.function.Supplier;
 
 import org.junit.Test;
 
-import defaultj.core.DefaultProvider;
 import defaultj.core.utils.failable.Failable;
-
-import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("javadoc")
 public class FactoryMethodReturningSupplierTest {

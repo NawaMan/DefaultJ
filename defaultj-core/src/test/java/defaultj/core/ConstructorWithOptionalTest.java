@@ -21,21 +21,16 @@
 //  SOFTWARE.
 package defaultj.core;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.util.Optional;
 
 import org.junit.Test;
 
 import defaultj.annotations.Nullable;
-import defaultj.core.DefaultProvider;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-
-import lombok.experimental.ExtensionMethod;
 import nullablej.NullableJ;
 
-@SuppressWarnings("javadoc")
-@ExtensionMethod({ NullableJ.class })
 public class ConstructorWithOptionalTest {
     
     private DefaultProvider provider = new DefaultProvider();
@@ -46,14 +41,13 @@ public class ConstructorWithOptionalTest {
         public String name();
     }
     
-    @ExtensionMethod({ NullableJ.class })
     public static class Employee {
         private Department department;
         public Employee(Optional<Department> department) {
             this.department = department.orElse(null);
         }
         public String departmentName() {
-            return department._whenNotNull().map(Department::name).orElse(null);
+            return NullableJ._whenNotNull(department).map(Department::name).orElse(null);
         }
     }
     
@@ -70,7 +64,6 @@ public class ConstructorWithOptionalTest {
         }
     }
     
-    @ExtensionMethod({ NullableJ.class })
     public static class Manager {
         private Optional<Salary> salary;
         public Manager(Optional<Salary> salary) {
@@ -86,7 +79,6 @@ public class ConstructorWithOptionalTest {
         assertNotNull(provider.get(Manager.class).salary());
     }
     
-    @ExtensionMethod({ NullableJ.class })
     public static class ExecutiveNullable {
         private Salary salary;
         public ExecutiveNullable(@Nullable Salary salary) {
@@ -97,7 +89,6 @@ public class ConstructorWithOptionalTest {
         }
     }
     
-    @ExtensionMethod({ NullableJ.class })
     public static class ExecutiveOptional {
         private Salary salary;
         public ExecutiveOptional(@defaultj.annotations.Optional Salary salary) {
@@ -114,7 +105,6 @@ public class ConstructorWithOptionalTest {
         assertNull(provider.get(ExecutiveOptional.class).salary());
     }
     
-    @ExtensionMethod({ NullableJ.class })
     public static class OwnerNullable {
         private Optional<Salary> salary;
         public OwnerNullable(@Nullable Optional<Salary> salary) {
@@ -125,7 +115,6 @@ public class ConstructorWithOptionalTest {
         }
     }
     
-    @ExtensionMethod({ NullableJ.class })
     public static class OwnerOptional {
         private Optional<Salary> salary;
         public OwnerOptional(@defaultj.annotations.Optional Optional<Salary> salary) {

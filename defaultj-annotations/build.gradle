@@ -8,14 +8,8 @@ repositories {
 dependencies {
     compile project(':defaultj-api')
     
-    compileOnly         'org.projectlombok:lombok:1.18.8'
-    annotationProcessor 'org.projectlombok:lombok:1.18.8'
-    
     // == Test ==
     
     testCompile 'junit:junit:4.12'
-    
-    testCompile             'org.projectlombok:lombok:1.18.8'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.8'
     
 }

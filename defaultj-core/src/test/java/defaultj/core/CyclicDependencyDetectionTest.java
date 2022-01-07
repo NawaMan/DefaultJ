@@ -21,21 +21,18 @@
 //  SOFTWARE.
 package defaultj.core;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.junit.Test;
 
 import defaultj.annotations.Nullable;
-import defaultj.core.DefaultProvider;
 import defaultj.core.exception.CyclicDependencyDetectedException;
 import defaultj.core.exception.DefaultCreationException;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import lombok.val;
 
 @SuppressWarnings("javadoc")
 public class CyclicDependencyDetectionTest {
@@ -96,7 +93,7 @@ public class CyclicDependencyDetectionTest {
     
     @Test
     public void testThat_whenDefaultConstructorAskForSupplierItself_itGetOne() {
-        val cyclic4 = provider.get(Cyclic4.class);
+        var cyclic4 = provider.get(Cyclic4.class);
         assertNotNull(cyclic4);
     }
     

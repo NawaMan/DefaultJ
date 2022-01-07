@@ -28,8 +28,6 @@ import static nullablej.NullableJ._stream$;
 import java.lang.annotation.Annotation;
 import java.util.function.Predicate;
 
-import lombok.val;
-
 /**
  * Utility class for Annotations.
  * 
@@ -44,7 +42,7 @@ public class AnnotationUtils {
      **/
     public static Predicate<? super Annotation> withNamed(String name) {
         return annotation->{
-            val toString = annotation.toString();
+            var toString = annotation.toString();
             return toString.matches("^@.*(\\.|\\$)" + name + "\\(.*$");
         };
     }

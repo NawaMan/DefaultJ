@@ -21,18 +21,14 @@
 //  SOFTWARE.
 package defaultj.core;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 import org.junit.Test;
 
-import defaultj.core.Bindings;
-import defaultj.core.DefaultProvider;
 import defaultj.core.bindings.FactoryBinding;
-
-import static org.junit.Assert.assertEquals;
-
-import lombok.val;
 
 @SuppressWarnings("javadoc")
 public class ConstructorWithSupplierTest {
@@ -49,13 +45,13 @@ public class ConstructorWithSupplierTest {
     
     @Test
     public void testThat_withSupplierAsParameter_aSupplierToGetIsGiven() {
-        val counter        = new AtomicInteger(1000);
-        val factoryBinding = new FactoryBinding<Integer>(defaultProvider->counter.getAndIncrement());
+        var counter        = new AtomicInteger(1000);
+        var factoryBinding = new FactoryBinding<Integer>(defaultProvider->counter.getAndIncrement());
         
-        val bindings = new Bindings.Builder().bind(Integer.class, factoryBinding).build();
-        val provider = new DefaultProvider().wihtBindings(bindings);
+        var bindings = new Bindings.Builder().bind(Integer.class, factoryBinding).build();
+        var provider = new DefaultProvider().wihtBindings(bindings);
         
-        val company = provider.get(Company.class);
+        var company = provider.get(Company.class);
         
         assertEquals(1000, company.revenue());
         assertEquals(1001, company.revenue());

@@ -21,16 +21,15 @@
 //  SOFTWARE.
 package defaultj.core;
 
+import static org.junit.Assert.assertEquals;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import org.junit.Test;
 
-import defaultj.core.DefaultProvider;
 import defaultj.core.DefaultImplementationTest.DefaultImplementation;
 import defaultj.core.exception.ImplementedClassNotCompatibleExistException;
-
-import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("javadoc")
 public class ImplementedByTest {

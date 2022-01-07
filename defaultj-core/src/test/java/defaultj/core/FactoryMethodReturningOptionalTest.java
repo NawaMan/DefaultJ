@@ -23,15 +23,13 @@ package defaultj.core;
 
 import static org.junit.Assert.assertEquals;
 
-import nullablej.nullable.Nullable;
-
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Optional;
 
 import org.junit.Test;
 
-import defaultj.core.DefaultProvider;
+import nullablej.nullable.Nullable;
 
 @SuppressWarnings("javadoc")
 public class FactoryMethodReturningOptionalTest {

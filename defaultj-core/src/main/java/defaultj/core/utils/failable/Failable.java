@@ -21,8 +21,6 @@
 //  SOFTWARE.
 package defaultj.core.utils.failable;
 
-import lombok.val;
-
 /**
  * Failable actions.
  * 
@@ -263,7 +261,7 @@ public class Failable {
          **/
         public default Runnable<T> asRunnableFor(java.util.function.Supplier<V> supplier) {
             return ()->{
-                val value = supplier.get();
+                var value = supplier.get();
                 this.accept(value);
             };
         }
@@ -359,7 +357,7 @@ public class Failable {
          **/
         public default Supplier<R, T> asSupplierFor(java.util.function.Supplier<V> supplier) {
             return ()->{
-                val value = supplier.get();
+                var value = supplier.get();
                 return this.apply(value);
             };
         }
@@ -386,8 +384,8 @@ public class Failable {
          */
         public default <R2, T2 extends Throwable> Function<V, R2, RuntimeException> pipeTo(Function<R, R2, T2> tail) {
             return value-> {
-                val mid = this.gracefully().apply(value);
-                val end = tail.gracefully().apply(mid);
+                var mid = this.gracefully().apply(value);
+                var end = tail.gracefully().apply(mid);
                 return end;
             };
         }
@@ -404,8 +402,8 @@ public class Failable {
          */
         public default <V2, R2, T2 extends Throwable> Function2<V, V2, R2, RuntimeException> pipeTo(Function2<R, V2, R2, T2> tail) {
             return (value, value2)-> {
-                val mid = this.gracefully().apply(value);
-                val end = tail.gracefully().apply(mid, value2);
+                var mid = this.gracefully().apply(value);
+                var end = tail.gracefully().apply(mid, value2);
                 return end;
             };
         }
@@ -574,7 +572,7 @@ public class Failable {
          **/
         public default Function<V2, R, T> asFunctionFor(java.util.function.Supplier<V1> supplier1) {
             return value2->{
-                val value1 = supplier1.get();
+                var value1 = supplier1.get();
                 return this.apply(value1, value2);
             };
         }
@@ -740,7 +738,7 @@ public class Failable {
          **/
         public default Function2<V2, V3, R, T> asFunctionFor(java.util.function.Supplier<V1> supplier1) {
             return (value2, value3)->{
-                val value1 = supplier1.get();
+                var value1 = supplier1.get();
                 return this.apply(value1, value2, value3);
             };
         }
@@ -878,7 +876,7 @@ public class Failable {
          **/
         public default Function3<V2, V3, V4, R, T> asFunctionFor(java.util.function.Supplier<V1> supplier1) {
             return (value2, value3, value4)->{
-                val value1 = supplier1.get();
+                var value1 = supplier1.get();
                 return this.apply(value1, value2, value3, value4);
             };
         }
@@ -1020,7 +1018,7 @@ public class Failable {
          **/
         public default Function4<V2, V3, V4, V5, R, T> asFunctionFor(java.util.function.Supplier<V1> supplier1) {
             return (value2, value3, value4, value5)->{
-                val value1 = supplier1.get();
+                var value1 = supplier1.get();
                 return this.apply(value1, value2, value3, value4, value5);
             };
         }

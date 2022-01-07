@@ -29,8 +29,6 @@ import java.util.function.Supplier;
 
 import org.junit.Test;
 
-import defaultj.core.DefaultProvider;
-
 @SuppressWarnings("javadoc")
 public class SingletonFieldSupplierTest {
     

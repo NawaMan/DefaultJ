@@ -29,7 +29,6 @@ import defaultj.annotations.DefaultInterface;
 import defaultj.api.IProvideDefault;
 import defaultj.core.exception.NonDefaultInterfaceException;
 import defaultj.core.utils.failable.Failable.Supplier;
-import lombok.val;
 
 /**
  * This class find default of an interface with all default methods.
@@ -51,12 +50,12 @@ public class DefaultInterfaceSupplierFinder implements IFindSupplier {
         if (!isDefaultInterface)
             return null;
         
-        val nonDefaults = getNonDefaultMethods(theGivenClass);
+        var nonDefaults = getNonDefaultMethods(theGivenClass);
         if (!nonDefaults.isEmpty()) {
             throw new NonDefaultInterfaceException(theGivenClass, nonDefaults);
         }
         
-        val theProxy = createDefaultProxy(theGivenClass);
+        var theProxy = createDefaultProxy(theGivenClass);
         return () -> theProxy;
     }
     

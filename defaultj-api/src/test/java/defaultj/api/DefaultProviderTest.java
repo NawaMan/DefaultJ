@@ -29,10 +29,6 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import defaultj.api.IProvideDefault;
-import defaultj.api.RequiredDefaultProviderNotAvailableException;
-import defaultj.api.utils;
-
 /**
  * The tests to get the default provider.
  * 

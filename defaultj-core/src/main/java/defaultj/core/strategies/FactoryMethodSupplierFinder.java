@@ -36,8 +36,6 @@ import java.util.function.Predicate;
 import defaultj.annotations.Default;
 import defaultj.api.IProvideDefault;
 import defaultj.core.utils.failable.Failable.Supplier;
-import lombok.Value;
-import lombok.val;
 import nullablej.nullable.Nullable;
 
 /**
@@ -55,14 +53,14 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>     theGivenClass,
             IProvideDefault defaultProvider) {
-        val methodValue = findValueFromFactoryMethod(theGivenClass, defaultProvider);
+        var methodValue = findValueFromFactoryMethod(theGivenClass, defaultProvider);
         return (Supplier<TYPE, THROWABLE>)methodValue;
     }
     
     @SuppressWarnings("unchecked")
     private <T> Supplier<T, ? extends Throwable> findValueFromFactoryMethod(Class<T> theGivenClass, IProvideDefault defaultProvider) {
-        val helper   = new Helper<T>(theGivenClass, defaultProvider);
-        val supplier = (Supplier<T, ? extends Throwable>)
+        var helper   = new Helper<T>(theGivenClass, defaultProvider);
+        var supplier = (Supplier<T, ? extends Throwable>)
                 _stream$(theGivenClass.getDeclaredMethods())
                 .filter(ifStaticMethod)
                 .filter(ifPublicMethod)
@@ -73,22 +71,26 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
         return supplier;
     }
     
-    @Value
     static class Helper<T> {
         private Class<T> theGivenClass;
         private IProvideDefault defaultProvider;
         
-        @SuppressWarnings({ "rawtypes", "unchecked" })
+        public Helper(Class<T> theGivenClass, IProvideDefault defaultProvider) {
+            this.theGivenClass = theGivenClass;
+            this.defaultProvider = defaultProvider;
+        }
+        
+        @SuppressWarnings({ "rawtypes" })
         private Supplier findValue(Method method) {
-            val type = method.getReturnType();
+            var type = method.getReturnType();
             if (theGivenClass.isAssignableFrom(type))
                 return (Supplier)(()->basicFactoryMethodCall(method));
             
-            val fromNullable = findNullableOrOptional(method, type);
+            var fromNullable = findNullableOrOptional(method, type);
             if (fromNullable != null)
                 return fromNullable;
             
-            val fromSupplier = findSupplier(method, type);
+            var fromSupplier = findSupplier(method, type);
             if (fromSupplier != null)
                 return fromSupplier;
             
@@ -100,24 +102,24 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
             if (!java.util.function.Supplier.class.isAssignableFrom(type)) 
                 return null;
             
-            val parameterizedType = (ParameterizedType)method.getGenericReturnType();
-            val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
+            var parameterizedType = (ParameterizedType)method.getGenericReturnType();
+            var actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
             if (!theGivenClass.isAssignableFrom(actualType))
                 return null;
             
-            val getMethod = getGetMethod();
+            var getMethod = getGetMethod();
              return (Supplier)(()->supplierFactoryMethodCall(method, getMethod));
         }
         
         @SuppressWarnings("rawtypes")
         private Supplier findNullableOrOptional(Method method, Class<?> type) {
-            val isOptional = Optional.class.isAssignableFrom(type);
-            val isNullable = !isOptional && Nullable.class.isAssignableFrom(type);
+            var isOptional = Optional.class.isAssignableFrom(type);
+            var isNullable = !isOptional && Nullable.class.isAssignableFrom(type);
             if (!isOptional && !isNullable)
                 return null;
             
-            val parameterizedType = (ParameterizedType)method.getGenericReturnType();
-            val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
+            var parameterizedType = (ParameterizedType)method.getGenericReturnType();
+            var actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
             
             if (!theGivenClass.isAssignableFrom(actualType))
                 return null;
@@ -128,9 +130,9 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
         @SuppressWarnings({ "rawtypes", "unchecked" })
         private Object getNullableOrOptionalValue(Method method, final boolean isNullable)
                 throws IllegalAccessException, InvocationTargetException {
-            val params   = prepareParameters(method, defaultProvider);
-            val nullable = method.invoke(theGivenClass, params);
-            val value = isNullable
+            var params   = prepareParameters(method, defaultProvider);
+            var nullable = method.invoke(theGivenClass, params);
+            var value = isNullable
                     ? ((Nullable)nullable).orElse(null)
                     : ((Optional)nullable).orElse(null);
             return value;
@@ -150,16 +152,16 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
                 Method method,
                 Method getMethod) 
                         throws IllegalAccessException, InvocationTargetException {
-            val params = prepareParameters(method, defaultProvider);
-            val result = method.invoke(theGivenClass, params);
-            val value  = getMethod.invoke(result);
+            var params = prepareParameters(method, defaultProvider);
+            var result = method.invoke(theGivenClass, params);
+            var value  = getMethod.invoke(result);
             return value;
         }
         
         private Object basicFactoryMethodCall(Method method)
                 throws IllegalAccessException, InvocationTargetException {
-            val params = prepareParameters(method, defaultProvider);
-            val value  = method.invoke(theGivenClass, params);
+            var params = prepareParameters(method, defaultProvider);
+            var value  = method.invoke(theGivenClass, params);
             return value;
         }
     }
