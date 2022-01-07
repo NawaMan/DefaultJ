@@ -24,9 +24,9 @@ package defaultj.core.strategies;
 import static defaultj.core.strategies.common.NullSupplier;
 import static defaultj.core.utils.AnnotationUtils.has;
 import static nullablej.NullableJ._isNull;
-import static nullablej.NullableJ._stream$;
 
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import defaultj.annotations.ImplementedBy;
 import defaultj.api.IProvideDefault;
@@ -69,13 +69,13 @@ public class ImplementedBySupplierFinder implements IFindSupplier {
     @SuppressWarnings("unchecked")
     private static <T> Class<T> findDefaultImplementation(Class<T> theGivenClass) {
         Class<?> implementedClass
-                = _stream$(theGivenClass.getAnnotations())
+                = Stream.of(theGivenClass.getAnnotations())
                 .filter(annotation -> ANNOTATION_NAME.equals(annotation.annotationType().getSimpleName()))
                 .map(toString)
                 .map(extractValue)
                 .map(findClass(theGivenClass))
                 .findAny()
-                .get();
+                .orElse(null);
         if (!theGivenClass.isAssignableFrom(implementedClass))
             throw new ImplementedClassNotCompatibleExistException(theGivenClass, implementedClass.getName());
         

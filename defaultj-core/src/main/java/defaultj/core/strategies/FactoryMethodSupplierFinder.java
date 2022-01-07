@@ -25,13 +25,13 @@ import static defaultj.core.utils.MethodSupplierFinderUtils.prepareParameters;
 import static defaultj.core.utils.MethodUtils.annotatedWith;
 import static defaultj.core.utils.MethodUtils.ifPublicMethod;
 import static defaultj.core.utils.MethodUtils.ifStaticMethod;
-import static nullablej.NullableJ._stream$;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import defaultj.annotations.Default;
 import defaultj.api.IProvideDefault;
@@ -61,7 +61,7 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
     private <T> Supplier<T, ? extends Throwable> findValueFromFactoryMethod(Class<T> theGivenClass, IProvideDefault defaultProvider) {
         var helper   = new Helper<T>(theGivenClass, defaultProvider);
         var supplier = (Supplier<T, ? extends Throwable>)
-                _stream$(theGivenClass.getDeclaredMethods())
+                Stream.of(theGivenClass.getDeclaredMethods())
                 .filter(ifStaticMethod)
                 .filter(ifPublicMethod)
                 .filter(annotatedWithDefault)

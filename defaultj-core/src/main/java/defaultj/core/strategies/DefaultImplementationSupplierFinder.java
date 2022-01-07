@@ -22,12 +22,12 @@
 package defaultj.core.strategies;
 
 import static defaultj.core.utils.AnnotationUtils.has;
-import static nullablej.NullableJ._stream$;
 
 import java.lang.annotation.Annotation;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import defaultj.annotations.DefaultImplementation;
 import defaultj.api.IProvideDefault;
@@ -73,7 +73,7 @@ public class DefaultImplementationSupplierFinder implements IFindSupplier {
     @SuppressWarnings("unchecked")
     private static <T> Class<T> findDefaultImplementation(Class<T> theGivenClass) {
         Class<?> implementedClass
-                = _stream$(theGivenClass.getAnnotations())
+                = Stream.of(theGivenClass.getAnnotations())
                 .filter(isDefaultImplementation)
                 .map   (toString)
                 .map   (extractValue)

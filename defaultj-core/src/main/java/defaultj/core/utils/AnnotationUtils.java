@@ -23,10 +23,10 @@ package defaultj.core.utils;
 
 import static nullablej.NullableJ._hasAll;
 import static nullablej.NullableJ._hasSome;
-import static nullablej.NullableJ._stream$;
 
 import java.lang.annotation.Annotation;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Utility class for Annotations.
@@ -55,7 +55,7 @@ public class AnnotationUtils {
      * @return  {@code true}  if the annotations has at lease one of the names.
      */
     public static boolean has(Annotation[] annotations, String ... names) {
-        return _stream$(names).anyMatch(
+        return Stream.of(names).anyMatch(
                 name -> _hasSome(annotations, withNamed(name)));
     }
     
@@ -67,7 +67,7 @@ public class AnnotationUtils {
      * @return  {@code true}  if the annotations has at lease one of the names.
      */
     public static boolean hasAllOf(Annotation[] annotations, String ... names) {
-        return _stream$(names).allMatch(
+        return Stream.of(names).allMatch(
                 name -> _hasAll(annotations, withNamed(name)));
     }
     
