@@ -67,7 +67,7 @@ subprojects {
             setMemberLevel JavadocMemberLevel.PUBLIC
             setAuthor true
             
-            links "https://docs.oracle.com/javase/8/docs/api/"
+            links "https://docs.oracle.com/javase/11/docs/api/"
         }
     }
     
