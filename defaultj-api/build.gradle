@@ -1,5 +1,17 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
 version="${theVersion}.0"
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
 dependencies {
-    testCompile 'junit:junit:4.12'
+    
+    testImplementation 'junit:junit:4.12'
+    
 }
