@@ -33,7 +33,6 @@ import defaultj.core.bindings.FactoryBinding;
 import defaultj.core.bindings.InstanceBinding;
 import defaultj.core.bindings.TypeBinding;
 
-@SuppressWarnings("javadoc")
 public class BindingTest {
     
     //== InstanceBinging ==

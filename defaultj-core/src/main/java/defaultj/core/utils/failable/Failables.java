@@ -442,7 +442,6 @@ public class Failables {
     
     //== namespace classes ==
     
-    @SuppressWarnings("javadoc")
     public static final class Runnables {
         
         private Runnables() {}
@@ -461,7 +460,6 @@ public class Failables {
         
     }
     
-    @SuppressWarnings("javadoc")
     public static final class Suppliers {
         
         private Suppliers() {}
@@ -481,7 +479,6 @@ public class Failables {
         
     }
     
-    @SuppressWarnings("javadoc")
     public static final class Consumers {
         
         private Consumers() {}
@@ -501,7 +498,6 @@ public class Failables {
         
     }
     
-    @SuppressWarnings("javadoc")
     public static final class Functions {
         
         private Functions() {}
@@ -521,7 +517,6 @@ public class Failables {
         }
     }
     
-    @SuppressWarnings("javadoc")
     public static final class Function2s {
         
         private Function2s() {}
@@ -542,7 +537,6 @@ public class Failables {
         }
     }
     
-    @SuppressWarnings("javadoc")
     public static final class Function3s {
         
         private Function3s() {}
@@ -564,7 +558,6 @@ public class Failables {
         }
     }
     
-    @SuppressWarnings("javadoc")
     public static final class Function4s {
         
         private Function4s() {}
@@ -587,7 +580,6 @@ public class Failables {
         }
     }
     
-    @SuppressWarnings("javadoc")
     public static final class Function5s {
         
         private Function5s() {}

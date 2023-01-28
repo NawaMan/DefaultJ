@@ -32,7 +32,6 @@ import org.junit.Test;
 
 import nullablej.nullable.Nullable;
 
-@SuppressWarnings("javadoc")
 public class SingletonFieldOfOptionalTest {
     
     private DefaultProvider provider = new DefaultProvider();

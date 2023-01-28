@@ -29,7 +29,6 @@ import java.util.function.Supplier;
 
 import org.junit.Test;
 
-@SuppressWarnings("javadoc")
 public class SingletonFieldSupplierTest {
     
     private DefaultProvider provider = new DefaultProvider();

@@ -28,7 +28,6 @@ import java.lang.annotation.RetentionPolicy;
 
 import org.junit.Test;
 
-@SuppressWarnings("javadoc")
 public class SingletonFieldTest {
     
     private DefaultProvider provider = new DefaultProvider();

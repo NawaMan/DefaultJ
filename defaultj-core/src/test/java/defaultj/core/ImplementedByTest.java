@@ -31,7 +31,6 @@ import org.junit.Test;
 import defaultj.core.DefaultImplementationTest.DefaultImplementation;
 import defaultj.core.exception.ImplementedClassNotCompatibleExistException;
 
-@SuppressWarnings("javadoc")
 public class ImplementedByTest {
 
     private DefaultProvider provider = new DefaultProvider();

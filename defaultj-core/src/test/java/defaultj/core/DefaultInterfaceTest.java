@@ -27,7 +27,6 @@ import org.junit.Test;
 
 import defaultj.annotations.DefaultInterface;
 
-@SuppressWarnings("javadoc")
 public class DefaultInterfaceTest {
     
     private DefaultProvider provider = new DefaultProvider();

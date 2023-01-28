@@ -27,7 +27,6 @@ import org.junit.Test;
 
 import defaultj.core.bindings.TypeBinding;
 
-@SuppressWarnings("javadoc")
 public class CurrentProviderTest {
     
     public static interface Greet {

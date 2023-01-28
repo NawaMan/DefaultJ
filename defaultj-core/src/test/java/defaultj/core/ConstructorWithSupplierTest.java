@@ -30,7 +30,6 @@ import org.junit.Test;
 
 import defaultj.core.bindings.FactoryBinding;
 
-@SuppressWarnings("javadoc")
 public class ConstructorWithSupplierTest {
     
     public static class Company {

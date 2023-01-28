@@ -30,7 +30,6 @@ import java.lang.annotation.Target;
 
 import org.junit.Test;
 
-@SuppressWarnings("javadoc")
 public class ConstructorTest {
     
     private DefaultProvider provider = new DefaultProvider();

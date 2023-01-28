@@ -31,7 +31,6 @@ import org.junit.Test;
 
 import defaultj.core.utils.failable.Failable;
 
-@SuppressWarnings("javadoc")
 public class FactoryMethodReturningSupplierTest {
     
     private DefaultProvider provider = new DefaultProvider();

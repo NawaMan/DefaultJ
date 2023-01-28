@@ -34,7 +34,6 @@ import defaultj.annotations.Nullable;
 import defaultj.core.exception.CyclicDependencyDetectedException;
 import defaultj.core.exception.DefaultCreationException;
 
-@SuppressWarnings("javadoc")
 public class CyclicDependencyDetectionTest {
     
     private DefaultProvider provider = new DefaultProvider();

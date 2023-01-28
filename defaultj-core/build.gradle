@@ -14,7 +14,7 @@ dependencies {
     api project(':defaultj-api')
     api project(':defaultj-annotations')
     
-    compileOnly 'io.nullablej:nullablej:4.0.1.0'
+    implementation 'io.nullablej:nullablej:4.0.1.0'
     
     // == Test ==
     

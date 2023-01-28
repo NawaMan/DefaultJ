@@ -31,7 +31,6 @@ import org.junit.Test;
 
 import nullablej.nullable.Nullable;
 
-@SuppressWarnings("javadoc")
 public class FactoryMethodReturningOptionalTest {
     
     private DefaultProvider provider = new DefaultProvider();

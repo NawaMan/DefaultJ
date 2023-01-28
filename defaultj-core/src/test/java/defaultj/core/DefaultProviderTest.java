@@ -34,7 +34,6 @@ import org.junit.Test;
 
 import defaultj.api.IProvideDefault;
 
-@SuppressWarnings("javadoc")
 public class DefaultProviderTest {
     
     private IProvideDefault provider = IProvideDefault.defaultProvider().get();

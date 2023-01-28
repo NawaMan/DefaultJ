@@ -33,7 +33,6 @@ import org.junit.Test;
 import defaultj.core.DefaultToNullTest.DefaultToNull;
 import defaultj.core.exception.AbstractClassCreationException;
 
-@SuppressWarnings("javadoc")
 public class DefaultImplementationTest {
     
     private DefaultProvider provider = new DefaultProvider();

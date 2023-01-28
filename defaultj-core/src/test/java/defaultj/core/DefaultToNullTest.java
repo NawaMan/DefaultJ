@@ -28,7 +28,6 @@ import java.lang.annotation.RetentionPolicy;
 
 import org.junit.Test;
 
-@SuppressWarnings("javadoc")
 public class DefaultToNullTest {
     
     private DefaultProvider provider = new DefaultProvider();
@@ -47,6 +46,5 @@ public class DefaultToNullTest {
     public void testThat_classAnnotatedWithDefaultToNull_hasDefaultValueOfNull() {
         assertNull(provider.get(NullValue.class));
     }
-    
     
 }
