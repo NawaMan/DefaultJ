@@ -21,10 +21,10 @@
 //  SOFTWARE.
 package defaultj.core.exception;
 
+import static java.util.Collections.unmodifiableMap;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.util.Collections.unmodifiableMap;
 
 /**
  * This exception is thrown when a method is called when a default interface

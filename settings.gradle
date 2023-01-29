@@ -3,4 +3,4 @@ include ":defaultj-api"
 include ":defaultj-core"
 include ":defaultj-annotations"
 
-rootProject.name = theGroup
+rootProject.name = "defaultj"

@@ -46,7 +46,7 @@ class utils {
         if (!isCompatibleType) 
             throw new ClassCastException(className);
         
-        Object          newInstance = providerClass.newInstance();
+        Object          newInstance = providerClass.getConstructor().newInstance();
         IProvideDefault provider    = IProvideDefault.class.cast(newInstance);
         return provider;
     }

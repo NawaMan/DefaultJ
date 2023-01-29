@@ -21,14 +21,12 @@
 //  SOFTWARE.
 package defaultj.core;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 import defaultj.annotations.DefaultInterface;
-import defaultj.core.DefaultProvider;
 
-import static org.junit.Assert.assertEquals;
-
-@SuppressWarnings("javadoc")
 public class DefaultInterfaceTest {
     
     private DefaultProvider provider = new DefaultProvider();

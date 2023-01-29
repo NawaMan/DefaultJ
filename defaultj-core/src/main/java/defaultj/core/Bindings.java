@@ -26,8 +26,6 @@ import static java.util.Collections.unmodifiableMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.NonNull;
-
 /**
  * Collections of bindings.
  * 
@@ -87,7 +85,7 @@ public class Bindings {
          * @param binding  the bind to be match with this class.
          * @return this binding builder.
          */
-        public <TYPE> Builder bind(@NonNull Class<TYPE> clzz, IBind<? extends TYPE> binding) {
+        public <TYPE> Builder bind(Class<TYPE> clzz, IBind<? extends TYPE> binding) {
             if (binding != null)
                 this.bindings.put(clzz, binding);
             return this;

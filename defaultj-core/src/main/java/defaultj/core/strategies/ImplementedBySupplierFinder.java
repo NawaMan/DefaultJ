@@ -24,17 +24,16 @@ package defaultj.core.strategies;
 import static defaultj.core.strategies.common.NullSupplier;
 import static defaultj.core.utils.AnnotationUtils.has;
 import static nullablej.NullableJ._isNull;
-import static nullablej.NullableJ._stream$;
 
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import defaultj.annotations.ImplementedBy;
 import defaultj.api.IProvideDefault;
 import defaultj.core.exception.ImplementedClassNotCompatibleExistException;
 import defaultj.core.exception.ImplementedClassNotExistException;
-import defaultj.core.utils.failable.Failables;
 import defaultj.core.utils.failable.Failable.Supplier;
-import lombok.val;
+import defaultj.core.utils.failable.Failables;
 
 /**
  * This class get a default that is a default implementation of the target class.
@@ -46,7 +45,7 @@ public class ImplementedBySupplierFinder implements IFindSupplier {
     private static final String ANNOTATION_NAME = ImplementedBy.class.getSimpleName();
 
     private static final Function<String, String> extractValue = toString->
-                toString.replaceAll("^(.*\\(value=class )(.*)(\\))$", "$2");
+                toString.replaceAll("^(.*\\(value=)(.*)(\\.class\\))$", "$2");
     
     private static final Function<Object, String> toString = Object::toString;
     
@@ -58,7 +57,7 @@ public class ImplementedBySupplierFinder implements IFindSupplier {
         if (!has(theGivenClass.getAnnotations(), ANNOTATION_NAME))
             return null;
         
-        val defaultImplementationClass = findDefaultImplementation(theGivenClass);
+        var defaultImplementationClass = findDefaultImplementation(theGivenClass);
         if (_isNull(defaultImplementationClass))
             return NullSupplier;
         
@@ -70,12 +69,13 @@ public class ImplementedBySupplierFinder implements IFindSupplier {
     @SuppressWarnings("unchecked")
     private static <T> Class<T> findDefaultImplementation(Class<T> theGivenClass) {
         Class<?> implementedClass
-                = _stream$(theGivenClass.getAnnotations())
+                = Stream.of(theGivenClass.getAnnotations())
+                .filter(annotation -> ANNOTATION_NAME.equals(annotation.annotationType().getSimpleName()))
                 .map(toString)
                 .map(extractValue)
                 .map(findClass(theGivenClass))
                 .findAny()
-                .get();
+                .orElse(null);
         if (!theGivenClass.isAssignableFrom(implementedClass))
             throw new ImplementedClassNotCompatibleExistException(theGivenClass, implementedClass.getName());
         

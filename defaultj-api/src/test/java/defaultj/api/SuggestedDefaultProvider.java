@@ -21,9 +21,6 @@
 //  SOFTWARE.
 package defaultj.api;
 
-import defaultj.api.IProvideDefault;
-import defaultj.api.ProvideDefaultException;
-
 public class SuggestedDefaultProvider implements IProvideDefault {
     
     @Override

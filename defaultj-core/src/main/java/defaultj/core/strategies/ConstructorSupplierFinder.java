@@ -32,9 +32,8 @@ import java.lang.reflect.Constructor;
 import defaultj.annotations.Default;
 import defaultj.annotations.PostConstruct;
 import defaultj.api.IProvideDefault;
-import defaultj.core.utils.failable.Failables;
 import defaultj.core.utils.failable.Failable.Supplier;
-import lombok.val;
+import defaultj.core.utils.failable.Failables;
 
 /**
  * This class get a default by invoking a constructor.
@@ -56,7 +55,7 @@ public class ConstructorSupplierFinder implements IFindSupplier {
             return null;
         
         @SuppressWarnings("unchecked")
-        val supplier = (Supplier<TYPE, THROWABLE>)Failables.of(()->
+        var supplier = (Supplier<TYPE, THROWABLE>)Failables.of(()->
                 callConstructor(constructor, defaultProvider));
         return supplier;
     }
@@ -64,19 +63,19 @@ public class ConstructorSupplierFinder implements IFindSupplier {
     private <TYPE> TYPE callConstructor(Constructor<TYPE> constructor, IProvideDefault defaultProvider)
             throws ReflectiveOperationException {
         // TODO - Change to use method handle.
-        val paramValues = prepareParameters(constructor, defaultProvider);
-        val instance    = constructor.newInstance(paramValues);
+        var paramValues = prepareParameters(constructor, defaultProvider);
+        var instance    = constructor.newInstance(paramValues);
         
         // TODO - Do the inherited methods too. - be careful duplicate when done with default methods
-        val methods = instance.getClass().getDeclaredMethods();
-        for(val method : methods) {
-            for(val annotation : method.getAnnotations()) {
-                val annotationName = annotation.annotationType().getSimpleName();
-                val isPostContruct = PostConstruct.class.getSimpleName().equals(annotationName);
+        var methods = instance.getClass().getDeclaredMethods();
+        for(var method : methods) {
+            for(var annotation : method.getAnnotations()) {
+                var annotationName = annotation.annotationType().getSimpleName();
+                var isPostContruct = PostConstruct.class.getSimpleName().equals(annotationName);
                 if (!isPostContruct)
                     continue;
                 
-                val isAccessible = method.isAccessible();
+                var isAccessible = method.canAccess(instance);
                 try {
                     method.setAccessible(true);
                     method.invoke(instance);

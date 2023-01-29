@@ -93,12 +93,14 @@ As mentioned, DefaultJ check for annotations for more clue on how to provide def
 
 ### Using DefaultJ in a Gradle project
 
-This project binary is published on [my maven repo](https://github.com/NawaMan/nawaman-maven-repository) hosted on GitHub. So to use DefaultJ you will need to ...
-
-Add the dependencies to DefaultJ.
+This project binary is published on Maven Central.
+So to use DefaultJ you will need to add the dependencies to DefaultJ (Gradle 5.0).
 
 ```Groovy
-	compile 'io.defaultj:defaultj-core:2.0.0.0' // Please lookup for the latest version.
+    compile 'io.defaultj:defaultj-core:2.0.0.0'        // Please lookup for the latest version.
+    compile 'io.defaultj:defaultj-annotation:2.0.0.0'  // Please lookup for the latest version.
+    
+    annotationProcessor 'io.defaultj:defaultj-annotation:2.0.0.0' // Please lookup for the latest version.
 ```
 
 [UseNullableJGradle](https://github.com/NawaMan/UseNullableJGradle) is an example project that use NullableJ.
@@ -120,12 +122,6 @@ Add the dependencies to DefaultJ.
 		<groupId>io.defaultj</groupId>
 		<artifactId>defaultj-core</artifactId>
 		<version>2.0.0.0</version>
-	</dependency>
-	<dependency>
-		<groupId>junit</groupId>
-		<artifactId>junit</artifactId>
-		<version>4.11</version>
-		<scope>test</scope>
 	</dependency>
 ```
 
