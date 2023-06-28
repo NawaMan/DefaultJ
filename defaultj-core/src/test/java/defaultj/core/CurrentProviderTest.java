@@ -52,7 +52,7 @@ public class CurrentProviderTest {
             .bind(Greet.class, new TypeBinding<Hello>(Hello.class))
             .bind(Hello.class, new TypeBinding<Hello>(Hi.class))
             .build();
-        var provider = DefaultProvider.instance.wihtBindings(bindings);
+        var provider = DefaultProvider.instance.withBindings(bindings);
         assertEquals("Hi", provider.get(Greet.class).greet());
     }
     

@@ -48,7 +48,7 @@ public class ConstructorWithSupplierTest {
         var factoryBinding = new FactoryBinding<Integer>(defaultProvider->counter.getAndIncrement());
         
         var bindings = new Bindings.Builder().bind(Integer.class, factoryBinding).build();
-        var provider = new DefaultProvider().wihtBindings(bindings);
+        var provider = new DefaultProvider().withBindings(bindings);
         
         var company = provider.get(Company.class);
         

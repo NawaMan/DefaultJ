@@ -190,7 +190,7 @@ public class DefaultProvider implements IProvideDefault {
      * @param provideFailureHandler  the handler.
      * @return  a new default provider with all configuration of this provider except for the handler.
      */
-    public DefaultProvider wihtProvideFailureHandler(IHandleProvideFailure provideFailureHandler) {
+    public DefaultProvider withProvideFailureHandler(IHandleProvideFailure provideFailureHandler) {
         return new DefaultProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
     }
     
@@ -200,7 +200,7 @@ public class DefaultProvider implements IProvideDefault {
      * @param bindings  the provision bindings.
      * @return  a new default provider with all configuration of this provider except for the bindings.
      */
-    public DefaultProvider wihtBindings(Bindings bindings) {
+    public DefaultProvider withBindings(Bindings bindings) {
         return new DefaultProvider(parent, additionalSupplierFinders, bindings, provideFailureHandler);
     }
     
