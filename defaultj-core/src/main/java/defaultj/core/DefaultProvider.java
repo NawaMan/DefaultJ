@@ -266,9 +266,9 @@ public class DefaultProvider implements IProvideDefault {
         if (IProvideDefault.class.isAssignableFrom(theGivenClass))
             return ()->this;
         
-            var knownValue = knownNullValuesFinder.findNullValueOf(theGivenClass);
-            if (knownValue != null)
-                return ()->knownValue;
+        var knownValue = knownNullValuesFinder.findNullValueOf(theGivenClass);
+        if (knownValue != null)
+            return ()->knownValue;
             
         if (knownNewNullValuesFinder.canFindFor(theGivenClass))
             return ()->knownNewNullValuesFinder.findNullValueOf(theGivenClass);
