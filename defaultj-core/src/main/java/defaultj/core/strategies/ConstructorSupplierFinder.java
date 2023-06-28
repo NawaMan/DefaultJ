@@ -49,14 +49,15 @@ public class ConstructorSupplierFinder implements IFindSupplier {
             find(Class<TYPE> theGivenClass, IProvideDefault defaultProvider) {
         Constructor<TYPE> constructor
                 = _orGet(findConstructorWithAnnotation(theGivenClass, ANNOTATION_NAME), 
-                		sensibleDefaultConstructorOf(theGivenClass));
+                         sensibleDefaultConstructorOf(theGivenClass));
         
         if (!_isPublic(constructor))
             return null;
         
         @SuppressWarnings("unchecked")
-        var supplier = (Supplier<TYPE, THROWABLE>)Failables.of(()->
-                callConstructor(constructor, defaultProvider));
+        var supplier = (Supplier<TYPE, THROWABLE>)Failables.of(()-> {
+                callConstructor(constructor, defaultProvider);
+        });
         return supplier;
     }
     
