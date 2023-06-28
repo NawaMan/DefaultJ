@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -21,10 +21,12 @@
 //  SOFTWARE.
 package defaultj.core.strategies;
 
+import static defaultj.core.strategies.common.extractValue;
+import static defaultj.core.strategies.common.notNull;
+import static defaultj.core.strategies.common.toString;
 import static defaultj.core.utils.AnnotationUtils.has;
 
 import java.lang.annotation.Annotation;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -43,16 +45,11 @@ public class DefaultImplementationSupplierFinder implements IFindSupplier {
     
     private static final String ANNOTATION_NAME = DefaultImplementation.class.getSimpleName();
     
-    private static final Function<String, String> extractValue = toString -> {
-        return toString.replaceAll("^(.*\\(value=\")(.*)(\"\\))$", "$2");
+    public static final Predicate<? super Annotation> isDefaultImplementation = annotation -> {
+        var annotationType = annotation.annotationType();
+        var simpleName = annotationType.getSimpleName();
+        return ANNOTATION_NAME.equals(simpleName);
     };
-    
-    private static final Predicate<? super Annotation> isDefaultImplementation = annotation -> {
-        return ANNOTATION_NAME.equals(annotation.annotationType().getSimpleName());
-    };
-    
-    private static final Function<Object, String> toString = Object::toString;
-    private static final Predicate<Object>        notNull  = Objects::nonNull;
     
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
@@ -72,7 +69,7 @@ public class DefaultImplementationSupplierFinder implements IFindSupplier {
     
     @SuppressWarnings("unchecked")
     private static <T> Class<T> findDefaultImplementation(Class<T> theGivenClass) {
-        Class<?> implementedClass
+        var implementedClass
                 = Stream.of(theGivenClass.getAnnotations())
                 .filter(isDefaultImplementation)
                 .map   (toString)

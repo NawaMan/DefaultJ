@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import defaultj.annotations.DefaultInterface;
+import defaultj.core.exception.NonDefaultInterfaceException;
 
 public class DefaultInterfaceTest {
     
@@ -75,31 +76,29 @@ public class DefaultInterfaceTest {
         assertEquals("Hello: world", provider.get(IGreet3Child.class).greet("world"));
     }
     
-    // This class fails to compile on CIServer.
-//    
-//    public static interface IGreet4Super {
-//        public String greet(String name);
-//    }
-//    
-//    @DefaultInterface
-//    public static interface IGreet4Child extends IGreet4Super {
-//        
-//    }
-//    
-//    @Test
-//    public void testFail_hasNonDefaultMethod() {
-//        try {
-//            provider.get(IGreet4Child.class);
-//        } catch (ObjectCreationException e) {
-//            val methods = ((NonDefaultInterfaceException)e.getCause()).getMethod();
-//            assertEquals(
-//                      "{"
-//                    +   "greet([class java.lang.String])"
-//                    +       ": class java.lang.String"
-//                    +       "=nawaman.defaultj.impl.DefaultInterfaceTest.IGreet4Super"
-//                    + "}",
-//                    methods.toString());
-//        }
-//    }
+    public static interface IGreet4Super {
+        public String greet(String name);
+    }
+    
+    @DefaultInterface
+    public static interface IGreet4Child extends IGreet4Super {
+        
+    }
+    
+    @Test
+    public void testFail_hasNonDefaultMethod() {
+        try {
+            provider.get(IGreet4Child.class);
+        } catch (NonDefaultInterfaceException e) {
+            var methods = e.getMethod();
+            assertEquals(
+                      "{"
+                    +   "greet([class java.lang.String])"
+                    +       ": class java.lang.String"
+                    +       "=defaultj.core.DefaultInterfaceTest.IGreet4Super"
+                    + "}",
+                    methods.toString());
+        }
+    }
     
 }

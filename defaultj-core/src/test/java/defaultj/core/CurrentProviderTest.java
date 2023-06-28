@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -52,7 +52,7 @@ public class CurrentProviderTest {
             .bind(Greet.class, new TypeBinding<Hello>(Hello.class))
             .bind(Hello.class, new TypeBinding<Hello>(Hi.class))
             .build();
-        var provider = DefaultProvider.instance.wihtBindings(bindings);
+        var provider = DefaultProvider.instance.withBindings(bindings);
         assertEquals("Hi", provider.get(Greet.class).greet());
     }
     

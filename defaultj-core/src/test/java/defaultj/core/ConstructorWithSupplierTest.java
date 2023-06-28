@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,7 @@ public class ConstructorWithSupplierTest {
         var factoryBinding = new FactoryBinding<Integer>(defaultProvider->counter.getAndIncrement());
         
         var bindings = new Bindings.Builder().bind(Integer.class, factoryBinding).build();
-        var provider = new DefaultProvider().wihtBindings(bindings);
+        var provider = new DefaultProvider().withBindings(bindings);
         
         var company = provider.get(Company.class);
         

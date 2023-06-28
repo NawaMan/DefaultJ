@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -190,7 +190,7 @@ public class DefaultProvider implements IProvideDefault {
      * @param provideFailureHandler  the handler.
      * @return  a new default provider with all configuration of this provider except for the handler.
      */
-    public DefaultProvider wihtProvideFailureHandler(IHandleProvideFailure provideFailureHandler) {
+    public DefaultProvider withProvideFailureHandler(IHandleProvideFailure provideFailureHandler) {
         return new DefaultProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
     }
     
@@ -200,7 +200,7 @@ public class DefaultProvider implements IProvideDefault {
      * @param bindings  the provision bindings.
      * @return  a new default provider with all configuration of this provider except for the bindings.
      */
-    public DefaultProvider wihtBindings(Bindings bindings) {
+    public DefaultProvider withBindings(Bindings bindings) {
         return new DefaultProvider(parent, additionalSupplierFinders, bindings, provideFailureHandler);
     }
     
@@ -234,11 +234,11 @@ public class DefaultProvider implements IProvideDefault {
         }
     }
     
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "unchecked" })
     <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> getSupplierFor(
             Class<TYPE> theGivenClass) {
         
-        Supplier supplier = suppliers.get(theGivenClass);
+        var supplier = suppliers.get(theGivenClass);
         if (_isNull(supplier)) {
             supplier = newSupplierFor(theGivenClass);
             supplier = _or(supplier, NoSupplier);
@@ -266,9 +266,9 @@ public class DefaultProvider implements IProvideDefault {
         if (IProvideDefault.class.isAssignableFrom(theGivenClass))
             return ()->this;
         
-            var knownValue = knownNullValuesFinder.findNullValueOf(theGivenClass);
-            if (knownValue != null)
-                return ()->knownValue;
+        var knownValue = knownNullValuesFinder.findNullValueOf(theGivenClass);
+        if (knownValue != null)
+            return ()->knownValue;
             
         if (knownNewNullValuesFinder.canFindFor(theGivenClass))
             return ()->knownNewNullValuesFinder.findNullValueOf(theGivenClass);
