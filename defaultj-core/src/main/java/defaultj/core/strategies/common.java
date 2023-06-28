@@ -21,11 +21,29 @@
 //  SOFTWARE.
 package defaultj.core.strategies;
 
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 import defaultj.core.utils.failable.Failable.Supplier;
 
 class common {
     
+    public static final Function<String, String> extractValue = toString -> {
+        var value = toString
+                .replaceFirst("value=", "")
+                .replaceFirst("\\.class", "")
+                .replaceFirst("^.*\\((.*)\\)$", "$1")
+                .replaceFirst("^\"(.*)\"$", "$1");
+        return value;
+    };
+    
+    public static final Function<Object, String> toString = Object::toString;
+    
     @SuppressWarnings("rawtypes")
     public static final Supplier NullSupplier = () -> null;
+    
+    public static final Predicate<Object> notNull  = Objects::nonNull;
+    
     
 }

@@ -22,6 +22,8 @@
 package defaultj.core.strategies;
 
 import static defaultj.core.strategies.common.NullSupplier;
+import static defaultj.core.strategies.common.extractValue;
+import static defaultj.core.strategies.common.toString;
 import static defaultj.core.utils.AnnotationUtils.has;
 import static nullablej.NullableJ._isNull;
 
@@ -42,12 +44,7 @@ import defaultj.core.utils.failable.Failables;
  */
 public class ImplementedBySupplierFinder implements IFindSupplier {
     
-    private static final String ANNOTATION_NAME = ImplementedBy.class.getSimpleName();
-
-    private static final Function<String, String> extractValue = toString->
-                toString.replaceAll("^(.*\\(value=)(.*)(\\.class\\))$", "$2");
-    
-    private static final Function<Object, String> toString = Object::toString;
+    public static final String ANNOTATION_NAME = ImplementedBy.class.getSimpleName();
     
     @SuppressWarnings("unchecked")
     @Override

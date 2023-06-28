@@ -23,7 +23,7 @@ package defaultj.core;
 
 public class TheClass3 implements ImplementedByTest.TheInterface2 {
     
-    public static final String TEXT = "I am class 2.";
+    public static final String TEXT = "I am class 3.";
     
     @Override
     public String getText() {

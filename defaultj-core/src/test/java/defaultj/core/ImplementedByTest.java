@@ -85,7 +85,7 @@ public class ImplementedByTest {
     
     @Test
     public void testImplementationNameExistSoItIsUsed() {
-        assertEquals(TheClass3.class, provider.get(TheInterface2.class).getClass());
+        assertEquals("" + TheClass3.class, "" + provider.get(TheInterface2.class).getClass());
     }
     
     @ImplementedBy(Object.class)

@@ -69,6 +69,7 @@ public class DefaultImplementationTest {
     
     @Test
     public void testThat_whenAnnotatedWithDefaultImplementation_findTheClassAndUseItsDefaultAsThis() {
+        System.out.println(provider.get(TheInterface2.class));
         assertTrue(provider.get(TheInterface2.class) instanceof TheClass2);
         assertEquals(TheClass2.TEXT, provider.get(TheInterface2User.class).getText());
     }

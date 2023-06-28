@@ -234,11 +234,11 @@ public class DefaultProvider implements IProvideDefault {
         }
     }
     
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "unchecked" })
     <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> getSupplierFor(
             Class<TYPE> theGivenClass) {
         
-        Supplier supplier = suppliers.get(theGivenClass);
+        var supplier = suppliers.get(theGivenClass);
         if (_isNull(supplier)) {
             supplier = newSupplierFor(theGivenClass);
             supplier = _or(supplier, NoSupplier);
