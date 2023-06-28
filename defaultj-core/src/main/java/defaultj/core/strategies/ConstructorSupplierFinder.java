@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2023 Nawa Manusitthipol
+//  Copyright (c) 2017-2019 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,7 @@ public class ConstructorSupplierFinder implements IFindSupplier {
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE>
             find(Class<TYPE> theGivenClass, IProvideDefault defaultProvider) {
         Constructor<TYPE> constructor
-                = _orGet(findConstructorWithAnnotation(theGivenClass, ANNOTATION_NAME), 
+                = _orGet(findConstructorWithAnnotation(theGivenClass, ANNOTATION_NAME),
                          sensibleDefaultConstructorOf(theGivenClass));
         
         if (!_isPublic(constructor))
@@ -56,7 +56,7 @@ public class ConstructorSupplierFinder implements IFindSupplier {
         
         @SuppressWarnings("unchecked")
         var supplier = (Supplier<TYPE, THROWABLE>)Failables.of(()-> {
-                callConstructor(constructor, defaultProvider);
+            return callConstructor(constructor, defaultProvider);
         });
         return supplier;
     }
