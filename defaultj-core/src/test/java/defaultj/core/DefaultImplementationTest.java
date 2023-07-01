@@ -101,6 +101,8 @@ public class DefaultImplementationTest {
         assertEquals(TheInterface3User.TEXT, provider.get(TheInterface3User.class).getText());
     }
     
+    // First try to find the default implementation class first.
+    // Then, default to null.
     @DefaultImplementation(value="directget.get.TheClassThatDoesNotExist")
     @DefaultToNull
     public static interface TheInterface4 {
