@@ -115,6 +115,84 @@ public class ConstructorTest {
         assertEquals("FLASH!", provider.get(AnotherPerson.class).zoom());
     }
     
+    //== Multiple Annotated Constructors ==
+    
+    public static class YetAnotherPerson {
+        private Car car;
+        @Default
+        public YetAnotherPerson() {
+            this(new Car() {
+                @Override
+                public String zoom() {
+                    return "Zoom zoom ...";
+                }
+            });
+        }
+        @Default
+        public YetAnotherPerson(Car car) {
+            this.car = car;
+        }
+        public String zoom() {
+            return (car != null) ? car.zoom() : "Meh";
+        }
+    }
+    
+    @Test
+    public void testMultipleInjectConstructor() {
+        assertEquals("Zoom zoom ...", provider.get(YetAnotherPerson.class).zoom());
+    }
+    
+    //== Multiple Constructors WithNoArgsConstructor ==
+    
+    public static class PersonWithNoArgsConstructor {
+        private Car car;
+        public PersonWithNoArgsConstructor() {
+            this(new Car() {
+                @Override
+                public String zoom() {
+                    return "Zoom zoom ...";
+                }
+            });
+        }
+        public PersonWithNoArgsConstructor(Car car) {
+            this.car = car;
+        }
+        public String zoom() {
+            return (car != null) ? car.zoom() : "Meh";
+        }
+    }
+    
+    @Test
+    public void testMultipleConstructorWithNoArgs() {
+        assertEquals("Zoom zoom ...", provider.get(PersonWithNoArgsConstructor.class).zoom());
+    }
+    
+    //== Multiple Constructors WithMultipleConstructors ==
+    
+    public static class PersonWithMultipleConstructors {
+        private Car car;
+        public PersonWithMultipleConstructors(String zoom) {
+            this(new Car() {
+                @Override
+                public String zoom() {
+                    return "zoom";
+                }
+            });
+        }
+        public PersonWithMultipleConstructors(Car car) {
+            this.car = car;
+        }
+        public String zoom() {
+            return (car != null) ? car.zoom() : "Meh";
+        }
+    }
+    
+    @Test
+    public void testMultipleConstructors() {
+        // Multiple constructors without `@Default`.
+        assertEquals(null, provider.get(PersonWithMultipleConstructors.class));
+    }
+    
     //== Post Constructor ==
     
     @Retention(RetentionPolicy.RUNTIME)
