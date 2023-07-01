@@ -39,7 +39,7 @@ public class Bindings {
     @SuppressWarnings("rawtypes")
     private final Map<Class, IBind> bindings;
     
-    Bindings(@SuppressWarnings("rawtypes") Map<Class, IBind> bindings) {
+    public Bindings(@SuppressWarnings("rawtypes") Map<Class, IBind> bindings) {
         this.bindings = unmodifiableMap(new HashMap<>(bindings));
     }
     
