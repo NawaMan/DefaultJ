@@ -26,6 +26,9 @@ import static java.util.Collections.unmodifiableMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import defaultj.core.bindings.InstanceBinding;
+import defaultj.core.bindings.TypeBinding;
+
 /**
  * Collections of bindings.
  * 
@@ -90,6 +93,39 @@ public class Bindings {
                 this.bindings.put(clzz, binding);
             return this;
         }
+        
+        /**
+         * Bind the binding to the class.
+         * This means that if there is a request for the data class,
+         *   the instance of the boundClzz will be given.
+         * 
+         * @param <TYPE>    the data type.
+         * @param clzz      the data class.
+         * @param instance  the instance to bind to.
+         * @return this binding builder.
+         */
+        public <TYPE> Builder bind(Class<TYPE> clzz, TYPE instance) {
+            var instanceBinding = new InstanceBinding<>(instance);
+            this.bindings.put(clzz, instanceBinding);
+            return this;
+        }
+        
+        /**
+         * Bind the binding to the class.
+         * This means that if there is a request for the data class,
+         *   the instance of the boundClzz will be given.
+         * 
+         * @param <TYPE>     the data type.
+         * @param clzz       the data class.
+         * @param boundClzz  the class to bind to.
+         * @return this binding builder.
+         */
+        public <TYPE> Builder bind(Class<TYPE> clzz, Class<? extends TYPE> boundClzz) {
+            var typeBinding = new TypeBinding<>(boundClzz);
+            this.bindings.put(clzz, typeBinding);
+            return this;
+        }
+        
         /**
          * Include all the bindings.
          * 
