@@ -25,6 +25,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 import static nullablej.NullableJ._isNotNull;
 import static nullablej.NullableJ._isNull;
 import static nullablej.NullableJ._or;
@@ -206,7 +207,7 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
      * @return  a new default provider with all configuration of this provider except for the additional supplier finders.
      */
     public DefaultProvider withAdditionalSupplier(Stream<IFindSupplier> additionalSupplierFinders) {
-        var finders = additionalSupplierFinders.toList();
+        var finders = additionalSupplierFinders.collect(toList());
         return new DefaultProvider(parent, finders, binidings, provideFailureHandler);
     }
     
