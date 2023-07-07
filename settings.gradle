@@ -1,6 +1,0 @@
-
-include ":defaultj-api"
-include ":defaultj-core"
-include ":defaultj-annotations"
-
-rootProject.name = "defaultj"

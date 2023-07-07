@@ -235,7 +235,7 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
     /**
      * Create a new provider with the given binding.
      * 
-     * @param bindings  the bindings builder.
+     * @param bindingBuilder  the bindings builder.
      * @return  a new default provider with all configuration of this provider except for the bindings.
      */
     public DefaultProvider withBindings(Bindings.Builder bindingBuilder) {
@@ -247,6 +247,8 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
     
     /**
      * Create a new provider with the given binding.
+     * 
+     * @param <TYPE>  the type of the class to be bound with.
      * 
      * @param clzz     the binding class.
      * @param binding  the binding for the class.
@@ -260,6 +262,8 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
     /**
      * Create a new provider with the given binding.
      * 
+     * @param <TYPE>  the type of the class to be bound with.
+     * 
      * @param clzz      the binding class.
      * @param instance  the bound instance.
      * @return  a new default provider with all configuration of this provider except for the bindings.
@@ -271,6 +275,8 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
     
     /**
      * Create a new provider with the given binding.
+     * 
+     * @param <TYPE>  the type of the class to be bound with.
      * 
      * @param clzz       the binding class.
      * @param boundClzz  the bound class.
