@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,8 @@ import static java.util.Collections.unmodifiableMap;
 import java.util.HashMap;
 import java.util.Map;
 
-import lombok.NonNull;
+import defaultj.core.bindings.InstanceBinding;
+import defaultj.core.bindings.TypeBinding;
 
 /**
  * Collections of bindings.
@@ -38,7 +39,7 @@ public class Bindings {
     @SuppressWarnings("rawtypes")
     private final Map<Class, IBind> bindings;
     
-    Bindings(@SuppressWarnings("rawtypes") Map<Class, IBind> bindings) {
+    public Bindings(@SuppressWarnings("rawtypes") Map<Class, IBind> bindings) {
         this.bindings = unmodifiableMap(new HashMap<>(bindings));
     }
     
@@ -87,11 +88,44 @@ public class Bindings {
          * @param binding  the bind to be match with this class.
          * @return this binding builder.
          */
-        public <TYPE> Builder bind(@NonNull Class<TYPE> clzz, IBind<? extends TYPE> binding) {
+        public <TYPE> Builder bind(Class<TYPE> clzz, IBind<? extends TYPE> binding) {
             if (binding != null)
                 this.bindings.put(clzz, binding);
             return this;
         }
+        
+        /**
+         * Bind the binding to the class.
+         * This means that if there is a request for the data class,
+         *   the instance of the boundClzz will be given.
+         * 
+         * @param <TYPE>    the data type.
+         * @param clzz      the data class.
+         * @param instance  the instance to bind to.
+         * @return this binding builder.
+         */
+        public <TYPE> Builder bind(Class<TYPE> clzz, TYPE instance) {
+            var instanceBinding = new InstanceBinding<>(instance);
+            this.bindings.put(clzz, instanceBinding);
+            return this;
+        }
+        
+        /**
+         * Bind the binding to the class.
+         * This means that if there is a request for the data class,
+         *   the instance of the boundClzz will be given.
+         * 
+         * @param <TYPE>     the data type.
+         * @param clzz       the data class.
+         * @param boundClzz  the class to bind to.
+         * @return this binding builder.
+         */
+        public <TYPE> Builder bind(Class<TYPE> clzz, Class<? extends TYPE> boundClzz) {
+            var typeBinding = new TypeBinding<>(boundClzz);
+            this.bindings.put(clzz, typeBinding);
+            return this;
+        }
+        
         /**
          * Include all the bindings.
          * 

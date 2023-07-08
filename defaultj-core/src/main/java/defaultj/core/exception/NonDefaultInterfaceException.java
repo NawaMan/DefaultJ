@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -21,10 +21,10 @@
 //  SOFTWARE.
 package defaultj.core.exception;
 
+import static java.util.Collections.unmodifiableMap;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.util.Collections.unmodifiableMap;
 
 /**
  * This exception is thrown when a method is called when a default interface

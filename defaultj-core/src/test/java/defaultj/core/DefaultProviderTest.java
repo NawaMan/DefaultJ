@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -21,9 +21,9 @@
 //  SOFTWARE.
 package defaultj.core;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Map;
@@ -33,9 +33,7 @@ import java.util.function.Supplier;
 import org.junit.Test;
 
 import defaultj.api.IProvideDefault;
-import defaultj.core.DefaultProvider;
 
-@SuppressWarnings("javadoc")
 public class DefaultProviderTest {
     
     private IProvideDefault provider = IProvideDefault.defaultProvider().get();

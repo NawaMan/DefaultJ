@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -28,10 +28,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
-
-import defaultj.api.IProvideDefault;
-import defaultj.api.RequiredDefaultProviderNotAvailableException;
-import defaultj.api.utils;
 
 /**
  * The tests to get the default provider.

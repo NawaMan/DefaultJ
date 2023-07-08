@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -21,11 +21,29 @@
 //  SOFTWARE.
 package defaultj.core.strategies;
 
+import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 import defaultj.core.utils.failable.Failable.Supplier;
 
 class common {
     
+    public static final Function<String, String> extractValue = toString -> {
+        var value = toString
+                .replaceFirst("value=", "")
+                .replaceFirst("\\.class", "")
+                .replaceFirst("^.*\\((.*)\\)$", "$1")
+                .replaceFirst("^\"(.*)\"$", "$1");
+        return value;
+    };
+    
+    public static final Function<Object, String> toString = Object::toString;
+    
     @SuppressWarnings("rawtypes")
     public static final Supplier NullSupplier = () -> null;
+    
+    public static final Predicate<Object> notNull  = Objects::nonNull;
+    
     
 }

@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,6 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 
 import defaultj.annotations.DefaultInterface;
-import lombok.AllArgsConstructor;
 
 /**
  * This annotation process ensures that {@link DefaultInterface} is only annotated
@@ -93,7 +92,6 @@ public class DefaultInterfaceAnnotationValidator extends AbstractProcessor {
         return hasError;
     }
     
-    @AllArgsConstructor
     private class InterfaceChecker {
         
         private Element orgInterface;
@@ -101,6 +99,11 @@ public class DefaultInterfaceAnnotationValidator extends AbstractProcessor {
         private final Map<String, String> abstracts = new TreeMap<String, String>();
         
         private final Set<String> defaults = new TreeSet<String>();
+        
+        public InterfaceChecker(Element orgInterface) {
+            super();
+            this.orgInterface = orgInterface;
+        }
         
         private void ensureDefaultInterface() {
             ensureDefaultInterface(orgInterface);

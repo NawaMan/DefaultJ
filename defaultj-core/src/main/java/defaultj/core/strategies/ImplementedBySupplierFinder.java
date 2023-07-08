@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,19 +22,20 @@
 package defaultj.core.strategies;
 
 import static defaultj.core.strategies.common.NullSupplier;
+import static defaultj.core.strategies.common.extractValue;
+import static defaultj.core.strategies.common.toString;
 import static defaultj.core.utils.AnnotationUtils.has;
 import static nullablej.NullableJ._isNull;
-import static nullablej.NullableJ._stream$;
 
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import defaultj.annotations.ImplementedBy;
 import defaultj.api.IProvideDefault;
 import defaultj.core.exception.ImplementedClassNotCompatibleExistException;
 import defaultj.core.exception.ImplementedClassNotExistException;
-import defaultj.core.utils.failable.Failables;
 import defaultj.core.utils.failable.Failable.Supplier;
-import lombok.val;
+import defaultj.core.utils.failable.Failables;
 
 /**
  * This class get a default that is a default implementation of the target class.
@@ -43,12 +44,7 @@ import lombok.val;
  */
 public class ImplementedBySupplierFinder implements IFindSupplier {
     
-    private static final String ANNOTATION_NAME = ImplementedBy.class.getSimpleName();
-
-    private static final Function<String, String> extractValue = toString->
-                toString.replaceAll("^(.*\\(value=class )(.*)(\\))$", "$2");
-    
-    private static final Function<Object, String> toString = Object::toString;
+    public static final String ANNOTATION_NAME = ImplementedBy.class.getSimpleName();
     
     @SuppressWarnings("unchecked")
     @Override
@@ -58,7 +54,7 @@ public class ImplementedBySupplierFinder implements IFindSupplier {
         if (!has(theGivenClass.getAnnotations(), ANNOTATION_NAME))
             return null;
         
-        val defaultImplementationClass = findDefaultImplementation(theGivenClass);
+        var defaultImplementationClass = findDefaultImplementation(theGivenClass);
         if (_isNull(defaultImplementationClass))
             return NullSupplier;
         
@@ -70,12 +66,13 @@ public class ImplementedBySupplierFinder implements IFindSupplier {
     @SuppressWarnings("unchecked")
     private static <T> Class<T> findDefaultImplementation(Class<T> theGivenClass) {
         Class<?> implementedClass
-                = _stream$(theGivenClass.getAnnotations())
+                = Stream.of(theGivenClass.getAnnotations())
+                .filter(annotation -> ANNOTATION_NAME.equals(annotation.annotationType().getSimpleName()))
                 .map(toString)
                 .map(extractValue)
                 .map(findClass(theGivenClass))
                 .findAny()
-                .get();
+                .orElse(null);
         if (!theGivenClass.isAssignableFrom(implementedClass))
             throw new ImplementedClassNotCompatibleExistException(theGivenClass, implementedClass.getName());
         

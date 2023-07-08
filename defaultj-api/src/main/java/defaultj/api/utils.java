@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,7 @@ class utils {
         if (!isCompatibleType) 
             throw new ClassCastException(className);
         
-        Object          newInstance = providerClass.newInstance();
+        Object          newInstance = providerClass.getConstructor().newInstance();
         IProvideDefault provider    = IProvideDefault.class.cast(newInstance);
         return provider;
     }

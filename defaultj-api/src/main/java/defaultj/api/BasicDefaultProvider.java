@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -21,6 +21,8 @@
 //  SOFTWARE.
 package defaultj.api;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * This default provider can only create a new instance from default constructor.
  * 
@@ -31,8 +33,8 @@ public class BasicDefaultProvider implements IProvideDefault {
     @Override
     public <TYPE> TYPE get(Class<TYPE> theGivenClass) throws ProvideDefaultException {
         try {
-            return (TYPE)theGivenClass.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            return (TYPE)theGivenClass.getConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
             throw new ProvideDefaultException("BasicDefaultProvider requires a default constructor.", theGivenClass, e);
         }
     }

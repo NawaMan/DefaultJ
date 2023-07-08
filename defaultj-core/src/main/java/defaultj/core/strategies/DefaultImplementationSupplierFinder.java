@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -21,18 +21,20 @@
 //  SOFTWARE.
 package defaultj.core.strategies;
 
+import static defaultj.core.strategies.common.extractValue;
+import static defaultj.core.strategies.common.notNull;
+import static defaultj.core.strategies.common.toString;
 import static defaultj.core.utils.AnnotationUtils.has;
-import static nullablej.NullableJ._stream$;
 
-import java.util.Objects;
+import java.lang.annotation.Annotation;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import defaultj.annotations.DefaultImplementation;
 import defaultj.api.IProvideDefault;
-import defaultj.core.utils.failable.Failables;
 import defaultj.core.utils.failable.Failable.Supplier;
-import lombok.val;
+import defaultj.core.utils.failable.Failables;
 
 /**
  * This class get a default that is a default implementation of the target class.
@@ -42,12 +44,12 @@ import lombok.val;
 public class DefaultImplementationSupplierFinder implements IFindSupplier {
     
     private static final String ANNOTATION_NAME = DefaultImplementation.class.getSimpleName();
-
-    private static final Function<String, String> extractValue = toString->
-                toString.replaceAll("^(.*\\(value=)(.*)(\\))$", "$2");
     
-    private static final Function<Object, String> toString = Object::toString;
-    private static final Predicate<Object>        notNull  = Objects::nonNull;
+    public static final Predicate<? super Annotation> isDefaultImplementation = annotation -> {
+        var annotationType = annotation.annotationType();
+        var simpleName = annotationType.getSimpleName();
+        return ANNOTATION_NAME.equals(simpleName);
+    };
     
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
@@ -56,7 +58,7 @@ public class DefaultImplementationSupplierFinder implements IFindSupplier {
         if (!has(theGivenClass.getAnnotations(), ANNOTATION_NAME))
             return null;
         
-        val defaultImplementationClass = findDefaultImplementation(theGivenClass);
+        var defaultImplementationClass = findDefaultImplementation(theGivenClass);
         if (defaultImplementationClass == null)
             return null;
         
@@ -67,11 +69,12 @@ public class DefaultImplementationSupplierFinder implements IFindSupplier {
     
     @SuppressWarnings("unchecked")
     private static <T> Class<T> findDefaultImplementation(Class<T> theGivenClass) {
-        Class<?> implementedClass
-                = _stream$(theGivenClass.getAnnotations())
-                .map(toString)
-                .map(extractValue)
-                .map(findClass())
+        var implementedClass
+                = Stream.of(theGivenClass.getAnnotations())
+                .filter(isDefaultImplementation)
+                .map   (toString)
+                .map   (extractValue)
+                .map   (findClass())
                 .filter(notNull)
                 .filter(isAssignableTo(theGivenClass))
                 .findAny()

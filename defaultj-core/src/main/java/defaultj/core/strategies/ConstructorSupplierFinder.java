@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -32,9 +32,8 @@ import java.lang.reflect.Constructor;
 import defaultj.annotations.Default;
 import defaultj.annotations.PostConstruct;
 import defaultj.api.IProvideDefault;
-import defaultj.core.utils.failable.Failables;
 import defaultj.core.utils.failable.Failable.Supplier;
-import lombok.val;
+import defaultj.core.utils.failable.Failables;
 
 /**
  * This class get a default by invoking a constructor.
@@ -49,34 +48,35 @@ public class ConstructorSupplierFinder implements IFindSupplier {
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE>
             find(Class<TYPE> theGivenClass, IProvideDefault defaultProvider) {
         Constructor<TYPE> constructor
-                = _orGet(findConstructorWithAnnotation(theGivenClass, ANNOTATION_NAME), 
-                		sensibleDefaultConstructorOf(theGivenClass));
+                = _orGet(findConstructorWithAnnotation(theGivenClass, ANNOTATION_NAME),
+                         sensibleDefaultConstructorOf(theGivenClass));
         
         if (!_isPublic(constructor))
             return null;
         
         @SuppressWarnings("unchecked")
-        val supplier = (Supplier<TYPE, THROWABLE>)Failables.of(()->
-                callConstructor(constructor, defaultProvider));
+        var supplier = (Supplier<TYPE, THROWABLE>)Failables.of(()-> {
+            return callConstructor(constructor, defaultProvider);
+        });
         return supplier;
     }
     
     private <TYPE> TYPE callConstructor(Constructor<TYPE> constructor, IProvideDefault defaultProvider)
             throws ReflectiveOperationException {
         // TODO - Change to use method handle.
-        val paramValues = prepareParameters(constructor, defaultProvider);
-        val instance    = constructor.newInstance(paramValues);
+        var paramValues = prepareParameters(constructor, defaultProvider);
+        var instance    = constructor.newInstance(paramValues);
         
         // TODO - Do the inherited methods too. - be careful duplicate when done with default methods
-        val methods = instance.getClass().getDeclaredMethods();
-        for(val method : methods) {
-            for(val annotation : method.getAnnotations()) {
-                val annotationName = annotation.annotationType().getSimpleName();
-                val isPostContruct = PostConstruct.class.getSimpleName().equals(annotationName);
+        var methods = instance.getClass().getDeclaredMethods();
+        for(var method : methods) {
+            for(var annotation : method.getAnnotations()) {
+                var annotationName = annotation.annotationType().getSimpleName();
+                var isPostContruct = PostConstruct.class.getSimpleName().equals(annotationName);
                 if (!isPostContruct)
                     continue;
                 
-                val isAccessible = method.isAccessible();
+                var isAccessible = method.canAccess(instance);
                 try {
                     method.setAccessible(true);
                     method.invoke(instance);

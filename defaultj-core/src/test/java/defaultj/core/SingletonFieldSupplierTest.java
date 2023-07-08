@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -29,9 +29,6 @@ import java.util.function.Supplier;
 
 import org.junit.Test;
 
-import defaultj.core.DefaultProvider;
-
-@SuppressWarnings("javadoc")
 public class SingletonFieldSupplierTest {
     
     private DefaultProvider provider = new DefaultProvider();

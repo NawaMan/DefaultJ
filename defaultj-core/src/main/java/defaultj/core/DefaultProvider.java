@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -21,8 +21,11 @@
 //  SOFTWARE.
 package defaultj.core;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.unmodifiableList;
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 import static nullablej.NullableJ._isNotNull;
 import static nullablej.NullableJ._isNull;
 import static nullablej.NullableJ._or;
@@ -33,8 +36,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import defaultj.api.IProvideDefault;
 import defaultj.api.ProvideDefaultException;
@@ -50,10 +55,7 @@ import defaultj.core.strategies.ImplementedBySupplierFinder;
 import defaultj.core.strategies.NullSupplierFinder;
 import defaultj.core.strategies.SingletonFieldFinder;
 import defaultj.core.utils.failable.Failable.Supplier;
-import lombok.AllArgsConstructor;
-import lombok.Setter;
-import lombok.val;
-import lombok.experimental.Accessors;
+import nullablej.nullable.Nullable;
 import nullablej.nullvalue.strategies.KnownNewNullValuesFinder;
 import nullablej.nullvalue.strategies.KnownNullValuesFinder;
 
@@ -62,7 +64,7 @@ import nullablej.nullvalue.strategies.KnownNullValuesFinder;
  * 
  * @author NawaMan -- nawa@nawaman.net
  */
-public class DefaultProvider implements IProvideDefault {
+public class DefaultProvider implements IProvideDefault, IFindSupplier {
     
     @SuppressWarnings("rawtypes")
     private static final Supplier NoSupplier = ()->null;
@@ -137,9 +139,6 @@ public class DefaultProvider implements IProvideDefault {
     /**
      * Create a builder for the DefaultProvider.
      */
-    @Setter
-    @AllArgsConstructor
-    @Accessors(fluent=true,chain=true)
     public static class Builder {
         private IProvideDefault       parent;
         private List<IFindSupplier>   additionalSupplierFinders;
@@ -153,6 +152,26 @@ public class DefaultProvider implements IProvideDefault {
             this(null, null, null, null);
         }
         
+        public Bindings bingings() {
+            return bingings;
+        }
+        
+        public Builder bingings(Bindings bingings) {
+            this.bingings = bingings;
+            return this;
+        }
+        
+        public Builder(IProvideDefault       parent,
+                       List<IFindSupplier>   additionalSupplierFinders,
+                       Bindings              bingings,
+                       IHandleProvideFailure provideFailureHandler) {
+            super();
+            this.parent                    = parent;
+            this.additionalSupplierFinders = additionalSupplierFinders;
+            this.bingings                  = bingings;
+            this.provideFailureHandler     = provideFailureHandler;
+        }
+        
         /**
          * Build the DefaultProvider.
          * 
@@ -164,7 +183,7 @@ public class DefaultProvider implements IProvideDefault {
     }
     
     private static List<IFindSupplier> combineFinders(List<IFindSupplier> additionalSupplierFinders) {
-        val finderList = new ArrayList<IFindSupplier>();
+        var finderList = new ArrayList<IFindSupplier>();
         finderList.addAll(beforeAdditionalFinders);
         finderList.addAll(_or(additionalSupplierFinders, noAdditionalSuppliers));
         finderList.addAll(afterAdditionalFinders);
@@ -174,21 +193,108 @@ public class DefaultProvider implements IProvideDefault {
     /**
      * Create a new provider with the given provide failure provider.
      * 
-     * @param provideFailureHandler  the handler.
-     * @return  a new default provider with all configuration of this provider except for the handler.
+     * @param additionalSupplierFinders  the supplier finders.
+     * @return  a new default provider with all configuration of this provider except for the additional supplier finders.
      */
-    public DefaultProvider wihtProvideFailureHandler(IHandleProvideFailure provideFailureHandler) {
+    public DefaultProvider withAdditionalSupplier(List<IFindSupplier> additionalSupplierFinders) {
         return new DefaultProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
     }
     
     /**
      * Create a new provider with the given provide failure provider.
      * 
-     * @param bindings  the provision bindings.
+     * @param additionalSupplierFinders  the supplier finders.
+     * @return  a new default provider with all configuration of this provider except for the additional supplier finders.
+     */
+    public DefaultProvider withAdditionalSupplier(Stream<IFindSupplier> additionalSupplierFinders) {
+        var finders = additionalSupplierFinders.collect(toList());
+        return new DefaultProvider(parent, finders, binidings, provideFailureHandler);
+    }
+    
+    /**
+     * Create a new provider with the given provide failure provider.
+     * 
+     * @param additionalSupplierFinders  the supplier finders.
+     * @return  a new default provider with all configuration of this provider except for the additional supplier finders.
+     */
+    public DefaultProvider withAdditionalSupplier(IFindSupplier ... additionalSupplierFinders) {
+        var finders = asList(additionalSupplierFinders);
+        return new DefaultProvider(parent, finders, binidings, provideFailureHandler);
+    }
+    
+    /**
+     * Create a new provider with the given binding.
+     * 
+     * @param bindings  the bindings.
      * @return  a new default provider with all configuration of this provider except for the bindings.
      */
-    public DefaultProvider wihtBindings(Bindings bindings) {
+    public DefaultProvider withBindings(Bindings bindings) {
         return new DefaultProvider(parent, additionalSupplierFinders, bindings, provideFailureHandler);
+    }
+    
+    /**
+     * Create a new provider with the given binding.
+     * 
+     * @param bindingBuilder  the bindings builder.
+     * @return  a new default provider with all configuration of this provider except for the bindings.
+     */
+    public DefaultProvider withBindings(Bindings.Builder bindingBuilder) {
+        var bindings = Optional.ofNullable(bindingBuilder)
+                     .map   (Bindings.Builder::build)
+                     .orElse(null);
+        return new DefaultProvider(parent, additionalSupplierFinders, bindings, provideFailureHandler);
+    }
+    
+    /**
+     * Create a new provider with the given binding.
+     * 
+     * @param <TYPE>  the type of the class to be bound with.
+     * 
+     * @param clzz     the binding class.
+     * @param binding  the binding for the class.
+     * @return  a new default provider with all configuration of this provider except for the bindings.
+     */
+    public <TYPE> DefaultProvider withBinding(Class<TYPE> clzz, IBind<? extends TYPE> binding) {
+        var bindings = new Bindings(Map.of(requireNonNull(clzz), requireNonNull(binding)));
+        return new DefaultProvider(parent, additionalSupplierFinders, bindings, provideFailureHandler);
+    }
+    
+    /**
+     * Create a new provider with the given binding.
+     * 
+     * @param <TYPE>  the type of the class to be bound with.
+     * 
+     * @param clzz      the binding class.
+     * @param instance  the bound instance.
+     * @return  a new default provider with all configuration of this provider except for the bindings.
+     */
+    public <TYPE> DefaultProvider withBinding(Class<TYPE> clzz, TYPE instance) {
+        var bindings = new Bindings.Builder().bind(requireNonNull(clzz), instance).build();
+        return new DefaultProvider(parent, additionalSupplierFinders, bindings, provideFailureHandler);
+    }
+    
+    /**
+     * Create a new provider with the given binding.
+     * 
+     * @param <TYPE>  the type of the class to be bound with.
+     * 
+     * @param clzz       the binding class.
+     * @param boundClzz  the bound class.
+     * @return  a new default provider with all configuration of this provider except for the bindings.
+     */
+    public <TYPE> DefaultProvider withBinding(Class<TYPE> clzz, Class<? extends TYPE> boundClzz) {
+        var bindings = new Bindings.Builder().bind(requireNonNull(clzz), boundClzz).build();
+        return new DefaultProvider(parent, additionalSupplierFinders, bindings, provideFailureHandler);
+    }
+    
+    /**
+     * Create a new provider with the given provide failure provider.
+     * 
+     * @param provideFailureHandler  the handler.
+     * @return  a new default provider with all configuration of this provider except for the handler.
+     */
+    public DefaultProvider withProvideFailureHandler(IHandleProvideFailure provideFailureHandler) {
+        return new DefaultProvider(parent, additionalSupplierFinders, binidings, provideFailureHandler);
     }
     
     /**
@@ -198,16 +304,9 @@ public class DefaultProvider implements IProvideDefault {
      * @return the created value.
      * @throws ProvideDefaultException when there is a problem providing the default.
      */
-    @SuppressWarnings("rawtypes")
     @Override
     public <TYPE> TYPE get(Class<TYPE> theGivenClass) throws ProvideDefaultException {
-//        if (theGivenClass.isPrimitive()) {
-//            val knownValue = knownNullValuesFinder.findNullValueOf(theGivenClass);
-//            if (knownValue != null)
-//                return knownValue;
-//        }
-        
-        val set = beingCreateds.get();
+        var set = beingCreateds.get();
         if (set.contains(theGivenClass))
             throw new CyclicDependencyDetectedException(theGivenClass);
         
@@ -215,8 +314,8 @@ public class DefaultProvider implements IProvideDefault {
             set.add(theGivenClass);
             
             try {
-                val supplier = getSupplierFor(theGivenClass);
-                val instance = supplier.get();
+                var supplier = getSupplierFor(theGivenClass);
+                var instance = supplier.get();
                 return theGivenClass.isPrimitive() ? instance : theGivenClass.cast(instance);
             } catch (ProvideDefaultException e) {
                 throw e;
@@ -228,11 +327,25 @@ public class DefaultProvider implements IProvideDefault {
         }
     }
     
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    /**
+     * Returns the default for the given class as Nullable.
+     * 
+     * @param <TYPE>  the data type represented by the given class.
+     * @param theGivenClass
+     *          the given class.
+     * @return  the default associated with the given class.
+     * @throws ProvideDefaultException  if there is a problem getting the default.
+     */
+    public <TYPE> Nullable<TYPE> nullable(Class<TYPE> theGivenClass)
+            throws ProvideDefaultException {
+        return Nullable.of(get(theGivenClass));
+    }
+    
+    @SuppressWarnings({ "unchecked" })
     <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> getSupplierFor(
             Class<TYPE> theGivenClass) {
         
-        Supplier supplier = suppliers.get(theGivenClass);
+        var supplier = suppliers.get(theGivenClass);
         if (_isNull(supplier)) {
             supplier = newSupplierFor(theGivenClass);
             supplier = _or(supplier, NoSupplier);
@@ -241,18 +354,32 @@ public class DefaultProvider implements IProvideDefault {
         return supplier;
     }
     
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Override
+    public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE>
+            find(Class<TYPE> theGivenClass, IProvideDefault defaultProvider) {
+        var supplier = getSupplierFor(theGivenClass);
+        return (supplier != null)
+                ? (Supplier)supplier
+                : (defaultProvider instanceof DefaultProvider)
+                    ? ((DefaultProvider)defaultProvider).getSupplierFor(theGivenClass)
+                    : (defaultProvider != null)
+                        ? () -> defaultProvider.get(theGivenClass)
+                        : null;
+    }
+    
     @SuppressWarnings({ "rawtypes" })
     private <T> Supplier newSupplierFor(Class<T> theGivenClass) {
-        val binding = this.binidings.getBinding(theGivenClass);
+        var binding = this.binidings.getBinding(theGivenClass);
         if (_isNotNull(binding))
             return ()->binding.get(this);
         
         if (DefaultProvider.class.isAssignableFrom(theGivenClass))
             return ()->this;
         
-        val parentProvider = (IProvideDefault)_or(this.parent, this);
-        for (val finder : finders) {
-            val supplier = finder.find(theGivenClass, parentProvider);
+        var parentProvider = (IProvideDefault)_or(this.parent, this);
+        for (var finder : finders) {
+            var supplier = finder.find(theGivenClass, parentProvider);
             if (_isNotNull(supplier))
                 return supplier;
         }
@@ -260,9 +387,9 @@ public class DefaultProvider implements IProvideDefault {
         if (IProvideDefault.class.isAssignableFrom(theGivenClass))
             return ()->this;
         
-            val knownValue = knownNullValuesFinder.findNullValueOf(theGivenClass);
-            if (knownValue != null)
-                return ()->knownValue;
+        var knownValue = knownNullValuesFinder.findNullValueOf(theGivenClass);
+        if (knownValue != null)
+            return ()->knownValue;
             
         if (knownNewNullValuesFinder.canFindFor(theGivenClass))
             return ()->knownNewNullValuesFinder.findNullValueOf(theGivenClass);

@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -41,8 +41,6 @@ import defaultj.annotations.ImplementedBy;
 
 import static java.util.stream.Collectors.toList;
 
-import lombok.val;
-
 /**
  * This annotation process ensures that {@link ImplementedBy} parameter is compatible with the annotated class.
  * 
@@ -81,15 +79,15 @@ public class ImplementedByAnnotationValidator extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         hasError = false;
         for (Element element : roundEnv.getElementsAnnotatedWith(ImplementedBy.class)) {
-            val elementType = element.toString();
+            var elementType = element.toString();
             
-            val implementedBy = element.getAnnotation(ImplementedBy.class);
-            val implementingTypeName = implementedBy.toString().replaceAll("^.*\\(value = (.*)\\.class\\)$", "$1");
+            var implementedBy = element.getAnnotation(ImplementedBy.class);
+            var implementingTypeName = implementedBy.toString().replaceAll("^.*\\(value = (.*)\\.class\\)$", "$1");
             if (elementType.equals(implementingTypeName))
                 error(element, format("%s is not a valid implementation of itself.", elementType));
             
-            val implementingType   = processingEnv.getElementUtils().getTypeElement(implementingTypeName);
-            val allCompatibleTypes = getAllCompatibleTypes(implementingType);
+            var implementingType   = processingEnv.getElementUtils().getTypeElement(implementingTypeName);
+            var allCompatibleTypes = getAllCompatibleTypes(implementingType);
             
             if (!allCompatibleTypes.contains(elementType))
                 error(element, format("%s is not compatible with %s", implementingTypeName, elementType));

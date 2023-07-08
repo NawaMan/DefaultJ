@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,6 @@ import defaultj.annotations.Default;
 import defaultj.api.IProvideDefault;
 import defaultj.core.exception.DefaultCreationException;
 import defaultj.core.utils.failable.Failable.Supplier;
-import lombok.val;
 import nullablej.NullableJ;
 
 /**
@@ -49,7 +48,7 @@ public class EnumValueSupplierFinder implements IFindSupplier {
         if (!theGivenClass.isEnum()) 
             return null;
         
-        val enumValue = findDefaultEnumValue(theGivenClass);
+        var enumValue = findDefaultEnumValue(theGivenClass);
         return ()->enumValue;
     }
     
@@ -65,9 +64,9 @@ public class EnumValueSupplierFinder implements IFindSupplier {
     }
     
     @SuppressWarnings("rawtypes")
-    static <T> Predicate<T>defaultEnumValue(Class<T> theGivenClass) {
+    static <T> Predicate<T> defaultEnumValue(Class<T> theGivenClass) {
         return value->{
-            val name = ((Enum)value).name();
+            var name = ((Enum)value).name();
             try {
                 return has(theGivenClass.getField(name).getAnnotations(), DEFAULT);
             } catch (NoSuchFieldException | SecurityException e) {

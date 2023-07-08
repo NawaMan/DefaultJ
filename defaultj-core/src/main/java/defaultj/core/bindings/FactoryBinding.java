@@ -1,6 +1,6 @@
 //  MIT License
 //  
-//  Copyright (c) 2017-2019 Nawa Manusitthipol
+//  Copyright (c) 2017-2023 Nawa Manusitthipol
 //  
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,6 @@ package defaultj.core.bindings;
 import defaultj.api.IProvideDefault;
 import defaultj.core.IBind;
 import defaultj.core.ICreateDefault;
-import lombok.val;
 
 /**
  * Binding to a factory.
@@ -48,7 +47,7 @@ public class FactoryBinding<TYPE> implements IBind<TYPE> {
     
     @Override
     public TYPE get(IProvideDefault defaultProvider) {
-        val value = this.factory.create(defaultProvider);
+        var value = this.factory.create(defaultProvider);
         return value;
     }
     
