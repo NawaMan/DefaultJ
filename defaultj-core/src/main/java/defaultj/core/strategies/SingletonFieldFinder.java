@@ -22,6 +22,7 @@
 package defaultj.core.strategies;
 
 import static defaultj.core.utils.FieldUtils.annotatedWith;
+import static defaultj.core.utils.FieldUtils.ifFinalField;
 import static defaultj.core.utils.FieldUtils.ifPublicField;
 import static defaultj.core.utils.FieldUtils.ifStaticField;
 import static java.util.Arrays.stream;
@@ -69,8 +70,9 @@ public class SingletonFieldFinder implements IFindSupplier {
         return (Supplier)stream(theGivenClass.getDeclaredFields())
                 .filter(ifPublicField)
                 .filter(ifStaticField)
+                .filter(ifFinalField)
                 .filter(annotatedWithDefault)
-                .map(helper::findValue)
+                .map   (helper::findValue)
                 .filter(notNull)
                 .findAny()
                 .orElse(null);

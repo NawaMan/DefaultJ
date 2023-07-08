@@ -40,6 +40,9 @@ public class FieldUtils {
     /** The predicate to check if a field is static. */
     public static Predicate<Field> ifStaticField = field -> _isStatic(field);
     
+    /** The predicate to check if a field is final. */
+    public static Predicate<Field> ifFinalField = field -> _isFinal(field);
+    
     /**
      * Checks if the field is public (null-safe).
      * 
@@ -64,6 +67,19 @@ public class FieldUtils {
             return false;
         
         return Modifier.isStatic(field.getModifiers());
+    }
+    
+    /**
+     * Checks if the field is final (null-safe).
+     * 
+     * @param field  the field.
+     * @return {@code true} if the field is final.
+     */
+    public static boolean _isFinal(Field field) {
+        if (field == null)
+            return false;
+        
+        return Modifier.isFinal(field.getModifiers());
     }
     
     /**

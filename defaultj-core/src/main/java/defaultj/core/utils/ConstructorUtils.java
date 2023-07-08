@@ -75,16 +75,21 @@ public class ConstructorUtils {
      * @param annotationNames  the annotation name.
      * @return  the constructor found.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static <T> Constructor<T> findConstructorWithAnnotation(Class<T> clzz, String ... annotationNames) {
-        for(Constructor<?> constructor : clzz.getConstructors()) {
+        Constructor foundConstructor = null;
+        for (var constructor : clzz.getConstructors()) {
             if (!Modifier.isPublic(constructor.getModifiers()))
                 continue;
             
-            if (has(constructor.getAnnotations(), annotationNames))
-                return (Constructor<T>)constructor;
+            if (has(constructor.getAnnotations(), annotationNames)) {
+                if (foundConstructor != null)
+                    return null;
+                
+                foundConstructor = constructor;
+            }
         }
-        return null;
+        return foundConstructor;
     }
     
     /**

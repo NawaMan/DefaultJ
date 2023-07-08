@@ -64,7 +64,7 @@ public class EnumValueSupplierFinder implements IFindSupplier {
     }
     
     @SuppressWarnings("rawtypes")
-    static <T> Predicate<T>defaultEnumValue(Class<T> theGivenClass) {
+    static <T> Predicate<T> defaultEnumValue(Class<T> theGivenClass) {
         return value->{
             var name = ((Enum)value).name();
             try {

@@ -30,8 +30,6 @@ import org.junit.Test;
 
 import defaultj.api.IProvideDefault;
 import defaultj.core.bindings.FactoryBinding;
-import defaultj.core.bindings.InstanceBinding;
-import defaultj.core.bindings.TypeBinding;
 
 public class BindingTest {
     
@@ -41,11 +39,10 @@ public class BindingTest {
     public void testInstanceBinding() {
         var expectedString = "I am a string.";
         
-        var instanceBinding = new InstanceBinding<>(expectedString);
-        var bindings        = new Bindings.Builder().bind(String.class, instanceBinding).build();
-        var provider        = new DefaultProvider.Builder().bingings(bindings).build();
-        
-        assertEquals(expectedString, provider.get(String.class));
+        var bindings = new Bindings.Builder().bind(String.class, expectedString).build();
+        var provider = new DefaultProvider.Builder().bingings(bindings).build();
+        var actual   = provider.get(String.class);
+        assertEquals(expectedString, actual);
     }
     
     //== TypeBinging ==
@@ -59,14 +56,13 @@ public class BindingTest {
     
     @Test
     public void testTypeBinding() {
-        var expectedClass = MyRunnable.class;
+        var expectedType = MyRunnable.class;
         
-        var typeBinding = new TypeBinding<Runnable>(MyRunnable.class);
-        var bindings    = new Bindings.Builder().bind(Runnable.class, typeBinding).build();
-        var provider    = new DefaultProvider.Builder().bingings(bindings).build();
+        var bindings = new Bindings.Builder().bind(Runnable.class, MyRunnable.class).build();
+        var provider = new DefaultProvider.Builder().bingings(bindings).build();
         
-        assertTrue(expectedClass.isInstance(provider.get(Runnable.class)));
-        assertTrue(expectedClass.isInstance(provider.get(MyRunnable.class)));
+        assertTrue(expectedType.isInstance(provider.get(Runnable.class)));
+        assertTrue(expectedType.isInstance(provider.get(MyRunnable.class)));
     }
     
     //== FactoryBinging ==
@@ -77,7 +73,6 @@ public class BindingTest {
         public Integer create(IProvideDefault defaultProvider) {
             return integer.getAndIncrement();
         }
-        
     }
     
     @Test
@@ -119,9 +114,8 @@ public class BindingTest {
     
     @Test
     public void testBindingAsDependency() {
-        var typeBinding = new TypeBinding<Car>(SuperCar.class);
-        var bindings    = new Bindings.Builder().bind(Car.class, typeBinding).build();
-        var provider    = new DefaultProvider.Builder().bingings(bindings).build();
+        var bindings = new Bindings.Builder().bind(Car.class, SuperCar.class).build();
+        var provider = new DefaultProvider.Builder().bingings(bindings).build();
         
         assertEquals("SUPER FLASH!!!!", provider.get(Person.class).zoom());
     }

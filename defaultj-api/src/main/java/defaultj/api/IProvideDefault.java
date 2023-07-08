@@ -43,6 +43,20 @@ public interface IProvideDefault {
     public <TYPE> TYPE get(Class<TYPE> theGivenClass)
             throws ProvideDefaultException;
     
+    /**
+     * Returns the default for the given class as Optional.
+     * 
+     * @param <TYPE>  the data type represented by the given class.
+     * @param theGivenClass
+     *          the given class.
+     * @return  the default associated with the given class.
+     * @throws ProvideDefaultException  if there is a problem getting the default.
+     */
+    public default <TYPE> Optional<TYPE> optional(Class<TYPE> theGivenClass)
+            throws ProvideDefaultException {
+        var defaultValue = get(theGivenClass);
+        return Optional.ofNullable(defaultValue);
+    }
     
     // == Factory method ==
     
