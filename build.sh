@@ -47,11 +47,15 @@ function build-package() {
 function build-release() {
     ensure-release
     
+    if [[ ! -f "key-var-name" ]]; then
+        echo "The file 'key-var-name' does not exist or not accessible."
+        show-help
+        exit -1
+    fi
+    
     ensure-variable NAWAMAN_SIGNING_PASSWORD
     ensure-variable NAWAMAN_SONATYPE_PASSWORD
-    
-    KEY_VAR_NAME=$(cat key-var-name)
-    ensure-variable "$KEY_VAR_NAME"
+    ensure-variable "$(cat key-var-name)"
     
     set-version
     ./mvnw clean install package deploy
@@ -69,18 +73,19 @@ function show-help() {
     echo "All command requires the follow files"
     echo "  project-version-number: Contains the major and minor version. For example: 2.0 for '2.0.6' version."
     echo "  project-build-number  : Contains the build number. For example: 6 for '2.0.6' version."
-    echo "  key-var-name          : Contains the environmental variable name that holds the key name."
+    echo "  key-var-name          : Contains the environmental variable name that holds the key name, e.g., DEFAULTJ_KEYNAME."
     echo "Release comand requires the following environmental variable."
     echo "  NAWAMAN_SIGNING_PASSWORD : The password for the signing key. Make sure the user name is in '~/.m2/settings.xml'".
     echo "  NAWAMAN_SONATYPE_PASSWORD: The password for SONATYPE account."
+    echo "  <what-in-key-var-name>   : The name of the environmental variable holding the key name for signing."
     exit 0
 }
 
 function ensure-variable() {
     local VAR_NAME=$1
     local VAR_VALUE=${!VAR_NAME}
-    if [[ "$VAR_NAME" == "" ]]; then
-        echo "$VAR_VALUE is not set."
+    if [[ "$VAR_VALUE" == "" ]]; then
+        echo "$VAR_NAME is not set."
         exit -1
     fi
 }
@@ -89,10 +94,12 @@ function set-version() {
     if [[ ! -f project-version-number ]]; then
         echo "The file 'project-version-number' does not exists or not accessible."
         show-help
+        exit -1
     fi
     if [[ ! -f project-build-number ]]; then
         echo "The file 'project-build-number' does not exists or not accessible."
         show-help
+        exit -1
     fi
     
     local CURRENT_BRANCH=$(git branch --show-current)
