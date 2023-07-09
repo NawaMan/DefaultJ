@@ -4,7 +4,7 @@
     
     <groupId>io.defaultj</groupId>
     <artifactId>defailtj</artifactId>
-    <version>2.0.2.0</version>
+    <version>2.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
     
     <name>defailtj</name>
@@ -162,6 +162,7 @@
                     <serverId>ossrh</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <skipNexusStagingDeployMojo>${nexus.staging.skip}</skipNexusStagingDeployMojo>
                 </configuration>
             </plugin>
             <plugin>
