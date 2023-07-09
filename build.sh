@@ -2,6 +2,9 @@
 
 set -e
 
+VERSION_NUMBER_FILE=project-version-number
+BUILD_NUMBER_FILE=project-build-number
+
 function main() {
     COMMAND="$1"
     shift || true
@@ -37,6 +40,7 @@ function build-full() {
 }
 
 function build-package() {
+    prepackage-action
     ensure-variable NAWAMAN_SIGNING_PASSWORD
     ensure-variable NAWAMAN_SONATYPE_PASSWORD
     
@@ -49,7 +53,9 @@ function build-package() {
 }
 
 function build-release() {
+    prepackage-action
     ensure-release
+    ensure-files-tracked
     
     if [[ ! -f "key-var-name" ]]; then
         echo "The file 'key-var-name' does not exist or not accessible."
@@ -64,6 +70,11 @@ function build-release() {
     ensure-java-version
     set-version
     ./mvnw clean install package deploy
+    
+    set -x
+    increment-build-number
+    push-release-branch
+    push-release-tag
 }
 
 function show-help() {
@@ -95,14 +106,14 @@ function ensure-variable() {
     fi
 }
 
-function set-version() {
-    if [[ ! -f project-version-number ]]; then
-        echo "The file 'project-version-number' does not exists or not accessible."
+function current-version() {
+    if [[ ! -f $VERSION_NUMBER_FILE ]]; then
+        echo "The file '$VERSION_NUMBER_FILE' does not exists or not accessible."
         show-help
         exit -1
     fi
-    if [[ ! -f project-build-number ]]; then
-        echo "The file 'project-build-number' does not exists or not accessible."
+    if [[ ! -f $BUILD_NUMBER_FILE ]]; then
+        echo "The file '$BUILD_NUMBER_FILE' does not exists or not accessible."
         show-help
         exit -1
     fi
@@ -113,9 +124,13 @@ function set-version() {
         SNAPSHOT=""
     fi
     
-    local PROJECT_VERSION=$(cat project-version-number)
-    local PROJECT_BUILD=$(cat project-build-number)
-    mvn versions:set -DnewVersion="$PROJECT_VERSION"."$PROJECT_BUILD""$SNAPSHOT"
+    local PROJECT_VERSION=$(cat $VERSION_NUMBER_FILE)
+    local PROJECT_BUILD=$(cat $BUILD_NUMBER_FILE)
+    echo -n "$PROJECT_VERSION"."$PROJECT_BUILD""$SNAPSHOT"
+}
+
+function set-version() {
+    mvn versions:set -DnewVersion="$(current-version)"
 }
 
 function ensure-java-version() {
@@ -130,6 +145,12 @@ function ensure-java-version() {
     fi
 }
 
+function prepackage-action() {
+    if [[ "$PREPACKAGE_ACTION" != "" ]]; then
+        source "$PREPACKAGE_ACTION"
+    fi
+}
+
 function ensure-release() {
     local CURRENT_BRANCH=$(git branch --show-current)
     if [[ "$CURRENT_BRANCH" != "release" ]]; then
@@ -137,6 +158,50 @@ function ensure-release() {
         echo "Publish only allow on the release branch."
         exit -1
     fi
+}
+
+function increment-build-number() {
+    BUILD_NUMBER=$(cat $BUILD_NUMBER_FILE)
+    ((BUILD_NUMBER++))
+    echo -n "$BUILD_NUMBER" > $BUILD_NUMBER_FILE
+    echo "Up the build number to: $BUILD_NUMBER"
+}
+
+function push-release-tag() {
+    VERSION=$(current-version)
+    git tag -a v$VERSION -m "Release: v$VERSION"
+    git push --tags origin
+}
+
+function ensure-files-tracked() {
+    UNTRACKED_FILES=$(untracted-files)
+    if [[ -n "$UNTRACKED_FILES" ]]; then
+        echo "There are untracked files. Please make sure all files are tracked."
+        git status
+        echo $UNTRACKED_FILES
+        exit 1
+    fi
+}
+
+function untracted-files() {
+    git status --porcelain           \
+    | grep -v "pom.xml"              \
+    | grep -v "$VERSION_NUMBER_FILE" \
+    | grep -v "$BUILD_NUMBER_FILE"   \
+    | grep -E '(^\?\? |^MM |^ M )' || true
+}
+
+function push-release-branch() {
+    ensure-files-tracked
+    
+    # Add all pom.xml
+    find . -type f -name "pom.xml" -exec git add {} + 2> /dev/null || true
+    git add $VERSION_NUMBER_FILE || true
+    git add $BUILD_NUMBER_FILE || true
+    
+    VERSION=$(current-version)
+    git commit -m "Release: v$VERSION"
+    git push
 }
 
 main "$@"
