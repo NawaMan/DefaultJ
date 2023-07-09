@@ -30,7 +30,7 @@ function build-test() {
 
 function build-full() {
     set-version
-    ./mvnw clean install
+    ./mvnw clean install -Dgpg.signing.skip=true
 }
 
 function build-package() {
@@ -60,7 +60,7 @@ function build-release() {
 function show-help() {
     echo "Build this project."
     echo "Commands"
-    echo "  ''     : Full build with all the tests."
+    echo "  ''     : Full build with all the tests (clean, install, tests but no sign, no publish)."
     echo "  quick  : Quick build skipping tests."
     echo "  test   : Compile and test."
     echo "  package: Compile, test, install and package (signed)."
