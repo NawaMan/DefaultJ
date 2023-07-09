@@ -19,16 +19,19 @@ function main() {
 }
 
 function build-quick() {
+    ensure-java-version
     set-version
     ./mvnw clean install -Dmaven.test.skip=true -Dmaven.javadoc.skip=true -Dmaven.source.skip=true
 }
 
 function build-test() {
+    ensure-java-version
     set-version
     ./mvnw clean compile test -Dmaven.javadoc.skip=true -Dmaven.source.skip=true
 }
 
 function build-full() {
+    ensure-java-version
     set-version
     ./mvnw clean install -Dgpg.signing.skip=true
 }
@@ -40,6 +43,7 @@ function build-package() {
     KEY_VAR_NAME=$(cat key-var-name)
     ensure-variable "$KEY_VAR_NAME"
     
+    ensure-java-version
     set-version
     ./mvnw clean install package deploy -Dnexus.staging.skip=true
 }
@@ -57,6 +61,7 @@ function build-release() {
     ensure-variable NAWAMAN_SONATYPE_PASSWORD
     ensure-variable "$(cat key-var-name)"
     
+    ensure-java-version
     set-version
     ./mvnw clean install package deploy
 }
@@ -111,6 +116,18 @@ function set-version() {
     local PROJECT_VERSION=$(cat project-version-number)
     local PROJECT_BUILD=$(cat project-build-number)
     mvn versions:set -DnewVersion="$PROJECT_VERSION"."$PROJECT_BUILD""$SNAPSHOT"
+}
+
+function ensure-java-version() {
+    REQUIRED=$(cat .java-version)
+    CURRENT=$(javac -version 2>&1 | awk '{print $2}')
+    
+    if [[ ! "$CURRENT" == "$REQUIRED"* ]]; then
+        echo "Java Compiler version is not what required."
+        echo "  Required: $REQUIRED"
+        echo "  Current : $CURRENT"
+        exit -1
+    fi
 }
 
 function ensure-release() {
