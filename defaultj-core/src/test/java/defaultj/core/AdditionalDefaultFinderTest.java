@@ -10,6 +10,7 @@ import org.junit.Test;
 import defaultj.api.IProvideDefault;
 import defaultj.core.strategies.IFindSupplier;
 import defaultj.core.utils.failable.Failable.Supplier;
+import lombok.val;
 
 public class AdditionalDefaultFinderTest {
     
@@ -27,7 +28,7 @@ public class AdditionalDefaultFinderTest {
             if (theGivenClass == StringRandomizer.class) {
                 return () -> {
                     return (TYPE)(StringRandomizer)(()->{
-                        var random = defaultProvider.optional(Random.class)
+                        val random = defaultProvider.optional(Random.class)
                                      .orElse (FinderThatKnowRandomizer.random);
                         return "#" + random.nextInt();
                     });
@@ -39,41 +40,41 @@ public class AdditionalDefaultFinderTest {
     
     @Test
     public void testAdditionalSupplier() {
-        var finder   = new FinderThatKnowRandomizer();
-        var provider = DefaultProvider.instance
+        val finder   = new FinderThatKnowRandomizer();
+        val provider = DefaultProvider.instance
                      .withAdditionalSupplier(finder);
-        var stringRandomizer = provider.get(StringRandomizer.class);
+        val stringRandomizer = provider.get(StringRandomizer.class);
         assertNotEquals(stringRandomizer.newRandomString(),
                         stringRandomizer.newRandomString());
     }
     
     @Test
     public void testAdditionalSupplier_withBinding() {
-        var finder   = new FinderThatKnowRandomizer();
-        var noRandom = new Random() {
+        val finder   = new FinderThatKnowRandomizer();
+        val noRandom = new Random() {
             private static final long serialVersionUID = 1L;
             public int nextInt() { return 0; }
         };
-        var provider = DefaultProvider.instance
+        val provider = DefaultProvider.instance
                      .withBinding(Random.class, noRandom)
                      .withAdditionalSupplier(finder);
-        var stringRandomizer = provider.get(StringRandomizer.class);
+        val stringRandomizer = provider.get(StringRandomizer.class);
         assertEquals(stringRandomizer.newRandomString(),
                      stringRandomizer.newRandomString());
     }
     
     @Test
     public void testAdditionalSupplier_withProvider() {
-        var finder   = new FinderThatKnowRandomizer();
-        var noRandom = new Random() {
+        val finder   = new FinderThatKnowRandomizer();
+        val noRandom = new Random() {
             private static final long serialVersionUID = 1L;
             public int nextInt() { return 0; }
         };
-        var providerWithBinding = DefaultProvider.instance
+        val providerWithBinding = DefaultProvider.instance
                                 .withBinding(Random.class, noRandom);
-        var provider = DefaultProvider.instance
+        val provider = DefaultProvider.instance
                      .withAdditionalSupplier(finder, providerWithBinding);
-        var stringRandomizer = provider.get(StringRandomizer.class);
+        val stringRandomizer = provider.get(StringRandomizer.class);
         assertEquals(stringRandomizer.newRandomString(),
                      stringRandomizer.newRandomString());
     }

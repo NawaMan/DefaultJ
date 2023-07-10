@@ -32,6 +32,7 @@ import java.util.Optional;
 
 import defaultj.api.IProvideDefault;
 import defaultj.core.utils.failable.Failable.Supplier;
+import lombok.val;
 import nullablej.nullable.Nullable;
 
 /**
@@ -49,8 +50,8 @@ public class MethodSupplierFinderUtils {
      * @return  the array of parameters.
      */
     public static Object[] prepareParameters(Method method, IProvideDefault defaultProvider) {
-        var paramsArray = method.getParameters();
-        var paramValues = getParameters(paramsArray , defaultProvider);
+        val paramsArray = method.getParameters();
+        val paramValues = getParameters(paramsArray , defaultProvider);
         return paramValues;
     }
     
@@ -62,17 +63,17 @@ public class MethodSupplierFinderUtils {
      * @return  the array of parameters.
      */
     public static Object[] prepareParameters(Constructor<?> constructor, IProvideDefault defaultProvider) {
-        var paramsArray = constructor.getParameters();
-        var paramValues = getParameters(paramsArray , defaultProvider);
+        val paramsArray = constructor.getParameters();
+        val paramValues = getParameters(paramsArray , defaultProvider);
         return paramValues;
     }
     
     private static Object[] getParameters(Parameter[] paramsArray, IProvideDefault defaultProvider) {
-        var params = new Object[paramsArray.length];
+        val params = new Object[paramsArray.length];
         for (int i = 0; i < paramsArray.length; i++) {
-            var param             = paramsArray[i];
-            var paramType         = param.getType();
-            var parameterizedType = param.getParameterizedType();
+            val param             = paramsArray[i];
+            val paramType         = param.getType();
+            val parameterizedType = param.getParameterizedType();
             boolean isNullable    = has(param.getAnnotations(), "Nullable")
                                  || has(param.getAnnotations(), "Optional");
             Object  paramValue    = determineParameterValue(paramType, parameterizedType, isNullable, defaultProvider);
@@ -84,23 +85,23 @@ public class MethodSupplierFinderUtils {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private static Object determineParameterValue(Class paramType, Type type, boolean canBeNull, IProvideDefault defaultProvider) {
         if (type instanceof ParameterizedType) {
-            var parameterizedType = (ParameterizedType)type;
-            var actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
+            val parameterizedType = (ParameterizedType)type;
+            val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
             
             if (Supplier.class.isAssignableFrom(paramType))
                 return  (Supplier)(()-> {
-                    var value = defaultProvider.get(actualType);
+                    val value = defaultProvider.get(actualType);
                     return value;
                 });
             
             if (java.util.function.Supplier.class.isAssignableFrom(paramType))
                 return (java.util.function.Supplier)(()->{
-                    var value = defaultProvider.get(actualType);
+                    val value = defaultProvider.get(actualType);
                     return value;
                 });
             
-            var isOptional = Optional.class.isAssignableFrom(paramType);
-            var isNullable = !isOptional && Nullable.class.isAssignableFrom(paramType);
+            val isOptional = Optional.class.isAssignableFrom(paramType);
+            val isNullable = !isOptional && Nullable.class.isAssignableFrom(paramType);
             if (isOptional || isNullable) {
                 return getNullableOrOptionalValue(canBeNull, defaultProvider, actualType, isOptional);
             }
@@ -109,7 +110,7 @@ public class MethodSupplierFinderUtils {
         if (canBeNull)
             return getValueOrNullWhenFail(paramType, defaultProvider);
         
-        var value = defaultProvider.get(paramType);
+        val value = defaultProvider.get(paramType);
         return value;
     }
     
@@ -119,7 +120,7 @@ public class MethodSupplierFinderUtils {
         java.util.function.Function noException   = isOptional ? Optional::ofNullable : Nullable::of;
         java.util.function.Supplier withException = isOptional ? Optional::empty      : Nullable::empty;
         try {
-            var paramValue = defaultProvider.get(actualType);
+            val paramValue = defaultProvider.get(actualType);
             return noException.apply(paramValue);
         } catch (Exception e) {
             return canBeNull ? null : withException.get();

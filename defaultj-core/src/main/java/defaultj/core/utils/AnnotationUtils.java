@@ -28,6 +28,8 @@ import java.lang.annotation.Annotation;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import lombok.val;
+
 /**
  * Utility class for Annotations.
  * 
@@ -42,7 +44,7 @@ public class AnnotationUtils {
      **/
     public static Predicate<? super Annotation> withNamed(String name) {
         return annotation->{
-            var toString = annotation.toString();
+            val toString = annotation.toString();
             return toString.matches("^@.*(\\.|\\$)" + name + "\\(.*$");
         };
     }

@@ -24,6 +24,7 @@ package defaultj.core.bindings;
 import defaultj.api.IProvideDefault;
 import defaultj.core.IBind;
 import defaultj.core.ICreateDefault;
+import lombok.val;
 
 /**
  * Binding to a factory.
@@ -47,7 +48,7 @@ public class FactoryBinding<TYPE> implements IBind<TYPE> {
     
     @Override
     public TYPE get(IProvideDefault defaultProvider) {
-        var value = this.factory.create(defaultProvider);
+        val value = this.factory.create(defaultProvider);
         return value;
     }
     

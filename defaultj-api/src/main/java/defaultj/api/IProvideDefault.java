@@ -23,6 +23,8 @@ package defaultj.api;
 
 import java.util.Optional;
 
+import lombok.val;
+
 /**
  * Classes implementing this interface can provide a default given a class..
  * 
@@ -54,7 +56,7 @@ public interface IProvideDefault {
      */
     public default <TYPE> Optional<TYPE> optional(Class<TYPE> theGivenClass)
             throws ProvideDefaultException {
-        var defaultValue = get(theGivenClass);
+        val defaultValue = get(theGivenClass);
         return Optional.ofNullable(defaultValue);
     }
     

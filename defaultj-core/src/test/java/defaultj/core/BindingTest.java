@@ -30,6 +30,7 @@ import org.junit.Test;
 
 import defaultj.api.IProvideDefault;
 import defaultj.core.bindings.FactoryBinding;
+import lombok.val;
 
 public class BindingTest {
     
@@ -37,11 +38,11 @@ public class BindingTest {
     
     @Test
     public void testInstanceBinding() {
-        var expectedString = "I am a string.";
+        val expectedString = "I am a string.";
         
-        var bindings = new Bindings.Builder().bind(String.class, expectedString).build();
-        var provider = new DefaultProvider.Builder().bingings(bindings).build();
-        var actual   = provider.get(String.class);
+        val bindings = new Bindings.Builder().bind(String.class, expectedString).build();
+        val provider = new DefaultProvider.Builder().bingings(bindings).build();
+        val actual   = provider.get(String.class);
         assertEquals(expectedString, actual);
     }
     
@@ -56,10 +57,10 @@ public class BindingTest {
     
     @Test
     public void testTypeBinding() {
-        var expectedType = MyRunnable.class;
+        val expectedType = MyRunnable.class;
         
-        var bindings = new Bindings.Builder().bind(Runnable.class, MyRunnable.class).build();
-        var provider = new DefaultProvider.Builder().bingings(bindings).build();
+        val bindings = new Bindings.Builder().bind(Runnable.class, MyRunnable.class).build();
+        val provider = new DefaultProvider.Builder().bingings(bindings).build();
         
         assertTrue(expectedType.isInstance(provider.get(Runnable.class)));
         assertTrue(expectedType.isInstance(provider.get(MyRunnable.class)));
@@ -77,11 +78,11 @@ public class BindingTest {
     
     @Test
     public void testFactoryBinding() {
-        var integerFactory = new IncrementalIntegerFactory();
+        val integerFactory = new IncrementalIntegerFactory();
         
-        var factoryBinding = new FactoryBinding<>(integerFactory);
-        var bindings       = new Bindings.Builder().bind(Integer.class, factoryBinding).build();
-        var provider       = new DefaultProvider.Builder().bingings(bindings).build();
+        val factoryBinding = new FactoryBinding<>(integerFactory);
+        val bindings       = new Bindings.Builder().bind(Integer.class, factoryBinding).build();
+        val provider       = new DefaultProvider.Builder().bingings(bindings).build();
         
         assertTrue(0 == provider.get(Integer.class));
         assertTrue(1 == provider.get(Integer.class));
@@ -114,8 +115,8 @@ public class BindingTest {
     
     @Test
     public void testBindingAsDependency() {
-        var bindings = new Bindings.Builder().bind(Car.class, SuperCar.class).build();
-        var provider = new DefaultProvider.Builder().bingings(bindings).build();
+        val bindings = new Bindings.Builder().bind(Car.class, SuperCar.class).build();
+        val provider = new DefaultProvider.Builder().bingings(bindings).build();
         
         assertEquals("SUPER FLASH!!!!", provider.get(Person.class).zoom());
     }

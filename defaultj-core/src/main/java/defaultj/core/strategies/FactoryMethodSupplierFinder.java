@@ -36,6 +36,7 @@ import java.util.stream.Stream;
 import defaultj.annotations.Default;
 import defaultj.api.IProvideDefault;
 import defaultj.core.utils.failable.Failable.Supplier;
+import lombok.val;
 import nullablej.nullable.Nullable;
 
 /**
@@ -53,14 +54,14 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> find(
             Class<TYPE>     theGivenClass,
             IProvideDefault defaultProvider) {
-        var methodValue = findValueFromFactoryMethod(theGivenClass, defaultProvider);
+        val methodValue = findValueFromFactoryMethod(theGivenClass, defaultProvider);
         return (Supplier<TYPE, THROWABLE>)methodValue;
     }
     
     @SuppressWarnings("unchecked")
     private <T> Supplier<T, ? extends Throwable> findValueFromFactoryMethod(Class<T> theGivenClass, IProvideDefault defaultProvider) {
-        var helper   = new Helper<T>(theGivenClass, defaultProvider);
-        var supplier = (Supplier<T, ? extends Throwable>)
+        val helper   = new Helper<T>(theGivenClass, defaultProvider);
+        val supplier = (Supplier<T, ? extends Throwable>)
                 Stream.of(theGivenClass.getDeclaredMethods())
                 .filter(ifStaticMethod)
                 .filter(ifPublicMethod)
@@ -82,15 +83,15 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
         
         @SuppressWarnings({ "rawtypes" })
         private Supplier findValue(Method method) {
-            var type = method.getReturnType();
+            val type = method.getReturnType();
             if (theGivenClass.isAssignableFrom(type))
                 return (Supplier)(()->basicFactoryMethodCall(method));
             
-            var fromNullable = findNullableOrOptional(method, type);
+            val fromNullable = findNullableOrOptional(method, type);
             if (fromNullable != null)
                 return fromNullable;
             
-            var fromSupplier = findSupplier(method, type);
+            val fromSupplier = findSupplier(method, type);
             if (fromSupplier != null)
                 return fromSupplier;
             
@@ -102,24 +103,24 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
             if (!java.util.function.Supplier.class.isAssignableFrom(type)) 
                 return null;
             
-            var parameterizedType = (ParameterizedType)method.getGenericReturnType();
-            var actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
+            val parameterizedType = (ParameterizedType)method.getGenericReturnType();
+            val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
             if (!theGivenClass.isAssignableFrom(actualType))
                 return null;
             
-            var getMethod = getGetMethod();
+            val getMethod = getGetMethod();
              return (Supplier)(()->supplierFactoryMethodCall(method, getMethod));
         }
         
         @SuppressWarnings("rawtypes")
         private Supplier findNullableOrOptional(Method method, Class<?> type) {
-            var isOptional = Optional.class.isAssignableFrom(type);
-            var isNullable = !isOptional && Nullable.class.isAssignableFrom(type);
+            val isOptional = Optional.class.isAssignableFrom(type);
+            val isNullable = !isOptional && Nullable.class.isAssignableFrom(type);
             if (!isOptional && !isNullable)
                 return null;
             
-            var parameterizedType = (ParameterizedType)method.getGenericReturnType();
-            var actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
+            val parameterizedType = (ParameterizedType)method.getGenericReturnType();
+            val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
             
             if (!theGivenClass.isAssignableFrom(actualType))
                 return null;
@@ -130,9 +131,9 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
         @SuppressWarnings({ "rawtypes", "unchecked" })
         private Object getNullableOrOptionalValue(Method method, final boolean isNullable)
                 throws IllegalAccessException, InvocationTargetException {
-            var params   = prepareParameters(method, defaultProvider);
-            var nullable = method.invoke(theGivenClass, params);
-            var value = isNullable
+            val params   = prepareParameters(method, defaultProvider);
+            val nullable = method.invoke(theGivenClass, params);
+            val value = isNullable
                     ? ((Nullable)nullable).orElse(null)
                     : ((Optional)nullable).orElse(null);
             return value;
@@ -152,16 +153,16 @@ public class FactoryMethodSupplierFinder implements IFindSupplier {
                 Method method,
                 Method getMethod) 
                         throws IllegalAccessException, InvocationTargetException {
-            var params = prepareParameters(method, defaultProvider);
-            var result = method.invoke(theGivenClass, params);
-            var value  = getMethod.invoke(result);
+            val params = prepareParameters(method, defaultProvider);
+            val result = method.invoke(theGivenClass, params);
+            val value  = getMethod.invoke(result);
             return value;
         }
         
         private Object basicFactoryMethodCall(Method method)
                 throws IllegalAccessException, InvocationTargetException {
-            var params = prepareParameters(method, defaultProvider);
-            var value  = method.invoke(theGivenClass, params);
+            val params = prepareParameters(method, defaultProvider);
+            val value  = method.invoke(theGivenClass, params);
             return value;
         }
     }

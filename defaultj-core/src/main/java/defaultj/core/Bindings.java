@@ -28,6 +28,7 @@ import java.util.Map;
 
 import defaultj.core.bindings.InstanceBinding;
 import defaultj.core.bindings.TypeBinding;
+import lombok.val;
 
 /**
  * Collections of bindings.
@@ -105,7 +106,7 @@ public class Bindings {
          * @return this binding builder.
          */
         public <TYPE> Builder bind(Class<TYPE> clzz, TYPE instance) {
-            var instanceBinding = new InstanceBinding<>(instance);
+            val instanceBinding = new InstanceBinding<>(instance);
             this.bindings.put(clzz, instanceBinding);
             return this;
         }
@@ -121,7 +122,7 @@ public class Bindings {
          * @return this binding builder.
          */
         public <TYPE> Builder bind(Class<TYPE> clzz, Class<? extends TYPE> boundClzz) {
-            var typeBinding = new TypeBinding<>(boundClzz);
+            val typeBinding = new TypeBinding<>(boundClzz);
             this.bindings.put(clzz, typeBinding);
             return this;
         }

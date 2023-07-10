@@ -45,6 +45,7 @@
         <nexus-staging-plugin.version>1.6.8</nexus-staging-plugin.version>
         
         <!-- DEPENDENCY -->
+        <lombok.version>1.18.28</lombok.version>
         <nullablej.version>4.0.6.0</nullablej.version>
         
         <!-- TEST -->
@@ -96,6 +97,13 @@
                 <groupId>io.nullablej</groupId>
                 <artifactId>nullablej</artifactId>
                 <version>${nullablej.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
             </dependency>
             
             <dependency>

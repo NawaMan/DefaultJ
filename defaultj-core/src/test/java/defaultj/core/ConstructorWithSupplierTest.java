@@ -29,6 +29,7 @@ import java.util.function.Supplier;
 import org.junit.Test;
 
 import defaultj.core.bindings.FactoryBinding;
+import lombok.val;
 
 public class ConstructorWithSupplierTest {
     
@@ -44,13 +45,13 @@ public class ConstructorWithSupplierTest {
     
     @Test
     public void testThat_withSupplierAsParameter_aSupplierToGetIsGiven() {
-        var counter        = new AtomicInteger(1000);
-        var factoryBinding = new FactoryBinding<Integer>(defaultProvider->counter.getAndIncrement());
+        val counter        = new AtomicInteger(1000);
+        val factoryBinding = new FactoryBinding<Integer>(defaultProvider->counter.getAndIncrement());
         
-        var bindings = new Bindings.Builder().bind(Integer.class, factoryBinding).build();
-        var provider = new DefaultProvider().withBindings(bindings);
+        val bindings = new Bindings.Builder().bind(Integer.class, factoryBinding).build();
+        val provider = new DefaultProvider().withBindings(bindings);
         
-        var company = provider.get(Company.class);
+        val company = provider.get(Company.class);
         
         assertEquals(1000, company.revenue());
         assertEquals(1001, company.revenue());

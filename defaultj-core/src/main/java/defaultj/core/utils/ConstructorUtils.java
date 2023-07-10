@@ -28,6 +28,7 @@ import java.lang.reflect.Modifier;
 import java.util.function.Supplier;
 
 import defaultj.core.exception.DefaultCreationException;
+import lombok.val;
 
 /**
  * Utility involving constructors
@@ -78,7 +79,7 @@ public class ConstructorUtils {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public static <T> Constructor<T> findConstructorWithAnnotation(Class<T> clzz, String ... annotationNames) {
         Constructor foundConstructor = null;
-        for (var constructor : clzz.getConstructors()) {
+        for (val constructor : clzz.getConstructors()) {
             if (!Modifier.isPublic(constructor.getModifiers()))
                 continue;
             

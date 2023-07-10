@@ -26,11 +26,12 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import defaultj.core.utils.failable.Failable.Supplier;
+import lombok.val;
 
 class common {
     
     public static final Function<String, String> extractValue = toString -> {
-        var value = toString
+        val value = toString
                 .replaceFirst("value=", "")
                 .replaceFirst("\\.class", "")
                 .replaceFirst("^.*\\((.*)\\)$", "$1")

@@ -26,6 +26,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import defaultj.core.bindings.TypeBinding;
+import lombok.val;
 
 public class CurrentProviderTest {
     
@@ -48,11 +49,11 @@ public class CurrentProviderTest {
     
     @Test
     public void testThatSubsequnceGetStillWithTheSameProvider() {
-        var bindings = new Bindings.Builder()
+        val bindings = new Bindings.Builder()
             .bind(Greet.class, new TypeBinding<Hello>(Hello.class))
             .bind(Hello.class, new TypeBinding<Hello>(Hi.class))
             .build();
-        var provider = DefaultProvider.instance.withBindings(bindings);
+        val provider = DefaultProvider.instance.withBindings(bindings);
         assertEquals("Hi", provider.get(Greet.class).greet());
     }
     

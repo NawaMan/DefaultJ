@@ -30,6 +30,7 @@ import defaultj.annotations.Default;
 import defaultj.api.IProvideDefault;
 import defaultj.core.exception.DefaultCreationException;
 import defaultj.core.utils.failable.Failable.Supplier;
+import lombok.val;
 import nullablej.NullableJ;
 
 /**
@@ -48,7 +49,7 @@ public class EnumValueSupplierFinder implements IFindSupplier {
         if (!theGivenClass.isEnum()) 
             return null;
         
-        var enumValue = findDefaultEnumValue(theGivenClass);
+        val enumValue = findDefaultEnumValue(theGivenClass);
         return ()->enumValue;
     }
     
@@ -66,7 +67,7 @@ public class EnumValueSupplierFinder implements IFindSupplier {
     @SuppressWarnings("rawtypes")
     static <T> Predicate<T> defaultEnumValue(Class<T> theGivenClass) {
         return value->{
-            var name = ((Enum)value).name();
+            val name = ((Enum)value).name();
             try {
                 return has(theGivenClass.getField(name).getAnnotations(), DEFAULT);
             } catch (NoSuchFieldException | SecurityException e) {

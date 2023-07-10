@@ -36,6 +36,7 @@ import java.util.function.Predicate;
 import defaultj.annotations.Default;
 import defaultj.api.IProvideDefault;
 import defaultj.core.utils.failable.Failable.Supplier;
+import lombok.val;
 import nullablej.nullable.Nullable;
 
 /**
@@ -66,7 +67,7 @@ public class SingletonFieldFinder implements IFindSupplier {
     
     @SuppressWarnings("rawtypes")
     private static <T> Supplier findValueFromSingletonField(Class<T> theGivenClass) {
-        var helper = new Helper<T>(theGivenClass);
+        val helper = new Helper<T>(theGivenClass);
         return (Supplier)stream(theGivenClass.getDeclaredFields())
                 .filter(ifPublicField)
                 .filter(ifStaticField)
@@ -87,15 +88,15 @@ public class SingletonFieldFinder implements IFindSupplier {
         
         @SuppressWarnings({ "rawtypes" })
         Supplier findValue(Field field) {
-            var type = field.getType();
+            val type = field.getType();
             if (theGivenClass.isAssignableFrom(type))
                 return (Supplier)(()->getFieldValue(field));
             
-            var optionalSupplier = findOptionalOrNullableFieldValue(field, type);
+            val optionalSupplier = findOptionalOrNullableFieldValue(field, type);
             if (optionalSupplier != null)
                 return optionalSupplier;
             
-            var supplierSupplier = findSupplierFieldValue(field, type);
+            val supplierSupplier = findSupplierFieldValue(field, type);
             if (supplierSupplier != null)
                 return supplierSupplier;
             
@@ -107,14 +108,14 @@ public class SingletonFieldFinder implements IFindSupplier {
             if (!java.util.function.Supplier.class.isAssignableFrom(type))
                 return null;
             
-            var parameterizedType = (ParameterizedType)field.getGenericType();
-            var actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
+            val parameterizedType = (ParameterizedType)field.getGenericType();
+            val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
             
             if (!theGivenClass.isAssignableFrom(actualType))
                 return null;
             
-            var supplier = (Supplier)()->{ 
-                var value = ((java.util.function.Supplier)getFieldValue(field)).get();
+            val supplier = (Supplier)()->{ 
+                val value = ((java.util.function.Supplier)getFieldValue(field)).get();
                 return value;
             };
             return supplier;
@@ -131,15 +132,15 @@ public class SingletonFieldFinder implements IFindSupplier {
             if (!isOptional && !isNullable)
                 return null;
             
-            var parameterizedType = (ParameterizedType)field.getGenericType();
-            var actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
+            val parameterizedType = (ParameterizedType)field.getGenericType();
+            val actualType        = (Class)parameterizedType.getActualTypeArguments()[0];
             
             if (!theGivenClass.isAssignableFrom(actualType))
                 return null;
             
-            var supplier = (Supplier)(()-> {
-                var optional = getFieldValue(field);
-                var value = isOptional
+            val supplier = (Supplier)(()-> {
+                val optional = getFieldValue(field);
+                val value = isOptional
                           ? ((Optional)optional).orElse(null)
                           : ((Nullable)optional).orElse(null);
                 return value;

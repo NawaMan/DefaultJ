@@ -23,6 +23,7 @@ package defaultj.core.bindings;
 
 import defaultj.api.IProvideDefault;
 import defaultj.core.IBind;
+import lombok.val;
 
 /**
  * Bind to a type.
@@ -46,7 +47,7 @@ public class TypeBinding<TYPE> implements IBind<TYPE> {
     
     @Override
     public TYPE get(IProvideDefault defaultProvider) {
-        var value = (TYPE)defaultProvider.get(referedType);
+        val value = (TYPE)defaultProvider.get(referedType);
         return value;
     }
     

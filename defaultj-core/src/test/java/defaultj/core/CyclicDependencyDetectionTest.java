@@ -33,6 +33,7 @@ import org.junit.Test;
 import defaultj.annotations.Nullable;
 import defaultj.core.exception.CyclicDependencyDetectedException;
 import defaultj.core.exception.DefaultCreationException;
+import lombok.val;
 
 public class CyclicDependencyDetectionTest {
     
@@ -92,7 +93,7 @@ public class CyclicDependencyDetectionTest {
     
     @Test
     public void testThat_whenDefaultConstructorAskForSupplierItself_itGetOne() {
-        var cyclic4 = provider.get(Cyclic4.class);
+        val cyclic4 = provider.get(Cyclic4.class);
         assertNotNull(cyclic4);
     }
     

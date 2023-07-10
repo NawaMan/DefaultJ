@@ -35,6 +35,7 @@ import defaultj.annotations.DefaultImplementation;
 import defaultj.api.IProvideDefault;
 import defaultj.core.utils.failable.Failable.Supplier;
 import defaultj.core.utils.failable.Failables;
+import lombok.val;
 
 /**
  * This class get a default that is a default implementation of the target class.
@@ -46,8 +47,8 @@ public class DefaultImplementationSupplierFinder implements IFindSupplier {
     private static final String ANNOTATION_NAME = DefaultImplementation.class.getSimpleName();
     
     public static final Predicate<? super Annotation> isDefaultImplementation = annotation -> {
-        var annotationType = annotation.annotationType();
-        var simpleName = annotationType.getSimpleName();
+        val annotationType = annotation.annotationType();
+        val simpleName = annotationType.getSimpleName();
         return ANNOTATION_NAME.equals(simpleName);
     };
     
@@ -58,7 +59,7 @@ public class DefaultImplementationSupplierFinder implements IFindSupplier {
         if (!has(theGivenClass.getAnnotations(), ANNOTATION_NAME))
             return null;
         
-        var defaultImplementationClass = findDefaultImplementation(theGivenClass);
+        val defaultImplementationClass = findDefaultImplementation(theGivenClass);
         if (defaultImplementationClass == null)
             return null;
         
@@ -69,7 +70,7 @@ public class DefaultImplementationSupplierFinder implements IFindSupplier {
     
     @SuppressWarnings("unchecked")
     private static <T> Class<T> findDefaultImplementation(Class<T> theGivenClass) {
-        var implementedClass
+        val implementedClass
                 = Stream.of(theGivenClass.getAnnotations())
                 .filter(isDefaultImplementation)
                 .map   (toString)

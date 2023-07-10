@@ -33,6 +33,7 @@ import static nullablej.NullableJ._or;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +56,7 @@ import defaultj.core.strategies.ImplementedBySupplierFinder;
 import defaultj.core.strategies.NullSupplierFinder;
 import defaultj.core.strategies.SingletonFieldFinder;
 import defaultj.core.utils.failable.Failable.Supplier;
+import lombok.val;
 import nullablej.nullable.Nullable;
 import nullablej.nullvalue.strategies.KnownNewNullValuesFinder;
 import nullablej.nullvalue.strategies.KnownNullValuesFinder;
@@ -183,7 +185,7 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
     }
     
     private static List<IFindSupplier> combineFinders(List<IFindSupplier> additionalSupplierFinders) {
-        var finderList = new ArrayList<IFindSupplier>();
+        val finderList = new ArrayList<IFindSupplier>();
         finderList.addAll(beforeAdditionalFinders);
         finderList.addAll(_or(additionalSupplierFinders, noAdditionalSuppliers));
         finderList.addAll(afterAdditionalFinders);
@@ -207,7 +209,7 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
      * @return  a new default provider with all configuration of this provider except for the additional supplier finders.
      */
     public DefaultProvider withAdditionalSupplier(Stream<IFindSupplier> additionalSupplierFinders) {
-        var finders = additionalSupplierFinders.collect(toList());
+        val finders = additionalSupplierFinders.collect(toList());
         return new DefaultProvider(parent, finders, binidings, provideFailureHandler);
     }
     
@@ -218,7 +220,7 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
      * @return  a new default provider with all configuration of this provider except for the additional supplier finders.
      */
     public DefaultProvider withAdditionalSupplier(IFindSupplier ... additionalSupplierFinders) {
-        var finders = asList(additionalSupplierFinders);
+        val finders = asList(additionalSupplierFinders);
         return new DefaultProvider(parent, finders, binidings, provideFailureHandler);
     }
     
@@ -239,7 +241,7 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
      * @return  a new default provider with all configuration of this provider except for the bindings.
      */
     public DefaultProvider withBindings(Bindings.Builder bindingBuilder) {
-        var bindings = Optional.ofNullable(bindingBuilder)
+        val bindings = Optional.ofNullable(bindingBuilder)
                      .map   (Bindings.Builder::build)
                      .orElse(null);
         return new DefaultProvider(parent, additionalSupplierFinders, bindings, provideFailureHandler);
@@ -254,8 +256,12 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
      * @param binding  the binding for the class.
      * @return  a new default provider with all configuration of this provider except for the bindings.
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public <TYPE> DefaultProvider withBinding(Class<TYPE> clzz, IBind<? extends TYPE> binding) {
-        var bindings = new Bindings(Map.of(requireNonNull(clzz), requireNonNull(binding)));
+        val bindingMap = new HashMap<Class<TYPE>, IBind<? extends TYPE>>();
+        bindingMap.put(requireNonNull(clzz), requireNonNull(binding));
+        
+        val bindings = new Bindings((Map<Class, IBind>)(Map)bindingMap);
         return new DefaultProvider(parent, additionalSupplierFinders, bindings, provideFailureHandler);
     }
     
@@ -269,7 +275,7 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
      * @return  a new default provider with all configuration of this provider except for the bindings.
      */
     public <TYPE> DefaultProvider withBinding(Class<TYPE> clzz, TYPE instance) {
-        var bindings = new Bindings.Builder().bind(requireNonNull(clzz), instance).build();
+        val bindings = new Bindings.Builder().bind(requireNonNull(clzz), instance).build();
         return new DefaultProvider(parent, additionalSupplierFinders, bindings, provideFailureHandler);
     }
     
@@ -283,7 +289,7 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
      * @return  a new default provider with all configuration of this provider except for the bindings.
      */
     public <TYPE> DefaultProvider withBinding(Class<TYPE> clzz, Class<? extends TYPE> boundClzz) {
-        var bindings = new Bindings.Builder().bind(requireNonNull(clzz), boundClzz).build();
+        val bindings = new Bindings.Builder().bind(requireNonNull(clzz), boundClzz).build();
         return new DefaultProvider(parent, additionalSupplierFinders, bindings, provideFailureHandler);
     }
     
@@ -304,9 +310,10 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
      * @return the created value.
      * @throws ProvideDefaultException when there is a problem providing the default.
      */
+    @SuppressWarnings("rawtypes")
     @Override
     public <TYPE> TYPE get(Class<TYPE> theGivenClass) throws ProvideDefaultException {
-        var set = beingCreateds.get();
+        val set = beingCreateds.get();
         if (set.contains(theGivenClass))
             throw new CyclicDependencyDetectedException(theGivenClass);
         
@@ -314,8 +321,8 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
             set.add(theGivenClass);
             
             try {
-                var supplier = getSupplierFor(theGivenClass);
-                var instance = supplier.get();
+                val supplier = getSupplierFor(theGivenClass);
+                val instance = supplier.get();
                 return theGivenClass.isPrimitive() ? instance : theGivenClass.cast(instance);
             } catch (ProvideDefaultException e) {
                 throw e;
@@ -341,11 +348,11 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
         return Nullable.of(get(theGivenClass));
     }
     
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE> getSupplierFor(
             Class<TYPE> theGivenClass) {
         
-        var supplier = suppliers.get(theGivenClass);
+        Supplier supplier = suppliers.get(theGivenClass);
         if (_isNull(supplier)) {
             supplier = newSupplierFor(theGivenClass);
             supplier = _or(supplier, NoSupplier);
@@ -358,7 +365,7 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
     @Override
     public <TYPE, THROWABLE extends Throwable> Supplier<TYPE, THROWABLE>
             find(Class<TYPE> theGivenClass, IProvideDefault defaultProvider) {
-        var supplier = getSupplierFor(theGivenClass);
+        val supplier = getSupplierFor(theGivenClass);
         return (supplier != null)
                 ? (Supplier)supplier
                 : (defaultProvider instanceof DefaultProvider)
@@ -370,16 +377,16 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
     
     @SuppressWarnings({ "rawtypes" })
     private <T> Supplier newSupplierFor(Class<T> theGivenClass) {
-        var binding = this.binidings.getBinding(theGivenClass);
+        val binding = this.binidings.getBinding(theGivenClass);
         if (_isNotNull(binding))
             return ()->binding.get(this);
         
         if (DefaultProvider.class.isAssignableFrom(theGivenClass))
             return ()->this;
         
-        var parentProvider = (IProvideDefault)_or(this.parent, this);
-        for (var finder : finders) {
-            var supplier = finder.find(theGivenClass, parentProvider);
+        val parentProvider = (IProvideDefault)_or(this.parent, this);
+        for (val finder : finders) {
+            val supplier = finder.find(theGivenClass, parentProvider);
             if (_isNotNull(supplier))
                 return supplier;
         }
@@ -387,7 +394,7 @@ public class DefaultProvider implements IProvideDefault, IFindSupplier {
         if (IProvideDefault.class.isAssignableFrom(theGivenClass))
             return ()->this;
         
-        var knownValue = knownNullValuesFinder.findNullValueOf(theGivenClass);
+            val knownValue = knownNullValuesFinder.findNullValueOf(theGivenClass);
         if (knownValue != null)
             return ()->knownValue;
             

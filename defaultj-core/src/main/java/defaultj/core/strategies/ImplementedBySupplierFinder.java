@@ -36,6 +36,7 @@ import defaultj.core.exception.ImplementedClassNotCompatibleExistException;
 import defaultj.core.exception.ImplementedClassNotExistException;
 import defaultj.core.utils.failable.Failable.Supplier;
 import defaultj.core.utils.failable.Failables;
+import lombok.val;
 
 /**
  * This class get a default that is a default implementation of the target class.
@@ -54,7 +55,7 @@ public class ImplementedBySupplierFinder implements IFindSupplier {
         if (!has(theGivenClass.getAnnotations(), ANNOTATION_NAME))
             return null;
         
-        var defaultImplementationClass = findDefaultImplementation(theGivenClass);
+        val defaultImplementationClass = findDefaultImplementation(theGivenClass);
         if (_isNull(defaultImplementationClass))
             return NullSupplier;
         
