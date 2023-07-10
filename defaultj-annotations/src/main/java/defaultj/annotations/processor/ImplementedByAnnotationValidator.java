@@ -38,7 +38,6 @@ import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 
 import defaultj.annotations.ImplementedBy;
-import lombok.val;
 
 import static java.util.stream.Collectors.toList;
 
@@ -61,7 +60,7 @@ public class ImplementedByAnnotationValidator extends AbstractProcessor {
     
     @Override
     public Set<String> getSupportedAnnotationTypes() {
-        val annotations = new LinkedHashSet<String>();
+        Set<String> annotations = new LinkedHashSet<>();
         annotations.add(ImplementedBy.class.getCanonicalName());
         return annotations;
     }
@@ -80,15 +79,15 @@ public class ImplementedByAnnotationValidator extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         hasError = false;
         for (Element element : roundEnv.getElementsAnnotatedWith(ImplementedBy.class)) {
-            val elementType = element.toString();
+            String elementType = element.toString();
             
-            val implementedBy = element.getAnnotation(ImplementedBy.class);
-            val implementingTypeName = implementedBy.toString().replaceAll("^.*\\(value = (.*)\\.class\\)$", "$1");
+            ImplementedBy implementedBy = element.getAnnotation(ImplementedBy.class);
+            String        implementingTypeName = implementedBy.toString().replaceAll("^.*\\(value = (.*)\\.class\\)$", "$1");
             if (elementType.equals(implementingTypeName))
                 error(element, format("%s is not a valid implementation of itself.", elementType));
             
-            val implementingType   = processingEnv.getElementUtils().getTypeElement(implementingTypeName);
-            val allCompatibleTypes = getAllCompatibleTypes(implementingType);
+            TypeElement  implementingType   = processingEnv.getElementUtils().getTypeElement(implementingTypeName);
+            List<String> allCompatibleTypes = getAllCompatibleTypes(implementingType);
             
             if (!allCompatibleTypes.contains(elementType))
                 error(element, format("%s is not compatible with %s", implementingTypeName, elementType));
@@ -97,7 +96,7 @@ public class ImplementedByAnnotationValidator extends AbstractProcessor {
     }
     
     private List<String> getAllCompatibleTypes(TypeElement implementingType) {
-        val allCompatibleTypes = new ArrayList<String>();
+        List<String> allCompatibleTypes = new ArrayList<>();
         allCompatibleTypes.add(implementingType.getSuperclass().toString());
         allCompatibleTypes.addAll(implementingType.getInterfaces().stream().map(String::valueOf).collect(toList()));
         return allCompatibleTypes;
