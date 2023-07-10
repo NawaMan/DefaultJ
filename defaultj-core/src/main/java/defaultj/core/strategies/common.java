@@ -32,7 +32,7 @@ class common {
     
     public static final Function<String, String> extractValue = toString -> {
         val value = toString
-                .replaceFirst("value=", "")
+                .replaceFirst("value=(class )?", "")
                 .replaceFirst("\\.class", "")
                 .replaceFirst("^.*\\((.*)\\)$", "$1")
                 .replaceFirst("^\"(.*)\"$", "$1");
