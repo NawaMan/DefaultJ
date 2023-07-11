@@ -53,9 +53,9 @@
     </properties>
     
     <scm>
-        <connection>scm:git:git://github.com/NawaMan/NullableJ.git</connection>
-        <developerConnection>scm:git:ssh://github.com/NawaMan/NullableJ.git</developerConnection>
-        <url>http://github.com/NawaMan/NullableJ/tree/master</url>
+        <connection>scm:git:git://github.com/NawaMan/DefaultJ.git</connection>
+        <developerConnection>scm:git:ssh://github.com/NawaMan/DefaultJ.git</developerConnection>
+        <url>http://github.com/NawaMan/DefaultJ/tree/master</url>
     </scm>
     
     <licenses>
