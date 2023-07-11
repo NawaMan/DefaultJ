@@ -4,13 +4,13 @@
     
     <parent>
         <groupId>io.defaultj</groupId>
-        <artifactId>defailtj</artifactId>
+        <artifactId>defaultj</artifactId>
         <version>2.2.0.4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     
-    <artifactId>defailtj-annotations</artifactId>
-    <name>defailtj-annotations</name>
+    <artifactId>defaultj-annotations</artifactId>
+    <name>defaultj-annotations</name>
     <description>
         The module for DefaultJ Annotations.
     </description>
@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>io.defaultj</groupId>
-            <artifactId>defailtj-api</artifactId>
+            <artifactId>defaultj-api</artifactId>
         </dependency>
             
         <dependency>

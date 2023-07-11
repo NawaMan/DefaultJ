@@ -4,13 +4,13 @@
     
     <parent>
         <groupId>io.defaultj</groupId>
-        <artifactId>defailtj</artifactId>
+        <artifactId>defaultj</artifactId>
         <version>2.2.0.4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     
-    <artifactId>defailtj-api</artifactId>
-    <name>defailtj-api</name>
+    <artifactId>defaultj-api</artifactId>
+    <name>defaultj-api</name>
     <description>
         The module for DefaultJ API.
     </description>

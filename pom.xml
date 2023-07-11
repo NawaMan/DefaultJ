@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     
     <groupId>io.defaultj</groupId>
-    <artifactId>defailtj</artifactId>
+    <artifactId>defaultj</artifactId>
     <version>2.2.0.4</version>
     <packaging>pom</packaging>
     
-    <name>defailtj</name>
+    <name>defaultj</name>
     
     <url>https://github.com/NawaMan/DefaultJ</url>
     <description>
@@ -85,12 +85,12 @@
         <dependencies>
             <dependency>
                 <groupId>io.defaultj</groupId>
-                <artifactId>defailtj-api</artifactId>
+                <artifactId>defaultj-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.defaultj</groupId>
-                <artifactId>defailtj-annotations</artifactId>
+                <artifactId>defaultj-annotations</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

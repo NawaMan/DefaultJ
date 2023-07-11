@@ -4,13 +4,13 @@
     
     <parent>
         <groupId>io.defaultj</groupId>
-        <artifactId>defailtj</artifactId>
+        <artifactId>defaultj</artifactId>
         <version>2.2.0.4</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     
-    <artifactId>defailtj-core</artifactId>
-    <name>defailtj-core</name>
+    <artifactId>defaultj-core</artifactId>
+    <name>defaultj-core</name>
     <description>
         The module for DefaultJ Core classes.
     </description>
@@ -23,11 +23,11 @@
     <dependencies>
         <dependency>
             <groupId>io.defaultj</groupId>
-            <artifactId>defailtj-api</artifactId>
+            <artifactId>defaultj-api</artifactId>
         </dependency>
         <dependency>
             <groupId>io.defaultj</groupId>
-            <artifactId>defailtj-annotations</artifactId>
+            <artifactId>defaultj-annotations</artifactId>
         </dependency>
         <dependency>
             <groupId>io.nullablej</groupId>
