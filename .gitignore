@@ -30,3 +30,7 @@ output.json
 **/bin
 **/target
 **/pom.xml.versionsBackup
+
+defaultj-api/.factorypath
+
+defaultj-core/.factorypath

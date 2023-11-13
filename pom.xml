@@ -28,10 +28,15 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
+        <!--==== SKIP ====-->
+        <gpg.signing.skip>true</gpg.signing.skip>
+        <sona.staging.skip>true</sona.staging.skip>
+        
         <!--==== SECRET ====-->
         <gpg.executable>/usr/bin/gpg</gpg.executable>
         <gpg.keyname>${env.DEFAULTJ_KEYNAME}</gpg.keyname>
         <gpg.passphrase>${env.NAWAMAN_SIGNING_PASSWORD}</gpg.passphrase>
+        <sona.site>https://oss.sonatype.org</sona.site>
         
         <!--==== VERSIONS ====-->
         
@@ -53,10 +58,15 @@
     </properties>
     
     <scm>
+        <url>http://github.com/NawaMan/DefaultJ/tree/master</url>
         <connection>scm:git:git://github.com/NawaMan/DefaultJ.git</connection>
         <developerConnection>scm:git:ssh://github.com/NawaMan/DefaultJ.git</developerConnection>
-        <url>http://github.com/NawaMan/DefaultJ/tree/master</url>
     </scm>
+    
+    <organization>
+        <name>nawaman.net</name>
+        <url>https://nawaman.net</url>
+    </organization>
     
     <licenses>
         <license>
@@ -70,8 +80,8 @@
             <id>NawaMan</id>
             <name>Nawapunth Manusitthipol</name>
             <email>nawa@nawaman.net</email>
-            <organization>NawaMan</organization>
-            <organizationUrl>http://nawaman.net</organizationUrl>
+            <organization>nawaman.net</organization>
+            <organizationUrl>https://nawaman.net</organizationUrl>
         </developer>
     </developers>
     
@@ -116,6 +126,7 @@
     
     <build>
         <plugins>
+            <!-- JAVA+SOURCE -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -134,7 +145,7 @@
                 <version>${maven-javadoc-plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>attach-javadoc</id>
+                        <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -160,19 +171,28 @@
                 </executions>
             </plugin>
             
-            <!-- PUBLISH -->
+            <!-- ADDITIONAL SOURCES -->
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>${nexus-staging-plugin.version}</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                    <skipNexusStagingDeployMojo>${nexus.staging.skip}</skipNexusStagingDeployMojo>
-                </configuration>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${build-helper-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>add-test-source</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/test/examples</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
+            
+            <!-- PACKAGE -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
@@ -191,6 +211,20 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            
+            <!-- PUBLISH -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${nexus-staging-plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>${sona.site}</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <skipNexusStagingDeployMojo>${sona.staging.skip}</skipNexusStagingDeployMojo>
+                </configuration>
             </plugin>
         </plugins>
     </build>
