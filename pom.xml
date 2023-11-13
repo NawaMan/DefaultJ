@@ -51,7 +51,7 @@
         
         <!-- DEPENDENCY -->
         <lombok.version>1.18.28</lombok.version>
-        <nullablej.version>4.0.6.0</nullablej.version>
+        <nullablej.version>4.1.0</nullablej.version>
         
         <!-- TEST -->
         <junit.version>4.13.2</junit.version>
